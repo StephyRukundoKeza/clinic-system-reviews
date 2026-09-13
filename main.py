@@ -9,7 +9,7 @@ def admin_menu():
     #to an adminstrator.
 
     while True:
-        print("ADMINISTRATOR MENU")
+        print("=====ADMINISTRATOR MENU=====")
         print("1.Register new patient")
         print("2.Display all patients")
         print("3.Search patient")
