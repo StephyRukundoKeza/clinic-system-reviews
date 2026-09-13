@@ -30,6 +30,45 @@ def patient_self_registration_menu(patient_list):
 
 # Administrator menu
 
+def create_admin_account(admin_list):
+    print("---Create New Admin Account---")
+    first = validation.get_valid_firstname()
+    last = validation.get_valid_lastname()
+    name = f"{first} {last}"
+
+    phone = validation.get_valid_phone_number()
+    pin = input("Create a 4-digit PIN for the admin: ").strip()
+
+    new_id = operations.generate_new_id_admin()
+    new_admin = models.Admin(new_id, name, pin, phone)
+    admin_list.append(new_admin)
+
+    print(f"\nSuccessful! Admin {name} created with ID: {new_id}")
+
+def delete_admin_account(admin_list):
+    print("---Delete Admin Account---")
+    search_id = input("Enter the admin ID to delete(e.g., A-12345678): ").strip().upper()
+    
+    a = operations.find_record_by_id(admin_list, search_id)
+    
+    if not a:
+        print("Error: Admin not found. Please check the ID.")
+        return
+
+    print("\nAdmin Found:")
+    if isinstance(a, dict):
+        print(f"ID: {a.get('user_id')} | Name: {a.get('name')} | Phone: {a.get('phone_number')}")
+    else:
+        print(f"ID: {a.user_id} | Name: {a.name} | Phone: {a.phone_number}")
+
+    confirmation = input(f"Are you sure you want to delete Admin {search_id}? (yes/no): ").strip().lower()
+    if confirmation == "yes":
+        admin_list.remove(a)
+        print(f"Admin {search_id} has been deleted successfully.")
+    else:
+        print("Attempt Cancelled.") 
+
+
 def admin_register_patient(patient_list):
     print("---Register New Patient (Admin)---")
     first = validation.get_valid_firstname()
