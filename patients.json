@@ -1,0 +1,10 @@
+[
+  {
+    "user_id": "P101",
+    "name": "Jane Doe",
+    "phone_number": "555-0199",
+    "pin": "1234",
+    "address": "123 Main St",
+    "medical_history": ["Hypertension"]
+  }
+]

@@ -1,0 +1,11 @@
+[
+  {
+    "appointment_id": "A301",
+    "date": "2026-09-10",
+    "time": "10:00",
+    "doctor_id": "D201",
+    "patient_id": "P101",
+    "status": "Scheduled",
+    "duration_mins": 30
+  }
+]
