@@ -1,6 +1,10 @@
+from data_manager import load_data, save_data 
 
 def main():# this particular function will control the main flow
               #of the application'
+
+#load saved data while the program starts
+    patients, doctors, appointments = load_data()
 
     while True:
         #display the opening screen
@@ -24,8 +28,12 @@ def main():# this particular function will control the main flow
 
         if user_id.lower() =="exit":
             #close the system when the user chooses Exit
-            print("Thank you for using the Clinic Management System.")
+            print("Thank you for using the Clinic Management System")
             print("System closed successfully")
+
+            #save the current data before closing
+            save_data(patients, doctors, appointments)
+
             break
 
         elif user_id.lower() =="new": 
@@ -80,7 +88,7 @@ def admin_menu():
         print("6.View appointments")
         print("7.Logout")
 
-        choice = input("Choose an option: ")
+        choice = int(input("Choose an option: "))
 
         if  choice =="7":
             print("Logging out...")
