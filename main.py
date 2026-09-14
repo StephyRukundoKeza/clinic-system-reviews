@@ -9,7 +9,11 @@ def admin_menu():
     #to an adminstrator.
 
     while True:
+<<<<<<< HEAD
         print("=====ADMINISTRATOR MENU=====")
+=======
+        print("====ADMINISTRATOR MENU====")
+>>>>>>> 981d3a7 (connecting patient menu)
         print("1.Register new patient")
         print("2.Display all patients")
         print("3.Search patient")
@@ -105,6 +109,8 @@ def main():  # this particular function will control the main flow
             doctor_menu()
 
         elif user_id.startswith("P"):
+
+            patient_menu()
             #an ID starting with P belongs to a doctor.
             print("Opening Patient Menu")
 
