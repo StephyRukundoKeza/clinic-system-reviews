@@ -21,7 +21,7 @@ def generate_new_id_doctor():
 
 def find_record_by_id(record_list, search_id):
     for record in record_list:
-# Check if the record is a dictionary (freshly loaded from JSON by Student 3)
+# Check if the record is a dictionary (freshly loaded from JSON by data_manager)
         if isinstance(record, dict):
 # We check 'user_id', but if it's an appointment, it falls back to checking 'appointment_id'
             record_id = record.get('user_id') or record.get('appointment_id')
