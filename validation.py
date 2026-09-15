@@ -1,33 +1,26 @@
 print("Day one on clinic appointment system!")
 from datetime import datetime
+
 def get_valid_menu():
     while True:
         try:
-            menu=int(input("select an option(1-4): "))
+            menu=int(input("select an option(1-3): "))
             if menu=="":
                 print("Oops sorry menu can not be left empty")
                 continue
-            if menu < 1 or menu > 4:
-                print("Selection out of range. Please select a number from 1-4 ")
+            if menu < 1 or menu > 3:
+                print("Selection out of range. Please select a number from 1-3 ")
                 continue
             break
         except ValueError:
-            print("Invalid format. Select a number from 1-4 ")       
+            print("Invalid format. Select a number from 1-3")       
             
 def get_valid_admin_menu():
     #This function displays the options available
     #to an adminstrator.
 
     while True:
-        print("=====ADMINISTRATOR MENU=====")
-        print("1.Register new patient")
-        print("2.Display all patients")
-        print("3.Search patient")
-        print("4.Update patient information")
-        print("5.Add doctor")
-        print("6.View appointments")
-        print("7.Logout")
-        
+       
         try:
             choice = int(input("Choose an option(1-7): "))
             if choice=="":
@@ -42,11 +35,7 @@ def get_valid_admin_menu():
                     
 def get_valid_doctor_menu()  :                 
     while True:
-        print("=====DOCTOR MENU=====")
-        print("1.View appointment")
-        print("2.View patient information")
-        print("3.Update appointment")
-        print("4.Logout")
+    
         try:
             choice = int(input("Choose an option(1-4): "))
             if choice=="":
@@ -62,12 +51,7 @@ def get_valid_doctor_menu()  :
             
 def get_valid_patient_menu():
     while True:
-        print("========PATIENT MENU========")
-        print("1.View my infomation")
-        print("2.Book appointment")
-        print("3.View my appointment")
-        print("4.Cancel appointment")
-        print("5.Logout")
+       
         try:
             choice = int(input("Choose an option(1-5): "))
             if choice=="":
@@ -113,6 +97,10 @@ def get_valid_birthdate():
             if date_input=="":
                 print("Oops sorry date of birth can not be left empty enter a valid date")
                 continue 
+            if date>datetime.today().date(): # ensures the due date is not a date that has already past
+                print("Birth date date cannot be after today's date.")
+                date_input=input("Enter another date(YYYY-MM-DD: ")
+                continue
             break
         except ValueError:
             print("Invalid format. Please try again with this format date as, YYYY-MM-DD: ")
@@ -127,6 +115,12 @@ def get_valid_appointmentdate():
             if date_input=="":
                 print("Oops sorry date can not be left empty enter a valid date")
                 continue 
+            if date<datetime.today().date(): # ensures the due date is not a date that has already past
+                print("Appointment date cannot be before today's date.")
+                date_input=input("Enter another date(YYYY-MM-DD: ")
+                continue
+            
+                      
             break
         except ValueError:
             print("Invalid format. Please try again with this format date as, YYYY-MM-DD: ")
@@ -174,6 +168,6 @@ def get_valid_email():
     return email
     
 #
-get_valid_phone_number()
+get_valid_birthdate()
 
 #get_valid_menu()

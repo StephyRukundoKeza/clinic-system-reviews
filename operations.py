@@ -1,23 +1,33 @@
 print("Day one on clinic appointment system!")
 import random
+from datetime import datetime, timedelta
+
 
 def generate_new_id_admin():
+    # Generates a unique 8-digit ID for new admins.
     print("Generating your admin id")
-    id=random.randrange(10000000,99999999)
+    id=random.randrange(00000000,99999999)
     print(f"Your admin id is A-{id}")
     return f"A-{id}"
 
 def generate_new_id_patient():
+    # Generates a unique 8-digit ID for new patients.
     print("Generating your patients id")
-    id=random.randrange(10000000,99999999)
+    id=random.randrange(00000000,99999999)
     print(f"Your patient id is P-{id}")
     return f"P-{id}"
 
 def generate_new_id_doctor():
+    # Generates a unique 8-digit ID for new doctors.
     print("Generating your doctors id")
-    id=random.randrange(10000000,99999999)
+    id=random.randrange(00000000,99999999)
     print(f"Your doctor id is DR-{id}")
     return f"DR-{id}"
+
+def generate_new_id_appointment():
+# Generates a unique 6-digit ID for new appointments.
+    id = random.randrange(100000, 999999)
+    return f"APT-{id}"
 
 def find_record_by_id(record_list, search_id):
     for record in record_list:
@@ -38,12 +48,7 @@ def find_record_by_id(record_list, search_id):
     # Return None if the loop finishes and no match was found
     return None
 
-def generate_new_id_appointment():
-# Generates a unique 6-digit ID for new appointments.
-    id = random.randrange(100000, 999999)
-    return f"APT-{id}"
 
-from datetime import datetime, timedelta
 
 def get_available_time_slots(doctor, target_date, appointment_list):
 # Calculates available 1-hour time slots for a doctor on a specific date.
@@ -70,3 +75,7 @@ def get_available_time_slots(doctor, target_date, appointment_list):
             current_time += timedelta(hours=1)
     except ValueError:
         return []
+
+
+
+    pass

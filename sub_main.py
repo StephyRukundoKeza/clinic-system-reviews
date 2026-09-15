@@ -324,8 +324,18 @@ def admin_cancel_appointment(appointment_list):
     else:
         print("Attempt Cancelled.")
 
+def patient_view_information():
+    print("---View Patient Information---")
+     
+def patient_book_appointment():
+    pass
+def patient_view_appointment():
+    pass
+def patient_cancel_appointment():
+    pass
 
 
+ 
 
 
 
