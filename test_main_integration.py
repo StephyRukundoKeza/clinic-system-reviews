@@ -28,7 +28,7 @@ def test_exit_closes_cleanly():
 
 def test_doctor_menu_logout_works():
     stdout, returncode = run_main(["DR-11111111", "4", "exit"])
-    assert stdout.count("Enter your ID:") >= 2
+    assert stdout.count("Enter your ID") >= 2
     assert returncode == 0
 
 

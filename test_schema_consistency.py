@@ -61,8 +61,12 @@ def test_appointment_json_fields_match_appointment_class():
             f"Record actually has: {list(appt.keys())}"
         )
 
-def test_no_admins_json_file_exists():
-    assert not os.path.exists("admins.json"), (
-        "admins.json now exists - update data_manager.load_data()/save_data() "
-        "to actually use it if that hasn't happened yet, and update this test."
+def test_admins_json_exists_and_is_a_list():
+    # admins.json is now created/maintained by data_manager.save_data()
+    # This replaces test_no_admins_json_file_exists, which
+    # documented the old gap where admins were never persisted at all.
+    assert os.path.exists("admins.json"), (
+        "admins.json should exist now that save_data() writes it"
     )
+    admins = load_json("admins.json")
+    assert isinstance(admins, list)

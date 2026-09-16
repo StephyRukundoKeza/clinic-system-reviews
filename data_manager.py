@@ -26,9 +26,17 @@ def load_data():
     except FileNotFoundError:
         appointments = []
 
-    return patients, doctors, appointments
 
-def save_data(patients, doctors, appointments):
+    # 4. Read admins.json
+    try:
+        with open('admins.json', 'r') as f:
+            admins = json.load(f)
+    except FileNotFoundError:
+        admins = []
+
+    return patients, doctors, appointments, admins
+
+def save_data(patients, doctors, appointments, admins):
     """
     Writes patients, doctors, and appointments back to their respective JSON files.
     """
@@ -43,3 +51,7 @@ def save_data(patients, doctors, appointments):
     # 3. Save appointments.json
     with open('appointments.json', 'w') as f:
         json.dump(appointments, f, indent=4)
+
+    # 4. Save admins.json
+    with open('admins.json', 'w') as f:
+        json.dump(admins, f, indent=4)
