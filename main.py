@@ -15,9 +15,9 @@ def main():# this particular function will control the main flow
         print()
         print("Welcome!")
         print()
-        print("Enter your ID to continue.")
-        print("Type NEW to register as patient. ")
-        print("Type EXIT to close the system")
+        print("1.Login")
+        print("2.Create Account ")
+        print("3.Logout")
         print()
 
 
