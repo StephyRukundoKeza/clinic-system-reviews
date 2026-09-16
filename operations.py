@@ -50,32 +50,38 @@ def find_record_by_id(record_list, search_id):
 
 
 
-def get_available_time_slots(doctor, target_date, appointment_list):
+def get_available_time_slots(selected_doctor , appointment_date, appointment_list):
 # Calculates available 1-hour time slots for a doctor on a specific date.
 # It looks at the doctor's shift hours and subtracts any active appointments.
 # 1. Get the doctor's shift times (safely handling dicts or objects)
-    if isinstance(doctor, dict):
-        start_str = doctor.get('shift_start_time', '09:00')
-        end_str = doctor.get('shift_end_time', '17:00')
-        doc_id = doctor.get('user_id')
-    else:
-        start_str = getattr(doctor, 'shift_start_time', '09:00')
-        end_str = getattr(doctor, 'shift_end_time', '17:00')
-        doc_id = getattr(doctor, 'user_id')
-
-# 2. Generate all possible hourly slots for the shift
-    all_slots = []
-    try:
-        start_time = datetime.strptime(start_str, "%H:%M")
-        end_time = datetime.strptime(end_str, "%H:%M")
+    
+    
+    all_slots=[]
+    start_time = datetime.strptime(selected_doctor['shift_start_time'],"%H:%M")
+    end_time = datetime.strptime(selected_doctor['shift_end_time'],"%H:%M")
+    doc_id = selected_doctor['user_id']
+    booked_slots=[]  
         
-        current_time = start_time
-        while current_time < end_time:
-            all_slots.append(current_time.strftime("%H:%M"))
-            current_time += timedelta(hours=1)
-    except ValueError:
-        return []
+    for appointment in appointment_list:
+        if(appointment['user_id'] == doc_id
+            and appointment['date'] == appointment_date):
+            booked_slots.append(appointment["start_time"])          
+                    
+    available_slots = []
+    current_time=start_time
+    while current_time + timedelta(minutes=60) <= end_time:
 
+        start = current_time.strftime("%H:%M")
+        end = (current_time + timedelta(minutes=60)).strftime("%H:%M")
 
+        if start not in booked_slots: 
+            available_slots.append(f"{start} - {end}")
 
-    pass
+        current_time += timedelta(minutes=60)
+        
+    for position, slot in enumerate(available_slots, start=1):
+        print(f"[position].{slot}")
+
+    
+            
+       

@@ -1,5 +1,8 @@
 from data_manager import load_data, save_data 
-
+from validation import  get_valid_admin_menu
+from validation import get_valid_doctor_menu
+from validation import get_valid_patient_menu
+from sub_main import patient_self_registration_menu
 def main():# this particular function will control the main flow
               #of the application'
 
@@ -88,16 +91,16 @@ def admin_menu():
         print("6.View appointments")
         print("7.Logout")
 
-        choice = int(input("Choose an option: "))
-
+        choice = get_valid_admin_menu()
         if  choice =="7":
             print("Logging out...")
             break
         elif choice =="1":
             print("Pegister new patient")
+            patient_self_registration_menu()
 
         elif choice =="2":
-            print("Display all patient")
+            print("Display all patient") 
 
         elif choice =="3":
             print("Search patients")
@@ -129,7 +132,7 @@ def  doctor_menu():
         print("3.Update appointment")
         print("4.Logout")
 
-        choice = input("Choose an option: ")
+        choice = get_valid_doctor_menu()  
 
         if choice =="4":
             print("View appointment")
@@ -164,8 +167,7 @@ def patient_menu():
         print("4.Cancel appointment")
         print("5.Logout")
 
-        choice = input("Choose an option: ")
-
+        choice =   get_valid_patient_menu()
         if choice =="5":
             print("Logging out...")
             break 
@@ -184,7 +186,7 @@ def patient_menu():
 
 
         else:
-            print("Invalid optiom.Please choose a number from 1 to 5.")
+            print("Invalid option.Please choose a number from 1 to 5.")
         
 def register_patient():
     #this function will collect the information

@@ -327,8 +327,25 @@ def admin_cancel_appointment(appointment_list):
 def patient_view_information():
     print("---View Patient Information---")
      
-def patient_book_appointment():
-    pass
+def patient_book_appointment(doctors,appointment_list):
+    print("---Book appointment---")
+    print("Available Doctors")
+    for position, doctor in enumerate(doctors, start=1):
+        print(f"{position}.{doctor['name']}")
+        print(f"   {doctor["specialization"]}")
+        print(f"Working hours: {doctor['shift_start_time']} - {doctor['shift_end_time']}")
+    
+        
+    choice=validation.get_valid_doctor_choice(doctors)
+    choice=choice-1
+    selected_doctor=doctors[choice]
+    print(f"You selected: {selected_doctor['name']}")
+    appointment_date=validation.get_valid_appointmentdate()
+    available_slots=validation.get_available_time_slots()
+    slot_choice= validation.get_valid_slot_choice(available_slots)
+    
+    slot_choice=slot_choice-1
+    print(f"You selected: {slot_choice}")
 def patient_view_appointment():
     pass
 def patient_cancel_appointment():

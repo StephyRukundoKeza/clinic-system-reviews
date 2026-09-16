@@ -1,11 +1,15 @@
 print("Day one on clinic appointment system!")
 from datetime import datetime
 
+from operations import get_available_time_slots
+
 def get_valid_menu():
+    #This function displays the options available
+        #to an adminstrator.
     while True:
         try:
             menu=int(input("select an option(1-3): "))
-            if menu=="":
+            if menu=="":  #check for my empty string inputs
                 print("Oops sorry menu can not be left empty")
                 continue
             if menu < 1 or menu > 3:
@@ -23,7 +27,7 @@ def get_valid_admin_menu():
        
         try:
             choice = int(input("Choose an option(1-7): "))
-            if choice=="":
+            if choice=="": #check for my empty string inputs
                 print("Oops sorry menu can not be left empty")
                 continue
             if choice < 1 or choice > 7:
@@ -33,7 +37,9 @@ def get_valid_admin_menu():
         except ValueError:
            print("Invalid format. Select a number from 1-7 ")       
                     
-def get_valid_doctor_menu()  :                 
+def get_valid_doctor_menu() :   
+    #This function displays the options available
+    #to a doctor.              
     while True:
     
         try:
@@ -50,6 +56,9 @@ def get_valid_doctor_menu()  :
             
             
 def get_valid_patient_menu():
+        #This function displays the options available
+    #to a menu
+    
     while True:
        
         try:
@@ -167,7 +176,32 @@ def get_valid_email():
         break
     return email
     
-#
-get_valid_birthdate()
+def get_valid_doctor_choice(doctors):
+    while True:
+            try:
+                choice=int(input('select a doctor number'))
+    
+    
+                if choice <1 or choice >len(doctors):
+                    print("sorry, selection out of range")
+                    continue
+                break
+            except ValueError:
+                print(f"Invalid format. Please enter a number between 1 and {len(doctors)}")
+    return choice
+            
+            
 
-#get_valid_menu()
+
+def get_valid_slot_choice(available_slots):
+    while True:
+        try:
+            slot_choice= int(input('select a slot number'))
+            if slot_choice <1 or slot_choice >len(available_slots):
+                print("sorry, selection out of range")
+                continue
+            break
+        except ValueError:
+            print(f"Invalid format. Please enter a number between 1 and {len(available_slots)}")
+            return slot_choice 
+    
