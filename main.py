@@ -94,7 +94,7 @@ def admin_menu():
             print("Logging out...")
             break
         elif choice =="1":
-            print("Pegister new patient")
+            print("Register new patient")
 
         elif choice =="2":
             print("Display all patient")
