@@ -47,8 +47,13 @@ def isolated_project(tmp_path, monkeypatch):
         json.dump(doctors, f)
     with open(tmp_path / "admins.json", "w") as f:
         json.dump(admins, f)
+    appointments = [{
+        "appointment_id": "A-301", "date": "2026-09-20", "start_time": "10:00",
+        "doctor_id": "DR-201", "patient_id": "P-101", "status": "Scheduled",
+        "duration": 30,
+    }]
     with open(tmp_path / "appointments.json", "w") as f:
-        json.dump([], f)
+        json.dump(appointments, f)
 
     monkeypatch.chdir(tmp_path)
     return tmp_path
@@ -57,11 +62,6 @@ def isolated_project(tmp_path, monkeypatch):
 def test_invalid_id_shows_error_and_reprompts(isolated_project):
     stdout, _ = run_main(["not-a-real-id", "exit"])
     assert "Invalid ID" in stdout
-
-def test_new_registration_trigger_is_case_insensitive(isolated_project):
-    stdout, returncode = run_main(["new", "exit"])
-    assert "Starting new patient registration" in stdout
-    assert returncode == 0
 
 
 def test_exit_closes_cleanly(isolated_project):
@@ -89,6 +89,22 @@ def test_wrong_pin_is_rejected(isolated_project):
     assert "PATIENT MENU" not in stdout
     assert returncode == 0
 
+def test_patient_can_view_own_information(isolated_project):
+    stdout, returncode = run_main(["P-101", "1234", "1", "5", "exit"])
+    assert "Jane Doe" in stdout
+    assert returncode == 0
+
+
+def test_patient_can_view_own_appointments(isolated_project):
+    stdout, returncode = run_main(["P-101", "1234", "3", "5", "exit"])
+    assert "A-301" in stdout
+    assert returncode == 0
+
+
+def test_doctor_can_view_own_appointments(isolated_project):
+    stdout, returncode = run_main(["DR-201", "5678", "1", "4", "exit"])
+    assert "A-301" in stdout
+    assert returncode == 0
 
 def test_unknown_id_with_valid_prefix_is_rejected(isolated_project):
     # A correctly-shaped ID (right prefix) that doesn't match any real
@@ -98,21 +114,25 @@ def test_unknown_id_with_valid_prefix_is_rejected(isolated_project):
     assert returncode == 0
 
 
-def test_new_registration_does_not_actually_save_a_patient(isolated_project):
+def test_new_registration_actually_creates_a_patient(isolated_project):
+   
+    stdout, returncode = run_main([
+        "new",
+        "Jane", "Test",
+        "1990-01-01",
+        "Female",
+        "55512345",
+        "jane.test@gmail.com",
+        "1 Test St",
+        "exit",
+    ])
+    assert "Registration successful!" in stdout
+    assert returncode == 0
+
     with open("patients.json") as f:
-        before = json.load(f)
-
-    run_main(["new", "Jane Test", "55512345", "Female", "1990-01-01",
-              "jane@gmail.com", "1 Test St", "exit"])
-
-    with open("patients.json") as f:
-        after = json.load(f)
-
-    assert before == after, (
-        "patients.json changed after registering via NEW - looks like "
-        "register_patient() now actually saves. If so, remove this test "
-        "and write a real 'registration succeeds' test instead."
-    )
+        patients = json.load(f)
+    assert len(patients) == 2  # the fixture's sample patient + the new one
+    assert any(p["name"] == "Jane Test" for p in patients)
 
 
 def test_admin_menu_rejects_bad_input_instead_of_crashing(isolated_project):
@@ -129,4 +149,52 @@ def test_admin_menu_logout_actually_works(isolated_project):
     assert "Logging out..." in stdout, (
         "Typing 7 to log out of the admin menu didn't log out - "
         "it fell through to the else branch instead (int vs string compare bug)."
+    )
+
+def test_admin_menu_all_options_run_without_crashing(isolated_project):
+    stdout, returncode = run_main([
+        "A-100", "9999",
+        "1", "Jane", "Test", "1990-01-01", "Female", "55512345", "jane.test@gmail.com", "1 Test St", "1111",
+        "2",
+        "3", "P-101",
+        "4", "P-101", "", "", "", "", "", "",
+        "5", "Add", "Doc", "Neurology", "09:00", "17:00", "55512345", "2222",
+        "6",
+        "7",
+        "exit",
+    ])
+    assert returncode == 0, (
+        f"Something crashed while running through every admin menu option "
+        f"(returncode={returncode}). Output:\n{stdout}"
+    )
+
+
+def test_doctor_menu_all_options_run_without_crashing(isolated_project):
+    stdout, returncode = run_main([
+        "DR-201", "5678",
+        "1",
+        "2", "P-101",
+        "3", "A-301", "Completed",
+        "4",
+        "exit",
+    ])
+    assert returncode == 0, (
+        f"Something crashed while running through every doctor menu option "
+        f"(returncode={returncode}). Output:\n{stdout}"
+    )
+
+
+def test_patient_menu_all_options_run_without_crashing(isolated_project):
+    stdout, returncode = run_main([
+        "P-101", "1234",
+        "1",
+        "2", "b", "DR-201", "2026-09-25", "09:00",
+        "3",
+        "4", "A-301", "yes",
+        "5",
+        "exit",
+    ])
+    assert returncode == 0, (
+        f"Something crashed while running through every patient menu option "
+        f"(returncode={returncode}). Output:\n{stdout}"
     )

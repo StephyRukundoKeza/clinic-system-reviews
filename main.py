@@ -1,5 +1,6 @@
 from data_manager import load_data, save_data
 from operations import find_record_by_id, check_pin
+import sub_main
 
 print("========================================")
 print("Clinic Appointment And Management System")
@@ -7,7 +8,7 @@ print("========================================")
 
 
 
-def admin_menu():
+def admin_menu(patients, doctors, appointments):
     while True:
         print("=====ADMINISTRATOR MENU=====")
         print("1.Register new patient")
@@ -28,14 +29,24 @@ def admin_menu():
             print("Please choose a number between 1 and 7.")
             continue
 
-        if choice == 7:
+        if choice == 1:
+            sub_main.admin_register_patient(patients)
+        elif choice == 2:
+            sub_main.admin_display_patients(patients)
+        elif choice == 3:
+            sub_main.admin_search_patient(patients)
+        elif choice == 4:
+            sub_main.admin_update_patient(patients)
+        elif choice == 5:
+            sub_main.admin_add_doctor(doctors)
+        elif choice == 6:
+            sub_main.admin_view_appointments(appointments)
+        elif choice == 7:
             print("Logging out...")
             break
-        else:
-            print("Option selected:", choice)
 
 
-def doctor_menu():
+def doctor_menu(record, patients, appointments):
     while True:
         print("=====DOCTOR MENU=====")
         print("1.View appointment")
@@ -53,14 +64,18 @@ def doctor_menu():
             print("Please choose a number between 1 and 4.")
             continue
 
-        if choice == 4:
+        if choice == 1:
+            sub_main.doctor_view_appointments(record, appointments)
+        elif choice == 2:
+            sub_main.doctor_view_patient_information(patients)
+        elif choice == 3:
+            sub_main.doctor_update_appointment(record, appointments)
+        elif choice == 4:
             print("Logging out...")
             break
-        else:
-            print("Option selected:", choice)
 
 
-def patient_menu():
+def patient_menu(record, doctors, appointments):
     while True:
         print("========PATIENT MENU========")
         print("1.View my infomation")
@@ -79,11 +94,17 @@ def patient_menu():
             print("Please choose a number between 1 and 5.")
             continue
 
-        if choice == 5:
+        if choice == 1:
+            sub_main.patient_view_information(record)
+        elif choice == 2:
+            sub_main.patient_book_appointment(record, doctors, appointments)
+        elif choice == 3:
+            sub_main.patient_view_own_appointments(record, appointments)
+        elif choice == 4:
+            sub_main.patient_cancel_appointment(record, appointments)
+        elif choice == 5:
             print("Logging out...")
             break
-        else:
-            print("Option selected:", choice)
 
 def main():  # this particular function will control the main flow
     patients, doctors, appointments, admins = load_data()
@@ -104,6 +125,7 @@ def main():  # this particular function will control the main flow
 
         elif user_id.upper() =="NEW":  #start the registration process for a new patient
             print("Starting new patient registration")
+            sub_main.patient_self_registration_menu(patients)
 
         elif user_id.startswith("A-"): # An ID starting with A belongs to the Adminstrator
             record = find_record_by_id(admins, user_id)
@@ -112,7 +134,8 @@ def main():  # this particular function will control the main flow
             else:
                 entered_pin = input("Enter your PIN: ")
                 if check_pin(record, entered_pin):
-                    admin_menu()
+                    print("Opening Admin Menu... ")
+                    admin_menu(patients, doctors, appointments)
                 else:
                     print("Incorrect PIN.")
 
@@ -124,7 +147,7 @@ def main():  # this particular function will control the main flow
                 entered_pin = input("Enter your PIN: ")
                 if check_pin(record, entered_pin):
                     print("Opening Doctor Menu... ")
-                    doctor_menu()
+                    doctor_menu(record, patients, appointments)
                 else:
                     print("Incorrect PIN.")
 
@@ -137,7 +160,7 @@ def main():  # this particular function will control the main flow
                 entered_pin = input("Enter your PIN: ")
                 if check_pin(record, entered_pin):
                     print("Opening Patient Menu")
-                    patient_menu()
+                    patient_menu(record, doctors, appointments)
                 else:
                     print("Incorrect PIN.")
 
