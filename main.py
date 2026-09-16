@@ -1,4 +1,5 @@
 from data_manager import load_data, save_data
+from operations import find_record_by_id, check_pin
 
 print("========================================")
 print("Clinic Appointment And Management System")
@@ -101,24 +102,44 @@ def main():  # this particular function will control the main flow
             save_data(patients, doctors, appointments, admins)
             break
 
-        elif user_id =="NEW":  #start the registration process for a new patient
+        elif user_id.upper() =="NEW":  #start the registration process for a new patient
             print("Starting new patient registration")
 
         elif user_id.startswith("A-"): # An ID starting with A belongs to the Adminstrator
-
-            admin_menu() 
-
-            print("Opening Adminstrator Menu")
+            record = find_record_by_id(admins, user_id)
+            if record is None:
+                print("Invalid ID.Please enter a valid ID.")
+            else:
+                entered_pin = input("Enter your PIN: ")
+                if check_pin(record, entered_pin):
+                    admin_menu()
+                else:
+                    print("Incorrect PIN.")
 
         elif user_id.startswith("DR-"):
-            print("Opening Doctor Menu... ")
-            #open the doctor's menu
-            doctor_menu()
+            record = find_record_by_id(doctors, user_id)
+            if record is None:
+                print("Invalid ID.Please enter a valid ID.")
+            else:
+                entered_pin = input("Enter your PIN: ")
+                if check_pin(record, entered_pin):
+                    print("Opening Doctor Menu... ")
+                    doctor_menu()
+                else:
+                    print("Incorrect PIN.")
 
         elif user_id.startswith("P-"):
-            #an ID starting with P belongs to a doctor.
-            print("Opening Patient Menu")
-            patient_menu()
+            #an ID starting with P belongs to a patient.
+            record = find_record_by_id(patients, user_id)
+            if record is None:
+                print("Invalid ID.Please enter a valid ID.")
+            else:
+                entered_pin = input("Enter your PIN: ")
+                if check_pin(record, entered_pin):
+                    print("Opening Patient Menu")
+                    patient_menu()
+                else:
+                    print("Incorrect PIN.")
 
 
         else:

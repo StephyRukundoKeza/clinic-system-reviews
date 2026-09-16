@@ -6,6 +6,11 @@ def test_user_verify_pin():
     assert u.verify_pin("1234") is True
     assert u.verify_pin("0000") is False
 
+def test_user_login():
+    u = User("U-1", "Test User", "1234", "55512345")
+    assert u.login("1234") is True
+    assert u.login("0000") is False
+
 
 def test_admin_to_dict_is_json_serializable():
     a = Admin("A-00000001", "Admin Person", "1111", "55512345")

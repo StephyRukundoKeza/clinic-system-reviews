@@ -65,29 +65,30 @@ def get_valid_patient_menu():
                 print("Invalid format. Select a number from 1-5 ")  
         
             
+def is_valid_name(name):
+    return name != "" and name.isalpha()
+
 def get_valid_firstname():
-   while True:
-    firstname=input("Please enter your first name: ").strip()
-    if firstname=="":
-        print("Oops sorry first name can not be left empty")
-        continue
-    if not firstname.isalpha():
-        print("Invalid format. Please enter a valid name")
-        continue
-    if firstname.isalpha():
-        return  firstname      
-                
-def get_valid_lastname():
     while True:
-        lastname=input("Please enter your last name: ").strip()
-        if lastname=="":
-            print("Oops sorry lasst name can not be left empty")
+        firstname = input("Please enter your first name: ").strip()
+        if firstname == "":
+            print("Oops sorry first name can not be left empty")
             continue
-        if not lastname.isalpha():
+        if not is_valid_name(firstname):
             print("Invalid format. Please enter a valid name")
             continue
-        if lastname.isalpha():
-            return  lastname      
+        return firstname
+
+def get_valid_lastname():
+    while True:
+        lastname = input("Please enter your last name: ").strip()
+        if lastname == "":
+            print("Oops sorry last name can not be left empty")
+            continue
+        if not is_valid_name(lastname):
+            print("Invalid format. Please enter a valid name")
+            continue
+        return lastname     
            
 def get_valid_birthdate():
     while True:
@@ -143,6 +144,8 @@ def get_valid_phone_number():
             continue
         break
     return number
+def is_valid_duration(duration_minutes):
+    return isinstance(duration_minutes, (int, float)) and duration_minutes > 0
 
 def get_valid_email():
     while True:
@@ -167,7 +170,6 @@ def get_valid_email():
         break
     return email
     
-#
-get_valid_birthdate()
+#get_valid_birthdate()
 
 #get_valid_menu()

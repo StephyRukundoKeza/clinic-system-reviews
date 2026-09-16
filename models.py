@@ -17,6 +17,9 @@ class User:
     def verify_pin(self, input_pin):   #verifies the user's pin for authentication
         return self.pin == input_pin
 
+    def login(self, input_pin):  #named login entry point per the role spec - just delegates to verify_pin so there's one source of truth for the pin check
+        return self.verify_pin(input_pin)
+
     def to_dict(self):  #converts the user object to a dictionary for easy storage and retrieval
         return {
             "user_id": self.user_id,
@@ -101,22 +104,22 @@ class Appointment:  #Appointment class to manage appointments
     self.duration = duration_minutes  # Duration in minutes
     self.status = status    
 
-    def update_status(self, new_status):  #method to update the status of the appointment (e.g., Active, Completed, Cancelled)
-        self.status = new_status
+   
 
-    def reschedule_appointment(self, new_date, new_start_time):  #method to reschedule an existing appointment
-        self.date = new_date
-        self.start_time = new_start_time
+  def update_status(self, new_status):  #method to update the status of the appointment (e.g., Active, Completed, Cancelled)
+      self.status = new_status
 
-    def to_dict(self):  #method to convert the appointment object to a dictionary for easy storage and retrieval
-        return {
-            "appointment_id": self.appointment_id,
-            "patient_id": self.patient_id,
-            "doctor_id": self.doctor_id,
-            "date": self.date,
-            "start_time": self.start_time,
-            "duration": self.duration,
-            "status": self.status
-        }
+  def reschedule_appointment(self, new_date, new_start_time):  #method to reschedule an existing appointment
+      self.date = new_date
+      self.start_time = new_start_time
 
-
+  def to_dict(self):  #method to convert the appointment object to a dictionary for easy storage and retrieval
+      return {
+          "appointment_id": self.appointment_id,
+          "patient_id": self.patient_id,
+          "doctor_id": self.doctor_id,
+          "date": self.date,
+          "start_time": self.start_time,
+          "duration": self.duration,
+          "status": self.status
+      }
