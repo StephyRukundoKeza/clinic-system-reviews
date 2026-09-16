@@ -18,55 +18,61 @@ def main():# this particular function will control the main flow
         print()
         print("Welcome!")
         print()
-        print("Enter your ID to continue.")
-        print("Type NEW to register as patient. ")
-        print("Type EXIT to close the system")
+        print("1.Login")
+        print("2.Create Account ")
+        print("3.Logout")
         print()
 
+        #option 1 :login choice 
+        choice = input("Choice an option: ").strip()
+        if choice =="1":
+               #Ask the user for their ID 
+            user_id = input("Enter your ID: ").strip()
+
+        #route the user based on their ID
+            if user_id.startswith("A-"):
+                     # An ID starting with A belongs to the Adminstrator
+                print("Opening Adminstrator Menu...")
+                admin_menu() 
+                    
+        
+            elif user_id.startswith("DR-"):
+                    print("Opening Doctor Menu... ")
+                    #open the doctor's menu
+                    doctor_menu()
+        
+            elif user_id.startswith("P-"):
+                    #An ID starting with P- belongs to patient
+                    print("Opening Patient Menu ...")
+                    patient_menu()
+                    #an ID starting with P belongs to a patient.
+            else:
+                        #this runs when the ID does not match
+                        #any of the accepted ID formats
+                        print("Invalid ID.Please enter a valid ID.")            
 
 
-    #Ask the user for their ID  
-        user_id =input("Enter your ID: ").strip()
+        #Option 2:Create Account
+        elif choice=="2":
+            print("Create Account")
 
 
-        if user_id.lower() =="exit":
-            #close the system when the user chooses Exit
-            print("Thank you for using the Clinic Management System")
+        #Option 3:Logout
+        elif choice =="3":
+            print("Thank you for using the Clinic Management System.")
             print("System closed successfully")
+       
+
 
             #save the current data before closing
             save_data(patients, doctors, appointments)
 
             break
 
-        elif user_id.lower() =="new": 
-             #start the registration process for a new patient
-            register_patient()
-
-        elif user_id.startswith("A-"):
-             # An ID starting with A belongs to the Adminstrator
-            print("Opening Adminstrator Menu...")
-            admin_menu() 
-            
-
-        elif user_id.startswith("DR-"):
-            print("Opening Doctor Menu... ")
-            #open the doctor's menu
-            doctor_menu()
-
-        elif user_id.startswith("P-"):
-            #An ID starting with P- belongs to patient
-            print("Opening Patient Menu ...")
-
-            patient_menu()
-            #an ID starting with P belongs to a patient.
-            
-
-
+        
         else:
-            #this runs when the ID does not match
-            #any of the accepted ID formats
-            print("Invalid ID.Please enter a valid ID.")
+             print("Invalid option. Please choose 1, 2, 3.")
+
 
 
     
@@ -97,7 +103,6 @@ def admin_menu():
             break
         elif choice =="1":
             print("Pegister new patient")
-            patient_self_registration_menu()
 
         elif choice =="2":
             print("Display all patient") 
