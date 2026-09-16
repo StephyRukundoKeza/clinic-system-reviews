@@ -1,8 +1,15 @@
 from data_manager import load_data, save_data 
+<<<<<<< HEAD
 from validation import  get_valid_admin_menu
 from validation import get_valid_doctor_menu
 from validation import get_valid_patient_menu
 from sub_main import patient_self_registration_menu
+=======
+from models import Patient
+from operations import generate_new_id_patient
+from operations import find_record_by_id
+
+>>>>>>> c3168ec (update main application interface and login routing)
 def main():# this particular function will control the main flow
               #of the application'
 
@@ -32,20 +39,37 @@ def main():# this particular function will control the main flow
         #route the user based on their ID
             if user_id.startswith("A-"):
                      # An ID starting with A belongs to the Adminstrator
-                print("Opening Adminstrator Menu...")
-                admin_menu() 
+                user = find_record_by_id(patients + doctors, user_id)
+                if user:
+                       print("Opening Adminstrator Menu'...")
+                       admin_menu(user_id)
+
+                else:
+                     print("Adminstrator ID not found")     
+                                   
+                
                     
         
             elif user_id.startswith("DR-"):
-                    print("Opening Doctor Menu... ")
-                    #open the doctor's menu
-                    doctor_menu()
+                    user = find_record_by_id(doctors, user_id)
+
+                    if user:
+                       print("Opening Doctor Menu... ")
+                       #open the doctor's menu
+                       doctor_menu(user_id)
+                    else:
+                         print("Doctor ID not found")
         
             elif user_id.startswith("P-"):
-                    #An ID starting with P- belongs to patient
-                    print("Opening Patient Menu ...")
-                    patient_menu()
-                    #an ID starting with P belongs to a patient.
+                    user = find_record_by_id(patients, user_id)
+
+                    if user:
+                        #An ID starting with P- belongs to patient
+                       print("Opening Patient Menu ...")
+                       patient_menu(user_id)
+                       #an ID starting with P belongs to a patient.
+                    else:
+                         print("Patient ID not found.")
             else:
                         #this runs when the ID does not match
                         #any of the accepted ID formats
@@ -55,12 +79,42 @@ def main():# this particular function will control the main flow
         #Option 2:Create Account
         elif choice=="2":
             print("Create Account")
+            while True:
+                 print()
+                 print("==============")
+                 print("Create Account")
+                 print("==============")
+                 print()
+                 print("1.Create Admin Account")
+                 print("2.Create Doctor Account")
+                 print("3.Create Patient Account")
+                 print("4.Back")
 
 
-        #Option 3:Logout
+                 account_choice = input("Choose an option: ").strip()
+                 if account_choice =="1":
+                      print("Create Admin Account")
+
+                 elif account_choice =="2":
+                      print("Create Doctor Account")
+
+                 elif account_choice =="3":
+                      # opens the patient registration interface
+                      register_patient(patients)
+
+                 elif account_choice =="4":
+                      print("Returning to main menu...")
+                      break
+
+
+                 else:
+                      print("Invalid option. Please choose 1, 2, 3, or 4. ")
+
+
+        #Option 3:closing the system
         elif choice =="3":
-            print("Thank you for using the Clinic Management System.")
-            print("System closed successfully")
+            print("Thank you for using our Clinic Management System.")
+            print("System closed successfully!")
        
 
 
@@ -81,7 +135,7 @@ def main():# this particular function will control the main flow
             
 
 
-def admin_menu():
+def admin_menu(user_id):
     #This function displays the options available
     #to an adminstrator.
 
@@ -97,12 +151,24 @@ def admin_menu():
         print("6.View appointments")
         print("7.Logout")
 
+<<<<<<< HEAD
         choice = get_valid_admin_menu()
+=======
+        choice = input("Choose an option: ").strip()
+
+>>>>>>> c3168ec (update main application interface and login routing)
         if  choice =="7":
             print("Logging out...")
             break
+
         elif choice =="1":
+<<<<<<< HEAD
             print("Pegister new patient")
+=======
+            #opens menu registration interface
+            register_patient()
+
+>>>>>>> c3168ec (update main application interface and login routing)
 
         elif choice =="2":
             print("Display all patient") 
@@ -120,11 +186,11 @@ def admin_menu():
             print("View appointments")
 
         else:
-            print("Option selected:",choice)
+            print("Invalid option. Please choose a number from 1 to 7.")
 
 
 
-def  doctor_menu():
+def  doctor_menu(user_id):
     #this function displays the options available to a doctor 
 
 
@@ -140,7 +206,7 @@ def  doctor_menu():
         choice = get_valid_doctor_menu()  
 
         if choice =="4":
-            print("View appointment")
+            print("Logging out...")
             break
 
         elif choice =="1":
@@ -159,8 +225,8 @@ def  doctor_menu():
         
 
 
-def patient_menu():
-
+def patient_menu(user_id):
+#this displays available options to a patient
 
     while True:
         print("============")
@@ -172,7 +238,12 @@ def patient_menu():
         print("4.Cancel appointment")
         print("5.Logout")
 
+<<<<<<< HEAD
         choice =   get_valid_patient_menu()
+=======
+        choice = input("Choose an option: ").strip()
+
+>>>>>>> c3168ec (update main application interface and login routing)
         if choice =="5":
             print("Logging out...")
             break 
@@ -193,7 +264,7 @@ def patient_menu():
         else:
             print("Invalid option.Please choose a number from 1 to 5.")
         
-def register_patient():
+def register_patient(patients):
     #this function will collect the information
     #needed to register a new patient
 
@@ -203,6 +274,7 @@ def register_patient():
 
 
     name = input("Enter your name: ")
+    pin = input("Create a pin: ")
     phone_number = input("Enter your phone number: ")
     gender = input("Enter your gender: ")
     date_of_birth = input("Enter your date of birth: ")
@@ -211,4 +283,5 @@ def register_patient():
 
     print()
     print("Patient information collected successfully.")
+#start the application
 main()       
