@@ -10,24 +10,50 @@ def generate_new_id_admin():
     print(f"Your admin id is A-{id}")
     return f"A-{id}"
 
-def generate_new_id_patient():
+def generate_new_id_patient(patients):
+    
+    while True:
     # Generates a unique 8-digit ID for new patients.
-    print("Generating your patients id")
-    id=random.randrange(00000000,99999999)
-    print(f"Your patient id is P-{id}")
-    return f"P-{id}"
+        print("Generating your patients id")
+        id=random.randrange(00000000,99999999)
+        new_id= f"P-{id}"
+#checks for any duplicates
+        for patient in patients:
+            if patient["user_id"] ==new_id:
+                break
+        else:
+            print(f"Your patient id is P-{id}")
+            return f"P-{id}"
 
-def generate_new_id_doctor():
+def generate_new_id_doctor(doctors):
     # Generates a unique 8-digit ID for new doctors.
     print("Generating your doctors id")
     id=random.randrange(00000000,99999999)
-    print(f"Your doctor id is DR-{id}")
-    return f"DR-{id}"
+    new_id=f"DR-{id}"
+    
+    
+    #checks for any duplicates
+    for doctor in doctors:
+        if doctor["user_id"] ==new_id:
+                break
+    else:
+        print(f"Your doctor id is DR-{id}")
+        return f"DR-{id}"
 
-def generate_new_id_appointment():
+def generate_new_id_appointment(appointments):
 # Generates a unique 6-digit ID for new appointments.
     id = random.randrange(100000, 999999)
-    return f"APT-{id}"
+    new_id=f"APT-{id}"
+    
+    #checks for any duplicates
+    for appointment in appointments:
+        if appointment["appointment_id"] ==new_id:
+                    break
+    else:
+        print(f"Your appointment id is DR-{id}")
+        return f"APT-{id}"
+
+
 
 def find_record_by_id(record_list, search_id):
     for record in record_list:
