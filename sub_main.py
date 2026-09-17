@@ -352,7 +352,125 @@ def patient_cancel_appointment():
     pass
 
 
- 
+ # Doctor menu
 
+def doctor_view_schedule(current_doctor, appointment_list, patient_list=None):
+# Displays all appointments associated with the logged-in doctor.
+#Handles both dictionary and object representations cleanly.
+    print("\n--- My Appointment Schedule ---")
+    
+    # Extract Doctor ID safely
+    doc_id = current_doctor.get('user_id') if isinstance(current_doctor, dict) else getattr(current_doctor, 'user_id', None)
+
+    # Filter appointments for this doctor
+    doc_apts = []
+    for a in appointment_list:
+        apt_doc = a.get('doctor_id') if isinstance(a, dict) else getattr(a, 'doctor_id', None)
+        if apt_doc == doc_id:
+            doc_apts.append(a)
+
+    if not doc_apts:
+        print("You have no scheduled appointments on record.")
+        return
+
+    print("\n---------------------------------------------------------------------------------------------")
+    print(f"{'Appt ID':<12} | {'Patient ID':<12} | {'Date':<12} | {'Time':<8} | {'Status':<10}")
+    print("---------------------------------------------------------------------------------------------")
+
+    for a in doc_apts:
+        if isinstance(a, dict):
+            apt_id = a.get('appointment_id', 'N/A')
+            p_id = a.get('patient_id', 'N/A')
+            date = a.get('date') or a.get('appointment_date', 'N/A')
+            time = a.get('start_time', 'N/A')
+            status = a.get('status', 'Active')
+        else:
+            apt_id = getattr(a, 'appointment_id', 'N/A')
+            p_id = getattr(a, 'patient_id', 'N/A')
+            date = getattr(a, 'date', getattr(a, 'appointment_date', 'N/A'))
+            time = getattr(a, 'start_time', 'N/A')
+            status = getattr(a, 'status', 'Active')
+
+        print(f"{apt_id:<12} | {p_id:<12} | {date:<12} | {time:<8} | {status:<10}")
+    print("---------------------------------------------------------------------------------------------\n")
+
+def doctor_update_appointment_status(current_doctor, appointment_list):
+    #Allows the doctor to update the status of an appointment assigned to them.
+    print("\n--- Update Appointment Status ---")
+    doc_id = current_doctor.get('user_id') if isinstance(current_doctor, dict) else getattr(current_doctor, 'user_id', None)
+
+    apt_id = input("Enter the Appointment ID to update (e.g., APT-123456): ").strip().upper()
+    apt = operations.find_record_by_id(appointment_list, apt_id)
+
+    if not apt:
+        print("Error: Appointment not found.")
+        return
+
+    # Verify ownership
+    apt_doc_id = apt.get('doctor_id') if isinstance(apt, dict) else getattr(apt, 'doctor_id', None)
+    if apt_doc_id != doc_id:
+        print("Error: You can only update appointments assigned to you.")
+        return
+
+    print("\nSelect New Status:")
+    print("1. Completed")
+    print("2. In-Progress")
+    print("3. Cancelled")
+    print("4. Active")
+
+    choice = validation.get_integer("Enter choice (1-4): ", min_val=1, max_val=4)
+    status_map = {1: "Completed", 2: "In-Progress", 3: "Cancelled", 4: "Active"}
+    new_status = status_map[choice]
+
+    if isinstance(apt, dict):
+        apt['status'] = new_status
+    else:
+        if hasattr(apt, 'update_status'):
+            apt.update_status(new_status)
+        else:
+            setattr(apt, 'status', new_status)
+
+    print(f"\nSuccess: Appointment {apt_id} status updated to '{new_status}'.")
+
+
+def doctor_view_profile(current_doctor):
+    """
+    Displays profile details for the currently logged-in doctor.
+    """
+    print("\n--- My Profile ---")
+    if isinstance(current_doctor, dict):
+        print(f"Doctor ID    : {current_doctor.get('user_id')}")
+        print(f"Name         : Dr. {current_doctor.get('name')}")
+        print(f"Specialty    : {current_doctor.get('specialization', 'General')}")
+        print(f"Phone        : {current_doctor.get('phone_number', 'N/A')}")
+        print(f"Shift Start  : {current_doctor.get('shift_start_time', '09:00')}")
+        print(f"Shift End    : {current_doctor.get('shift_end_time', '17:00')}")
+    else:
+        print(f"Doctor ID    : {getattr(current_doctor, 'user_id', 'N/A')}")
+        print(f"Name         : Dr. {getattr(current_doctor, 'name', 'N/A')}")
+        print(f"Specialty    : {getattr(current_doctor, 'specialization', 'General')}")
+        print(f"Phone        : {getattr(current_doctor, 'phone_number', 'N/A')}")
+        print(f"Shift Start  : {getattr(current_doctor, 'shift_start_time', getattr(current_doctor, 'shift_start', '09:00'))}")
+        print(f"Shift End    : {getattr(current_doctor, 'shift_end_time', getattr(current_doctor, 'shift_end', '17:00'))}")
+
+def doctor_update_shift(current_doctor):
+# Allows the doctor to change their shift hours.
+    print("\n--- Update Shift Working Hours ---")
+    new_start = validation.get_valid_time("Enter new Shift Start Time (HH:MM in 24h format): ")
+    new_end = validation.get_valid_time("Enter new Shift End Time (HH:MM in 24h format): ")
+
+    if isinstance(current_doctor, dict):
+        current_doctor['shift_start_time'] = new_start
+        current_doctor['shift_end_time'] = new_end
+    else:
+        if hasattr(current_doctor, 'update_shifts'):
+            current_doctor.update_shifts(new_start, new_end)
+        elif hasattr(current_doctor, 'update_shift'):
+            current_doctor.update_shift(new_start, new_end)
+        else:
+            setattr(current_doctor, 'shift_start_time', new_start)
+            setattr(current_doctor, 'shift_end_time', new_end)
+
+    print(f"\nShift updated successfully: {new_start} - {new_end}")
 
 
