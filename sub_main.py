@@ -324,6 +324,7 @@ def admin_cancel_appointment(appointments):
     else:
         print("Attempt Cancelled.")
 
+# Patient menu
 def patient_view_information(patients):
     print("---View Patient Information---")
      
@@ -356,7 +357,7 @@ def patient_cancel_appointment():
     pass
 
 
- # Doctor menu
+# Doctor menu
 
 def doctor_view_schedule(current_doctor, appointments, patients=None):
 # Displays all appointments associated with the logged-in doctor.
@@ -437,9 +438,7 @@ def doctor_update_appointment_status(current_doctor, appointments):
 
 
 def doctor_view_profile(current_doctor):
-    """
-    Displays profile details for the currently logged-in doctor.
-    """
+# Displays profile details for the currently logged-in doctor.
     print("\n--- My Profile ---")
     if isinstance(current_doctor, dict):
         print(f"Doctor ID    : {current_doctor.get('user_id')}")
