@@ -1,7 +1,7 @@
 print("Day one on clinic appointment system!")
 import random
 from datetime import datetime, timedelta
-
+import data_manager
 
 def generate_new_id_admin():
     # Generates a unique 8-digit ID for new admins.
@@ -23,7 +23,7 @@ def generate_new_id_patient(patients):
                 break
         else:
             print(f"Your patient id is P-{id}")
-            return f"P-{id}"
+            return new_id
 
 def generate_new_id_doctor(doctors):
     # Generates a unique 8-digit ID for new doctors.
@@ -38,7 +38,7 @@ def generate_new_id_doctor(doctors):
                 break
     else:
         print(f"Your doctor id is DR-{id}")
-        return f"DR-{id}"
+        return new_id
 
 def generate_new_id_appointment(appointments):
 # Generates a unique 6-digit ID for new appointments.
@@ -51,7 +51,7 @@ def generate_new_id_appointment(appointments):
                     break
     else:
         print(f"Your appointment id is DR-{id}")
-        return f"APT-{id}"
+        return  new_id
 
 
 
@@ -110,4 +110,4 @@ def get_available_time_slots(selected_doctor , appointment_date, appointment_lis
 
     
             
-       
+
