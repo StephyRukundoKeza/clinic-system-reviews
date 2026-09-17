@@ -1,15 +1,14 @@
 from data_manager import load_data, save_data 
-<<<<<<< HEAD
+
 from validation import  get_valid_admin_menu
 from validation import get_valid_doctor_menu
 from validation import get_valid_patient_menu
 from sub_main import patient_self_registration_menu
-=======
-from models import Patient
-from operations import generate_new_id_patient
+
+
 from operations import find_record_by_id
 
->>>>>>> c3168ec (update main application interface and login routing)
+
 def main():# this particular function will control the main flow
               #of the application'
 
@@ -39,7 +38,7 @@ def main():# this particular function will control the main flow
         #route the user based on their ID
             if user_id.startswith("A-"):
                      # An ID starting with A belongs to the Adminstrator
-                user = find_record_by_id(patients + doctors, user_id)
+                print("Administrator login is not connected yet.")
                 if user:
                        print("Opening Adminstrator Menu'...")
                        admin_menu(user_id)
@@ -151,24 +150,24 @@ def admin_menu(user_id):
         print("6.View appointments")
         print("7.Logout")
 
-<<<<<<< HEAD
+
         choice = get_valid_admin_menu()
-=======
+
         choice = input("Choose an option: ").strip()
 
->>>>>>> c3168ec (update main application interface and login routing)
+
         if  choice =="7":
             print("Logging out...")
             break
 
         elif choice =="1":
-<<<<<<< HEAD
+
             print("Pegister new patient")
-=======
+
             #opens menu registration interface
             register_patient()
 
->>>>>>> c3168ec (update main application interface and login routing)
+
 
         elif choice =="2":
             print("Display all patient") 
@@ -238,12 +237,12 @@ def patient_menu(user_id):
         print("4.Cancel appointment")
         print("5.Logout")
 
-<<<<<<< HEAD
+
         choice =   get_valid_patient_menu()
-=======
+
         choice = input("Choose an option: ").strip()
 
->>>>>>> c3168ec (update main application interface and login routing)
+
         if choice =="5":
             print("Logging out...")
             break 
