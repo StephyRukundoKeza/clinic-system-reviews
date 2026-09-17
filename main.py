@@ -59,7 +59,7 @@ def main():# this particular function will control the main flow
                     else:
                          print("Doctor ID not found")
         
-            elif user_id.startswith("P-"):
+            elif user_id.startswith("P-") or user_id.startswith("P"):
                     user = find_record_by_id(patients, user_id)
 
                     if user:
@@ -84,16 +84,16 @@ def main():# this particular function will control the main flow
                  print("Create Account")
                  print("==============")
                  print()
-                 print("1.Create Admin Account")
-                 print("2.Create Doctor Account")
-                 print("3.Create Patient Account")
-                 print("4.Back")
+                 print("1.Register")
+                 print("0.Cancel")
+                 
 
 
                  account_choice = input("Choose an option: ").strip()
                  if account_choice =="1":
-                      print("Create Admin Account")
-
+                      
+                      
+                      
                  elif account_choice =="2":
                       print("Create Doctor Account")
 
@@ -162,7 +162,7 @@ def admin_menu(user_id):
 
         elif choice =="1":
 
-            print("Pegister new patient")
+            print("Register new patient")
 
             #opens menu registration interface
             register_patient()
