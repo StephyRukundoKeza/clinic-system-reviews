@@ -55,8 +55,8 @@ def generate_new_id_appointment(appointments):
 
 
 
-def find_record_by_id(record_list, search_id):
-    for record in record_list:
+def find_record_by_id(saved_data, search_id):
+    for record in saved_data:
 # Check if the record is a dictionary (freshly loaded from JSON by data_manager)
         if isinstance(record, dict):
 # We check 'user_id', but if it's an appointment, it falls back to checking 'appointment_id'
@@ -76,7 +76,7 @@ def find_record_by_id(record_list, search_id):
 
 
 
-def get_available_time_slots(selected_doctor , appointment_date, appointment_list):
+def get_available_time_slots(selected_doctor , appointment_date, appointments):
 # Calculates available 1-hour time slots for a doctor on a specific date.
 # It looks at the doctor's shift hours and subtracts any active appointments.
 # 1. Get the doctor's shift times (safely handling dicts or objects)
@@ -88,7 +88,7 @@ def get_available_time_slots(selected_doctor , appointment_date, appointment_lis
     doc_id = selected_doctor['user_id']
     booked_slots=[]  
         
-    for appointment in appointment_list:
+    for appointment in appointments:
         if(appointment['user_id'] == doc_id
             and appointment['date'] == appointment_date):
             booked_slots.append(appointment["start_time"])          
