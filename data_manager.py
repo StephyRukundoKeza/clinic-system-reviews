@@ -1,5 +1,6 @@
 import json
 
+
 def load_data():
     """
     Reads patients, doctors, and appointments from their respective JSON files.

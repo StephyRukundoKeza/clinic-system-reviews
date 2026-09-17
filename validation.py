@@ -15,9 +15,25 @@ def get_valid_menu():
             if menu < 1 or menu > 3:
                 print("Selection out of range. Please select a number from 1-3 ")
                 continue
-            break
+        
+            return menu
         except ValueError:
-            print("Invalid format. Select a number from 1-3")       
+            print("Invalid format. Select a number from 1-3")    
+            
+def get_valid_create_account_menu():
+    while True:
+        try:
+            menu=int(input("select an option(1-4): "))
+            if menu=="":  #check for my empty string inputs
+                print("Oops sorry menu can not be left empty")
+                continue
+            if menu < 1 or menu > 4:
+                print("Selection out of range. Please select a number from 1-3 ")
+                continue
+               
+            return menu
+        except ValueError:
+                print("Invalid format. Select a number from 1-3")    
             
 def get_valid_admin_menu():
     #This function displays the options available
@@ -33,7 +49,7 @@ def get_valid_admin_menu():
             if choice < 1 or choice > 7:
                 print("Selection out of range. Please select a number from 1-7 ")
                 continue
-            break
+            return choice
         except ValueError:
            print("Invalid format. Select a number from 1-7 ")       
                     
@@ -50,7 +66,7 @@ def get_valid_doctor_menu() :
             if choice < 1 or choice > 4:
                 print("Selection out of range. Please select a number from 1-7 ")
                 continue
-            break
+            return choice
         except ValueError:
             print("Invalid format. Select a number from 1-4 ")  
             
@@ -69,7 +85,7 @@ def get_valid_patient_menu():
             if choice < 1 or choice > 5:
                 print("Selection out of range. Please select a number from 1-7 ")
                 continue
-            break
+            return choice
         except ValueError:
                 print("Invalid format. Select a number from 1-5 ")  
         
@@ -130,11 +146,11 @@ def get_valid_appointmentdate():
                 continue
             
                       
-            break
+            return date
+           
         except ValueError:
             print("Invalid format. Please try again with this format date as, YYYY-MM-DD: ")
-    return date
-
+    
 def get_valid_phone_number():
     while True:
         number=input("Enter your mobile phone number(without the country code): ").strip()  # this ensures users do not enter country codes with have + at the beginning because the program is built to reject all non digit inputs
@@ -150,8 +166,7 @@ def get_valid_phone_number():
         if number[0] !="5" and number[0]!="7": # checks that numbers entered starts with 5 or 7 which is the standard for mauritian numbers to ensure the number is valid
             print("Enter a valid mauritian number")
             continue
-        break
-    return number
+        return number
 
 def get_valid_email():
     while True:
@@ -173,8 +188,8 @@ def get_valid_email():
         if parts[1] not in valid_domains:
             print("Invalid email format. Enter a valid email domain: ")
             continue
-        break
-    return email
+     
+        return email
     
 def get_valid_doctor_choice(doctors):
     while True:
@@ -185,10 +200,10 @@ def get_valid_doctor_choice(doctors):
                 if choice <1 or choice >len(doctors):
                     print("sorry, selection out of range")
                     continue
-                break
+                return choice
             except ValueError:
                 print(f"Invalid format. Please enter a number between 1 and {len(doctors)}")
-    return choice
+   
             
             
 
@@ -200,8 +215,8 @@ def get_valid_slot_choice(available_slots):
             if slot_choice <1 or slot_choice >len(available_slots):
                 print("sorry, selection out of range")
                 continue
-            break
+            return slot_choice 
+                
         except ValueError:
             print(f"Invalid format. Please enter a number between 1 and {len(available_slots)}")
-            return slot_choice 
-    
+           

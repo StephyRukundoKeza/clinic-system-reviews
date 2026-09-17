@@ -324,10 +324,10 @@ def admin_cancel_appointment(appointment_list):
     else:
         print("Attempt Cancelled.")
 
-def patient_view_information():
+def patient_view_information(patient):
     print("---View Patient Information---")
      
-def patient_book_appointment(doctors,appointment_list):
+def patient_book_appointment(doctors,appointments):
     print("---Book appointment---")
     print("Available Doctors")
     for position, doctor in enumerate(doctors, start=1):
@@ -346,7 +346,11 @@ def patient_book_appointment(doctors,appointment_list):
     
     slot_choice=slot_choice-1
     print(f"You selected: {slot_choice}")
-def patient_view_appointment():
+    
+    
+    
+def patient_view_appointment(patients):
+    
     pass
 def patient_cancel_appointment():
     pass
