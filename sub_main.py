@@ -325,36 +325,146 @@ def admin_cancel_appointment(appointments):
         print("Attempt Cancelled.")
 
 # Patient menu
+
 def patient_view_information(patients):
     print("---View Patient Information---")
+    if isinstance(patients, dict):
+        print(f"Patient ID : {patients.get('user_id')}")
+        print(f"Name       : {patients.get('name')}")
+        print(f"DOB        : {patients.get('date_of_birth')}")
+        print(f"Gender     : {patients.get('gender')}")
+        print(f"Phone      : {patients.get('phone_number')}")
+        print(f"Email      : {patients.get('email')}")
+        print(f"Address    : {patients.get('address')}")
+    else:
+        print(f"Patient ID : {patients.user_id}")
+        print(f"Name       : {patients.name}")
+        print(f"DOB        : {getattr(patients, 'date_of_birth', getattr(patients, 'dob', 'N/A'))}")
+        print(f"Gender     : {patients.gender}")
+        print(f"Phone      : {patients.phone_number}")
+        print(f"Email      : {patients.email}")
+        print(f"Address    : {patients.address}")
      
-def patient_book_appointment(doctors,appointments):
-    print("---Book appointment---")
-    print("Available Doctors")
-    for position, doctor in enumerate(doctors, start=1):
-        print(f"{position}.{doctor['name']}")
-        print(f"   {doctor["specialization"]}")
-        print(f"Working hours: {doctor['shift_start_time']} - {doctor['shift_end_time']}")
+def patient_book_appointment(patients, doctors, appointments):
+    print("\n--- Book an Appointment ---")
+    if not doctors:
+        print("No doctors available in the system yet.")
+        return
+
+    # Extract patient ID safely
+    patient_id = patients.get('user_id') if isinstance(patients, dict) else patients.user_id
+
+    # 1. Display available doctors
+    print("\nAvailable Doctors:")
+    for d in doctors:
+        if isinstance(d, dict):
+            print(f"ID: {d.get('user_id')} | Name: Dr. {d.get('name')} | Specialization: {d.get('specialization')}")
+            print(f"    Working hours: {d.get('shift_start_time')} - {d.get('shift_end_time')}")
+        else:
+            print(f"ID: {d.user_id} | Name: Dr. {d.name} | Specialization: {d.specialization}")
+            # Handle slight attribute name variations between team members
+            start = getattr(d, 'shift_start_time', getattr(d, 'shift_start', '09:00'))
+            end = getattr(d, 'shift_end_time', getattr(d, 'shift_end', '17:00'))
+            print(f"    Working hours: {start} - {end}")
+
+    doc_id = input("\nEnter the Doctor ID you wish to see (e.g., DR-12345678): ").strip().upper()
+    doctor = operations.find_record_by_id(doctors, doc_id)
+
+    if not doctor:
+        print("Error: Doctor not found.")
+        return
+
+    doc_name = doctor.get('name') if isinstance(doctor, dict) else doctor.name
+    print(f"\nYou selected: Dr. {doc_name}")
+
+    # 2. Get target date using validation
+    target_date = validation.get_valid_appointmentdate()
+
+    # 3. Use operations helper to find free slots
+    available_slots = operations.get_available_time_slots(doctor, str(target_date), appointments)
+
+    if not available_slots:
+        print(f"Sorry, Dr. {doc_name} has no open slots on {target_date}.")
+        return
+
+    print(f"\nAvailable time slots for {target_date}:")
+    for idx, slot in enumerate(available_slots, 1):
+        print(f"  [{idx}] {slot}")
+
+    slot_choice = validation.get_integer("Select slot number: ", min_val=1, max_val=len(available_slots))
+    selected_time = available_slots[slot_choice - 1]
+
+    # 4. Generate unique ID and create the Appointment
+    new_apt_id = operations.generate_new_id_appointment()
     
-        
-    choice=validation.get_valid_doctor_choice(doctors)
-    choice=choice-1
-    selected_doctor=doctors[choice]
-    print(f"You selected: {selected_doctor['name']}")
-    appointment_date=validation.get_valid_appointmentdate()
-    available_slots=validation.get_available_time_slots()
-    slot_choice= validation.get_valid_slot_choice(available_slots)
-    
-    slot_choice=slot_choice-1
-    print(f"You selected: {slot_choice}")
-    
-    
-    
-def patient_view_appointment(patients):
-    
-    pass
-def patient_cancel_appointment():
-    pass
+    new_apt = models.Appointment(
+        appointment_id=new_apt_id,
+        patient_id=patient_id,
+        doctor_id=doc_id,
+        date=str(target_date),
+        start_time=selected_time,
+        status="Active"
+    )
+    appointments.append(new_apt)
+
+    print(f"\nSuccess! Appointment booked.")
+    print(f"Appointment ID: {new_apt_id} | Date: {target_date} | Time: {selected_time}")
+
+
+def patient_view_appointments(patients, appointments):
+    print("\n--- My Appointments ---")
+    patient_id = patients.get('user_id') if isinstance(patients, dict) else patients.user_id
+
+    my_apts = []
+    for a in appointments:
+        apt_patient = a.get('patient_id') if isinstance(a, dict) else getattr(a, 'patient_id', None)
+        if apt_patient == patient_id:
+            my_apts.append(a)
+
+    if not my_apts:
+        print("You have no scheduled appointments.")
+        return
+
+    print("\n---------------------------------------------------------------------------------------------")
+    print(f"{'Appt ID':<12} | {'Doctor ID':<12} | {'Date':<12} | {'Time':<8} | {'Status':<10}")
+    print("---------------------------------------------------------------------------------------------")
+    for a in my_apts:
+        if isinstance(a, dict):
+            print(f"{a.get('appointment_id'):<12} | {a.get('doctor_id'):<12} | {a.get('date', a.get('appointment_date')):<12} | {a.get('start_time'):<8} | {a.get('status'):<10}")
+        else:
+            date_val = getattr(a, 'date', getattr(a, 'appointment_date', 'N/A'))
+            print(f"{a.appointment_id:<12} | {a.doctor_id:<12} | {date_val:<12} | {a.start_time:<8} | {a.status:<10}")
+    print("---------------------------------------------------------------------------------------------")
+
+
+def patient_cancel_appointment(patients, appointments):
+    print("\n--- Cancel My Appointment ---")
+    patient_id = patients.get('user_id') if isinstance(patients, dict) else patients.user_id
+
+    search_id = input("Enter the Appointment ID to cancel (e.g., APT-123456): ").strip().upper()
+    apt = operations.find_record_by_id(appointments, search_id)
+
+    if not apt:
+        print("Error: Appointment not found.")
+        return
+
+    apt_patient_id = apt.get('patient_id') if isinstance(apt, dict) else getattr(apt, 'patient_id', None)
+    if apt_patient_id != patient_id:
+        print("Error: Appointment not found.")
+        return
+
+    confirm = input(f"Are you sure you want to cancel appointment {search_id}? (Y/N): ").strip().upper()
+    if confirm == 'Y' or confirm == 'YES':
+        if isinstance(apt, dict):
+            apt['status'] = 'Cancelled'
+        else:
+            if hasattr(apt, 'update_status'):
+                apt.update_status('Cancelled')
+            else:
+                setattr(apt, 'status', 'Cancelled')
+        print(f"Appointment {search_id} has been cancelled.")
+    else:
+        print("Cancellation aborted.")
 
 
 # Doctor menu
