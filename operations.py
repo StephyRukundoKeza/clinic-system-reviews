@@ -1,7 +1,7 @@
 print("Day one on clinic appointment system!")
 import random
 from datetime import datetime, timedelta
-
+import data_manager
 
 def generate_new_id_admin():
     # Generates a unique 8-digit ID for new admins.
@@ -23,7 +23,7 @@ def generate_new_id_patient(patients):
                 break
         else:
             print(f"Your patient id is P-{id}")
-            return f"P-{id}"
+            return new_id
 
 def generate_new_id_doctor(doctors):
     # Generates a unique 8-digit ID for new doctors.
@@ -38,7 +38,7 @@ def generate_new_id_doctor(doctors):
                 break
     else:
         print(f"Your doctor id is DR-{id}")
-        return f"DR-{id}"
+        return new_id
 
 def generate_new_id_appointment(appointments):
 # Generates a unique 6-digit ID for new appointments.
@@ -51,12 +51,12 @@ def generate_new_id_appointment(appointments):
                     break
     else:
         print(f"Your appointment id is DR-{id}")
-        return f"APT-{id}"
+        return  new_id
 
 
 
-def find_record_by_id(record_list, search_id):
-    for record in record_list:
+def find_record_by_id(saved_data, search_id):
+    for record in saved_data:
 # Check if the record is a dictionary (freshly loaded from JSON by data_manager)
         if isinstance(record, dict):
 # We check 'user_id', but if it's an appointment, it falls back to checking 'appointment_id'
@@ -76,7 +76,7 @@ def find_record_by_id(record_list, search_id):
 
 
 
-def get_available_time_slots(selected_doctor , appointment_date, appointment_list):
+def get_available_time_slots(selected_doctor , appointment_date, appointments):
 # Calculates available 1-hour time slots for a doctor on a specific date.
 # It looks at the doctor's shift hours and subtracts any active appointments.
 # 1. Get the doctor's shift times (safely handling dicts or objects)
@@ -88,7 +88,7 @@ def get_available_time_slots(selected_doctor , appointment_date, appointment_lis
     doc_id = selected_doctor['user_id']
     booked_slots=[]  
         
-    for appointment in appointment_list:
+    for appointment in appointments:
         if(appointment['user_id'] == doc_id
             and appointment['date'] == appointment_date):
             booked_slots.append(appointment["start_time"])          
@@ -110,4 +110,4 @@ def get_available_time_slots(selected_doctor , appointment_date, appointment_lis
 
     
             
-       
+

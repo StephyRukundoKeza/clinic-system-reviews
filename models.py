@@ -63,7 +63,6 @@ class Patient(User):  #Patient class inherits from User class
         self.date_of_birth = date_of_birth
         self.email = email
         self.address = address
-        self.notification = notification
     
     def update_profile(self, name=None, phone_number=None, gender=None, date_of_birth=None, email=None, address=None):  #method to update the patient's profile
         updates = {"name": name, "phone_number": phone_number, "gender": gender, "date_of_birth": date_of_birth, "email": email, "address": address}
@@ -72,14 +71,6 @@ class Patient(User):  #Patient class inherits from User class
                 setattr(self, field, value)
         return True
 
-    def add_notification(self, message):  #method to add a notification for the patient
-        if self.notification is None:
-            self.notification = []
-        self.notification.append(message)
-
-    def clear_notification(self):  #method to clear the patient's read notifications
-        if self.notification is not None:
-            self.notification = []
 
     def to_dict(self):  #overrides the to_dict method to include the role of the user
         data = super().to_dict()
@@ -88,7 +79,6 @@ class Patient(User):  #Patient class inherits from User class
         data["date_of_birth"] = self.date_of_birth
         data["email"] = self.email
         data["address"] = self.address
-        data["notification"] = self.notification
         return data 
 
 class Appointment:  #Appointment class to manage appointments

@@ -5,7 +5,10 @@ from validation import get_valid_doctor_menu
 from validation import get_valid_patient_menu
 from sub_main import patient_self_registration_menu
 
-
+import validation
+import models
+import sub_main
+from data_manager import load_data
 from operations import find_record_by_id
 
 
@@ -14,6 +17,7 @@ def main():# this particular function will control the main flow
 
 #load saved data while the program starts
     patients, doctors, appointments = load_data()
+    
 
     while True:
         #display the opening screen
@@ -30,8 +34,8 @@ def main():# this particular function will control the main flow
         print()
 
         #option 1 :login choice 
-        choice = input("Choice an option: ").strip()
-        if choice =="1":
+        choice = validation.get_valid_menu()
+        if choice ==1:
                #Ask the user for their ID 
             user_id = input("Enter your ID: ").strip()
 
@@ -76,8 +80,8 @@ def main():# this particular function will control the main flow
 
 
         #Option 2:Create Account
-        elif choice=="2":
-            print("Create Account")
+        elif choice==2:
+            
             while True:
                  print()
                  print("==============")
@@ -89,6 +93,7 @@ def main():# this particular function will control the main flow
                  
 
 
+<<<<<<< HEAD
                  account_choice = input("Choose an option: ").strip()
                  if account_choice =="1":
                       
@@ -98,20 +103,29 @@ def main():# this particular function will control the main flow
                       print("Create Doctor Account")
 
                  elif account_choice =="3":
+=======
+                 account_choice = validation.get_valid_create_account_menu()
+                 if account_choice ==1:
+                    print("Create Admin Account")
+                    sub_main.create_admin_account()  # stephy did not save admins?
+                      
+
+                 elif account_choice ==2:
+                    print("Create Doctor Account")
+                     
+                 elif account_choice ==3:
+>>>>>>> 5f2bd007687853d6df524474442575e5084b3a1b
                       # opens the patient registration interface
-                      register_patient(patients)
+                    sub_main.patient_self_registration_menu(patients)
 
-                 elif account_choice =="4":
-                      print("Returning to main menu...")
-                      break
+                 elif account_choice ==4:
+                    print("Returning to main menu...")
+                    main()
 
-
-                 else:
-                      print("Invalid option. Please choose 1, 2, 3, or 4. ")
 
 
         #Option 3:closing the system
-        elif choice =="3":
+        elif choice ==3:
             print("Thank you for using our Clinic Management System.")
             print("System closed successfully!")
        
@@ -123,9 +137,7 @@ def main():# this particular function will control the main flow
             break
 
         
-        else:
-             print("Invalid option. Please choose 1, 2, 3.")
-
+        
 
 
     
@@ -134,7 +146,7 @@ def main():# this particular function will control the main flow
             
 
 
-def admin_menu(user_id):
+def admin_menu(user_id, doctors, patients, appointments):
     #This function displays the options available
     #to an adminstrator.
 
@@ -153,8 +165,6 @@ def admin_menu(user_id):
 
         choice = get_valid_admin_menu()
 
-        choice = input("Choose an option: ").strip()
-
 
         if  choice =="7":
             print("Logging out...")
@@ -165,31 +175,29 @@ def admin_menu(user_id):
             print("Register new patient")
 
             #opens menu registration interface
-            register_patient()
-
+            sub_main.admin_register_patient(patients)
 
 
         elif choice =="2":
             print("Display all patient") 
-
+            sub_main. admin_display_patients(patients)
         elif choice =="3":
             print("Search patients")
-
+            sub_main.admin_search_patient(patients)
         elif choice =="4":
             print("Update patient information")
-
+            sub_main.admin_update_patient(patients)
         elif choice =="5":
             print("Add doctor")
-
+            sub_main.admin_add_doctor(doctors)
         elif choice =="6":
             print("View appointments")
-
-        else:
-            print("Invalid option. Please choose a number from 1 to 7.")
-
+            sub_main
+        
 
 
-def  doctor_menu(user_id):
+
+def  doctor_menu(user_id, doctors, appointments):
     #this function displays the options available to a doctor 
 
 
@@ -224,7 +232,7 @@ def  doctor_menu(user_id):
         
 
 
-def patient_menu(user_id):
+def patient_menu(user_id,doctors, patients,appointments):
 #this displays available options to a patient
 
     while True:
@@ -240,47 +248,28 @@ def patient_menu(user_id):
 
         choice =   get_valid_patient_menu()
 
-        choice = input("Choose an option: ").strip()
-
-
+       
         if choice =="5":
             print("Logging out...")
             break 
 
         elif choice =="1":
             print("View my information")
-
+            sub_main.patient_view_information(patients)
         elif choice =="2":
             print("Book appointment")
+            sub_main.patient_book_appointment(doctors,appointments)
 
         elif choice =="3":
             print("View my appointment")
+            sub_main.patient_view_appointment(patients)
 
         elif choice =="4":
             print("Cancel appointment")
 
 
-        else:
-            print("Invalid option.Please choose a number from 1 to 5.")
-        
-def register_patient(patients):
-    #this function will collect the information
-    #needed to register a new patient
+    
 
-    print("=====================")
-    print("Patient Registration ")
-    print("=====================")
-
-
-    name = input("Enter your name: ")
-    pin = input("Create a pin: ")
-    phone_number = input("Enter your phone number: ")
-    gender = input("Enter your gender: ")
-    date_of_birth = input("Enter your date of birth: ")
-    email = input("Enter your email: ")
-    address = input("Enter your address: ")
-
-    print()
-    print("Patient information collected successfully.")
+    #nee
 #start the application
 main()       
