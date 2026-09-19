@@ -5,9 +5,6 @@ from operations import find_record_by_id
 
 
 
-
-
-
 def main():# this particular function will control the main flow
               #of the application'
 
