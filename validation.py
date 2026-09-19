@@ -26,7 +26,7 @@ def get_valid_admin_menu():
             if choice=="":
                 print("Oops sorry menu can not be left empty")
                 continue
-            if choice < 1 or choice > 7:
+            if choice < 1 or choice > 13:
                 print("Selection out of range. Please select a number from 1-13 ")
                 continue
             break
