@@ -285,7 +285,7 @@ def patient_menu(user_id, patients, doctors, appointments):
 
 
         elif choice == 2:
-            sub_main.patient_book_information(patients, doctors, appointments)
+            sub_main.patient_book_appointment(patients, doctors, appointments)
         
         elif choice == 3:
             sub_main.patient_view_appointments(
