@@ -7,9 +7,6 @@
         "gender": "Female",
         "date_of_birth": "1990-05-14",
         "email": "jane.doe@gmail.com",
-        "address": "123 Main St",
-        "medical_history": [
-            "Hypertension"
-        ]
+        "address": "123 Main St"
     }
 ]

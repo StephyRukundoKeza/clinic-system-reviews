@@ -17,21 +17,21 @@ def get_valid_menu():
             
 def get_valid_admin_menu():
     #This function displays the options available
-    #to an adminstrator.
+    #to an administrator.
 
     while True:
        
         try:
-            choice = int(input("Choose an option(1-7): "))
+            choice = int(input("Choose an option(1-13): "))
             if choice=="":
                 print("Oops sorry menu can not be left empty")
                 continue
             if choice < 1 or choice > 7:
-                print("Selection out of range. Please select a number from 1-7 ")
+                print("Selection out of range. Please select a number from 1-13 ")
                 continue
             break
         except ValueError:
-           print("Invalid format. Select a number from 1-7 ")       
+           print("Invalid format. Select a number from 1-13 ")       
                     
 def get_valid_doctor_menu()  :                 
     while True:
@@ -42,7 +42,7 @@ def get_valid_doctor_menu()  :
                 print("Oops sorry menu can not be left empty")
                 continue
             if choice < 1 or choice > 4:
-                print("Selection out of range. Please select a number from 1-7 ")
+                print("Selection out of range. Please select a number from 1-4 ")
                 continue
             break
         except ValueError:
@@ -58,7 +58,7 @@ def get_valid_patient_menu():
                 print("Oops sorry menu can not be left empty")        
                 continue
             if choice < 1 or choice > 5:
-                print("Selection out of range. Please select a number from 1-7 ")
+                print("Selection out of range. Please select a number from 1-5 ")
                 continue
             break
         except ValueError:
@@ -100,7 +100,6 @@ def get_valid_birthdate():
                 continue 
             if date>datetime.today().date(): # ensures the due date is not a date that has already past
                 print("Birth date date cannot be after today's date.")
-                date_input=input("Enter another date(YYYY-MM-DD: ")
                 continue
             break
         except ValueError:
@@ -108,29 +107,31 @@ def get_valid_birthdate():
     return date       
                         
                             
-def get_valid_appointmentdate():
+def get_valid_appointment_date():
     while True:
+        date_input = input(
+            "Please enter your appointment date in this format (YYYY-MM-DD): "
+        ).strip()
+        if date_input == "":
+            print("Oops, appointment date cannot be left empty.")
+            continue
+
         try:
-            date_input= input("Please enter your appointment date this format date as, YYYY-MM-DD: ")  # ask users for appointment date
-            date = datetime.strptime(date_input, "%Y-%m-%d").date() 
-            if date_input=="":
-                print("Oops sorry date can not be left empty enter a valid date")
-                continue 
-            if date<datetime.today().date(): # ensures the due date is not a date that has already past
-                print("Appointment date cannot be before today's date.")
-                date_input=input("Enter another date(YYYY-MM-DD: ")
-                continue
-            
-                      
-            break
+            date = datetime.strptime(date_input, "%Y-%m-%d").date()
         except ValueError:
-            print("Invalid format. Please try again with this format date as, YYYY-MM-DD: ")
-    return date
+            print("Invalid format. Please try again with this format (YYYY-MM-DD): ")
+            continue
+
+        if date < datetime.today().date():
+            print("Appointment date cannot be before today's date.")
+            continue
+
+        return date
 
 def get_valid_phone_number():
     while True:
         number=input("Enter your mobile phone number(without the country code): ").strip()  # this ensures users do not enter country codes with have + at the beginning because the program is built to reject all non digit inputs
-        if number=="": # non empy string
+        if number=="": # non-empty string
             print("Sorry your mobile phone number can not be empty")
             continue
         if not number.isdigit() : # checks that all the input only contains numbers
