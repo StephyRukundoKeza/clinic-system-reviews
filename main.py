@@ -59,7 +59,7 @@ def main():# this particular function will control the main flow
                     user_pin = str(user.get('pin')) if isinstance(user,dict) else str(user.pin)
                     if entered_pin == user_pin:
                         print("\nOpening Doctor Menu...")
-                        doctor_menu(user_id,doctors,patients,appointment)
+                        doctor_menu(user_id, doctors, patients, appointments)
                     else:
                         print("Incorrect PIN")
                 else:
@@ -241,7 +241,7 @@ def  doctor_menu(user_id,doctors, patients, appointments):
         
 
 
-def patient_menu(user_id, patients, doctors, appointment):
+def patient_menu(user_id, patients, doctors, appointments):
     """
     Displays the Patient menu and routes choices to the functions in sub_main.py
     """
@@ -249,6 +249,11 @@ def patient_menu(user_id, patients, doctors, appointment):
     current_patient = find_record_by_id(patients, user_id)
 
     #Get the patient's name whether the record is a dictionary or a Patient object
+    if isinstance(current_patient, dict):
+        patient_name = current_patient.get("name")
+    else:
+        patient_name = current_patient.name
+
     while True:
         print("\n================================")
         print(f"    Patient Menu - {patient_name}")
@@ -260,7 +265,7 @@ def patient_menu(user_id, patients, doctors, appointment):
         print("5. Logout")
 
 
-        choice =   get_valid_patient_menu()
+        choice = validation.get_valid_patient_menu()
 
     
 
@@ -273,7 +278,7 @@ def patient_menu(user_id, patients, doctors, appointment):
 
 
         elif choice == 2:
-            sub.main.patient_book_information(patients,doctors,appointment)
+            sub_main.patient_book_information(patients,doctors,appointments)
         
         elif choice == 3:
             sub_main.patients_view_appointments(patients,appointments)
