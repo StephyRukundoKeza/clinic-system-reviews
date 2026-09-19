@@ -18,7 +18,7 @@ def patient_self_registration_menu(patients):
     phone = validation.get_valid_phone_number()
     email = validation.get_valid_email()
     address = input("Enter your physical address: ").strip()
-    new_id = operations.generate_new_id_patient(patients)
+    new_id = operations.generate_new_id("Patient", patients)
     new_pin = str(random.randint(1000, 9999)) # Create a random 4-digit PIN for the patient
 
     new_patient = models.Patient(new_id, name, new_pin, phone, gender, str(dob), email, address)
@@ -39,7 +39,7 @@ def create_admin_account(admins):
     phone = validation.get_valid_phone_number()
     pin = input("Create a 4-digit PIN for the admin: ").strip()
 
-    new_id = operations.generate_new_id_admin()
+    new_id = operations.generate_new_id("Admin", admins)
     new_admin = models.Admin(new_id, name, pin, phone)
     admins.append(new_admin)
 
@@ -82,7 +82,7 @@ def admin_register_patient(patients):
     address = input("Enter your physical address: ").strip()
     pin = input("Create a 4-digit PIN for the patient: ").strip()
     
-    new_id = operations.generate_new_id_patient(patients)
+    new_id = operations.generate_new_id("Patient", patients)
     new_patient = models.Patient(new_id, name, pin, phone, gender, str(dob), email, address)
     patients.append(new_patient)
     
@@ -188,7 +188,7 @@ def admin_add_doctor(doctors):
     phone = validation.get_valid_phone_number()
     pin = input("Create a 4-digit PIN for the doctor: ").strip()
 
-    new_id = operations.generate_new_id_doctor()
+    new_id = operations.generate_new_id("Doctor", doctors)
     new_doctor = models.Doctor(new_id, name, pin, phone, specialization, shift_start_time, shift_end_time)
     doctors.append(new_doctor)
 
@@ -289,9 +289,9 @@ def admin_view_appointments(appointments):
     print("\nScheduled Appointments:")
     for a in appointments:
         if isinstance(a, dict):
-            print(f"Appointment ID: {a.get('appointment_id')} | Patient ID: {a.get('patient_id')} | Doctor ID: {a.get('doctor_id')} | Date: {a.get('appointment_date')}")
+            print(f"Appointment ID: {a.get('appointment_id')} | Patient ID: {a.get('patient_id')} | Doctor ID: {a.get('doctor_id')} | Date: {a.get('date')}")
         else:
-            print(f"Appointment ID: {a.appointment_id} | Patient ID: {a.patient_id} | Doctor ID: {a.doctor_id} | Date: {a.appointment_date}")
+            print(f"Appointment ID: {a.appointment_id} | Patient ID: {a.patient_id} | Doctor ID: {a.doctor_id} | Date: {a.date}")
 
 def admin_cancel_appointment(appointments):
     print("---Cancel Appointment (Admin)---")
@@ -302,13 +302,13 @@ def admin_cancel_appointment(appointments):
         if isinstance(a, dict):
             if a.get('appointment_id') == search_id:
                 print("\nAppointment Found:")
-                print(f"Appointment ID: {a.get('appointment_id')} | Patient ID: {a.get('patient_id')} | Doctor ID: {a.get('doctor_id')} | Date: {a.get('appointment_date')}")
+                print(f"Appointment ID: {a.get('appointment_id')} | Patient ID: {a.get('patient_id')} | Doctor ID: {a.get('doctor_id')} | Date: {a.get('date')}")
                 found = True
                 break
         else:
             if a.appointment_id == search_id:
                 print("\nAppointment Found:")
-                print(f"Appointment ID: {a.appointment_id} | Patient ID: {a.patient_id} | Doctor ID: {a.doctor_id} | Date: {a.appointment_date}")
+                print(f"Appointment ID: {a.appointment_id} | Patient ID: {a.patient_id} | Doctor ID: {a.doctor_id} | Date: {a.date}")
                 found = True
                 break
 
@@ -324,117 +324,199 @@ def admin_cancel_appointment(appointments):
     else:
         print("Attempt Cancelled.")
 
-# Patient menu
-
-def patient_view_information(patients):
-    print("\n---View Patient Information---")
-    if isinstance(patients, dict):
-        print(f"Patient ID : {patients.get('user_id')}")
-        print(f"Name       : {patients.get('name')}")
-        print(f"DOB        : {patients.get('date_of_birth')}")
-        print(f"Gender     : {patients.get('gender')}")
-        print(f"Phone      : {patients.get('phone_number')}")
-        print(f"Email      : {patients.get('email')}")
-        print(f"Address    : {patients.get('address')}")
+def patient_view_information(patient):
+    print("---View Patient Information---")
+    if isinstance(patient, dict):
+        print(f"ID: {patient.get('user_id')} | Name: {patient.get('name')} | Phone: {patient.get('phone_number')}")
+        print(f"Gender: {patient.get('gender')} | DOB: {patient.get('date_of_birth')} | Email: {patient.get('email')}")
+        print(f"Address: {patient.get('address')}")
     else:
-        print(f"Patient ID : {patients.user_id}")
-        print(f"Name       : {patients.name}")
-        print(f"DOB        : {getattr(patients, 'date_of_birth', getattr(patients, 'dob', 'N/A'))}")
-        print(f"Gender     : {patients.gender}")
-        print(f"Phone      : {patients.phone_number}")
-        print(f"Email      : {patients.email}")
-        print(f"Address    : {patients.address}")
-     
-def patient_book_appointment(patients, doctors, appointments):
-    print("\n--- Book an Appointment ---")
+        print(f"ID: {patient.user_id} | Name: {patient.name} | Phone: {patient.phone_number}")
+        print(f"Gender: {patient.gender} | DOB: {patient.date_of_birth} | Email: {patient.email}")
+        print(f"Address: {patient.address}")
+        if getattr(patient, 'notification', None):
+            print("\nNotifications:")
+            for note in patient.notification:
+                print(f"  - {note}")
+            patient.clear_notification()
+
+
+def patient_view_own_appointments(patient, appointment_list):
+    print("---View My Appointments---")
+    patient_id = patient.get('user_id') if isinstance(patient, dict) else getattr(patient, 'user_id', None)
+    found_any = False
+    for a in appointment_list:
+        appt_patient_id = a.get('patient_id') if isinstance(a, dict) else getattr(a, 'patient_id', None)
+        if appt_patient_id == patient_id:
+            found_any = True
+            if isinstance(a, dict):
+                print(f"Appointment ID: {a.get('appointment_id')} | Doctor ID: {a.get('doctor_id')} | Date: {a.get('date')} | Time: {a.get('start_time')} | Status: {a.get('status')}")
+            else:
+                print(f"Appointment ID: {a.appointment_id} | Doctor ID: {a.doctor_id} | Date: {a.date} | Time: {a.start_time} | Status: {a.status}")
+    if not found_any:
+        print("You have no appointments.")
+
+
+def doctor_view_appointments(doctor, appointment_list):
+    print("---View My Appointments (Doctor)---")
+    doctor_id = doctor.get('user_id') if isinstance(doctor, dict) else getattr(doctor, 'user_id', None)
+    found_any = False
+    for a in appointment_list:
+        appt_doctor_id = a.get('doctor_id') if isinstance(a, dict) else getattr(a, 'doctor_id', None)
+        if appt_doctor_id == doctor_id:
+            found_any = True
+            if isinstance(a, dict):
+                print(f"Appointment ID: {a.get('appointment_id')} | Patient ID: {a.get('patient_id')} | Date: {a.get('date')} | Time: {a.get('start_time')} | Status: {a.get('status')}")
+            else:
+                print(f"Appointment ID: {a.appointment_id} | Patient ID: {a.patient_id} | Date: {a.date} | Time: {a.start_time} | Status: {a.status}")
+    if not found_any:
+        print("You have no appointments.")
+
+
+def doctor_view_patient_information(patient_list):
+    print("---View Patient Information (Doctor)---")
+    search_id = input("Enter the patient ID to look up (e.g., P-12345678): ").strip().upper()
+    p = operations.find_record_by_id(patient_list, search_id)
+    if not p:
+        print("Error: Patient not found. Please check the ID.")
+        return
+    if isinstance(p, dict):
+        print(f"ID: {p.get('user_id')} | Name: {p.get('name')} | Phone: {p.get('phone_number')}")
+        print(f"Gender: {p.get('gender')} | DOB: {p.get('date_of_birth')} | Address: {p.get('address')}")
+    else:
+        print(f"ID: {p.user_id} | Name: {p.name} | Phone: {p.phone_number}")
+        print(f"Gender: {p.gender} | DOB: {p.date_of_birth} | Address: {p.address}")
+
+
+def doctor_update_appointment(doctor, appointment_list):
+    print("---Update Appointment (Doctor)---")
+    doctor_id = doctor.get('user_id') if isinstance(doctor, dict) else getattr(doctor, 'user_id', None)
+    search_id = input("Enter the appointment ID to update: ").strip().upper()
+
+    match = None
+    for a in appointment_list:
+        appt_id = a.get('appointment_id') if isinstance(a, dict) else getattr(a, 'appointment_id', None)
+        appt_doctor_id = a.get('doctor_id') if isinstance(a, dict) else getattr(a, 'doctor_id', None)
+        if appt_id == search_id and appt_doctor_id == doctor_id:
+            match = a
+            break
+
+    if not match:
+        print("Error: Appointment not found for this doctor. Please check the ID.")
+        return
+
+    new_status = input("Enter new status (Scheduled/Completed/Cancelled) - leave blank to keep: ").strip()
+    new_date = input("Enter new date (YYYY-MM-DD) - leave blank to keep: ").strip()
+    new_start_time = input("Enter new start time (HH:MM) - leave blank to keep: ").strip()
+
+    if isinstance(match, dict):
+        if new_status:
+            match['status'] = new_status
+        if new_date:
+            match['date'] = new_date
+        if new_start_time:
+            match['start_time'] = new_start_time
+    else:
+        if new_status:
+            match.update_status(new_status)
+        if new_date or new_start_time:
+            match.reschedule_appointment(
+                new_date or match.date,
+                new_start_time or match.start_time,
+            )
+
+    print(f"Appointment {search_id} updated.")
+
+def patient_book_appointment(patient, doctors, appointment_list):
+    print("---Book an Appointment---")
+    patient_id = patient.get('user_id') if isinstance(patient, dict) else getattr(patient, 'user_id', None)
+
     if not doctors:
-        print("No doctors available in the system yet.")
+        print("Sorry, there are no doctors registered yet.")
         return
 
-    # Extract patient ID safely
-    patient_id = patients.get('user_id') if isinstance(patients, dict) else patients.user_id
+    doctor_choice = input(
+        "Would you like (a) any general doctor, or (b) to see a list of specialists to choose from? "
+    ).strip().lower()
 
-    # 1. Display available doctors
-    print("\nAvailable Doctors:")
-    for d in doctors:
-        if isinstance(d, dict):
-            print(f"ID: {d.get('user_id')} | Name: Dr. {d.get('name')} | Specialization: {d.get('specialization')}")
-            print(f"    Working hours: {d.get('shift_start_time')} - {d.get('shift_end_time')}")
-        else:
-            print(f"ID: {d.user_id} | Name: Dr. {d.name} | Specialization: {d.specialization}")
-            # Handle slight attribute name variations between team members
-            start = getattr(d, 'shift_start_time', getattr(d, 'shift_start', '09:00'))
-            end = getattr(d, 'shift_end_time', getattr(d, 'shift_end', '17:00'))
-            print(f"    Working hours: {start} - {end}")
-
-    doc_id = input("\nEnter the Doctor ID you wish to see (e.g., DR-12345678): ").strip().upper()
-    doctor = operations.find_record_by_id(doctors, doc_id)
-
-    if not doctor:
-        print("Error: Doctor not found.")
+    if doctor_choice == "b":
+        print("\nAvailable Doctors:")
+        for d in doctors:
+            if isinstance(d, dict):
+                print(f"  {d.get('user_id')} - Dr. {d.get('name')} ({d.get('specialization')})")
+            else:
+                print(f"  {d.user_id} - Dr. {d.name} ({d.specialization})")
+        doctor_id = input("Enter the Doctor ID you'd like to see: ").strip().upper()
+        doctor = operations.find_record_by_id(doctors, doctor_id)
+        if doctor is None:
+            print("Error: Doctor not found. Please check the ID.")
+            return
+    elif doctor_choice == "a":
+        doctor = doctors[0]
+        doctor_id = doctor.get('user_id') if isinstance(doctor, dict) else getattr(doctor, 'user_id', None)
+        doctor_name = doctor.get('name') if isinstance(doctor, dict) else getattr(doctor, 'name', None)
+        print(f"You've been assigned to Dr. {doctor_name} ({doctor_id}).")
+    else:
+        print("Please choose 'a' or 'b'. Booking cancelled.")
         return
 
-    doc_name = doctor.get('name') if isinstance(doctor, dict) else doctor.name
-    print(f"\nYou selected: Dr. {doc_name}")
-
-    # 2. Get target date using validation
-    target_date = validation.get_valid_appointmentdate()
-
-    # 3. Use operations helper to find free slots
-    available_slots = operations.get_available_time_slots(doctor, str(target_date), appointments)
-
+    target_date = str(validation.get_valid_appointmentdate())
+    available_slots = operations.get_available_time_slots(doctor, target_date, appointment_list)
     if not available_slots:
-        print(f"Sorry, Dr. {doc_name} has no open slots on {target_date}.")
+        print("Sorry, no available time slots for that doctor on that date.")
         return
 
-    print(f"\nAvailable time slots for {target_date}:")
-    for idx, slot in enumerate(available_slots, 1):
-        print(f"  [{idx}] {slot}")
+    print("Available time slots:")
+    for slot in available_slots:
+        print(f"  {slot}")
 
-    slot_choice = validation.get_integer("Select slot number: ", min_val=1, max_val=len(available_slots))
-    selected_time = available_slots[slot_choice - 1]
-
-    # 4. Generate unique ID and create the Appointment
-    new_apt_id = operations.generate_new_id_appointment()
-    
-    new_apt = models.Appointment(
-        appointment_id=new_apt_id,
-        patient_id=patient_id,
-        doctor_id=doc_id,
-        date=str(target_date),
-        start_time=selected_time,
-        status="Active"
-    )
-    appointments.append(new_apt)
-
-    print(f"\nSuccess! Appointment booked.")
-    print(f"Appointment ID: {new_apt_id} | Date: {target_date} | Time: {selected_time}")
-
-
-def patient_view_appointments(patients, appointments):
-    print("\n--- My Appointments ---")
-    patient_id = patients.get('user_id') if isinstance(patients, dict) else patients.user_id
-
-    my_apts = []
-    for a in appointments:
-        apt_patient = a.get('patient_id') if isinstance(a, dict) else getattr(a, 'patient_id', None)
-        if apt_patient == patient_id:
-            my_apts.append(a)
-
-    if not my_apts:
-        print("You have no scheduled appointments.")
+    chosen_time = input("Enter the time slot you want (e.g. 09:00): ").strip()
+    if chosen_time not in available_slots:
+        print("That's not one of the available time slots. Booking cancelled.")
         return
 
-    print("\n---------------------------------------------------------------------------------------------")
-    print(f"{'Appt ID':<12} | {'Doctor ID':<12} | {'Date':<12} | {'Time':<8} | {'Status':<10}")
-    print("---------------------------------------------------------------------------------------------")
-    for a in my_apts:
-        if isinstance(a, dict):
-            print(f"{a.get('appointment_id'):<12} | {a.get('doctor_id'):<12} | {a.get('date', a.get('appointment_date')):<12} | {a.get('start_time'):<8} | {a.get('status'):<10}")
-        else:
-            date_val = getattr(a, 'date', getattr(a, 'appointment_date', 'N/A'))
-            print(f"{a.appointment_id:<12} | {a.doctor_id:<12} | {date_val:<12} | {a.start_time:<8} | {a.status:<10}")
-    print("---------------------------------------------------------------------------------------------")
+    duration_input = input("Enter appointment duration in minutes (leave blank for default 60): ").strip()
+    if not duration_input:
+        duration = 60
+    elif duration_input.isdigit() and operations.is_valid_duration(int(duration_input)):
+        duration = int(duration_input)
+    else:
+        print("That's not a valid duration - using the default of 60 minutes instead.")
+        duration = 60
+
+    new_id = operations.generate_new_id_appointment()
+    new_appointment = models.Appointment(new_id, patient_id, doctor_id, target_date, chosen_time, duration_minutes=duration, status="Scheduled")
+    appointment_list.append(new_appointment)
+    if not isinstance(patient, dict):
+        patient.add_notification(f"Appointment {new_id} booked with {doctor_id} on {target_date} at {chosen_time}.")
+    print(f"Appointment booked! Your appointment ID is {new_id}.")
+
+
+def patient_cancel_appointment(patient, appointment_list):
+    print("---Cancel My Appointment---")
+    patient_id = patient.get('user_id') if isinstance(patient, dict) else getattr(patient, 'user_id', None)
+    search_id = input("Enter the appointment ID to cancel: ").strip().upper()
+
+    match = None
+    for a in appointment_list:
+        appt_id = a.get('appointment_id') if isinstance(a, dict) else getattr(a, 'appointment_id', None)
+        appt_patient_id = a.get('patient_id') if isinstance(a, dict) else getattr(a, 'patient_id', None)
+        if appt_id == search_id and appt_patient_id == patient_id:
+            match = a
+            break
+
+    if match is None:
+        print("Error: Appointment not found for you. Please check the ID.")
+        return
+
+    confirmation = input(f"Are you sure you want to cancel Appointment {search_id}? (yes/no): ").strip().lower()
+    if confirmation == "yes":
+        appointment_list.remove(match)
+        if not isinstance(patient, dict):
+            patient.add_notification(f"Appointment {search_id} was cancelled.")
+        print(f"Appointment {search_id} has been cancelled successfully.")
+    else:
+        print("Cancellation attempt aborted.") 
 
 
 def patient_cancel_appointment(patients, appointments):

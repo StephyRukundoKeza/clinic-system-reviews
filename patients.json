@@ -1,10 +1,15 @@
 [
-  {
-    "user_id": "P-101",
-    "name": "Jane Doe",
-    "phone_number": "555-0199",
-    "pin": "1234",
-    "address": "123 Main St",
-    "email": "jane.doe@example.com"
-  }
+    {
+        "user_id": "P-101",
+        "name": "Jane Doe",
+        "phone_number": "555-0199",
+        "pin": "1234",
+        "gender": "Female",
+        "date_of_birth": "1990-05-14",
+        "email": "jane.doe@gmail.com",
+        "address": "123 Main St",
+        "medical_history": [
+            "Hypertension"
+        ]
+    }
 ]
