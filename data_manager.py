@@ -47,7 +47,7 @@ def _to_serializable(records):
     return [r.to_dict() if hasattr(r, "to_dict") else r for r in records]
 
 
-def save_data(patients, doctors, appointments, admins):
+def save_data(patients, doctors, appointments,admins):
     """
     Writes patients, doctors, and appointments back to their respective JSON files.
     """

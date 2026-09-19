@@ -9,7 +9,7 @@ def main():# this particular function will control the main flow
               #of the application'
 
 #load saved data while the program starts
-    admins, patients, doctors, appointments = load_data()
+    patients, doctors, appointments, admins = load_data()
 
     while True:
         #display the opening screen
@@ -43,7 +43,7 @@ def main():# this particular function will control the main flow
                     entered_pin = input("Enter your 4-digit PIN: ").strip()
                     if entered_pin =="1234":
                        print("\nOpening Administrator Menu...")
-                       admin_menu(user_id, patients,doctors,appointments)
+                       admin_menu(user_id, patients, doctors, appointments, admins)
 
                 else:
                      print("Incorrect Password")   
@@ -102,7 +102,7 @@ def main():# this particular function will control the main flow
         elif choice ==3:
             print("\nSaving system data...")
             #Save the current data before closing
-            save_data(admins, patients, doctors, appointments)
+            save_data(patients, doctors, appointments, admins)
             print("Thank you using our Clinic Management System.")
             print("System closed successfully!")
             break
@@ -117,7 +117,7 @@ def main():# this particular function will control the main flow
             
 
 
-def admin_menu(user_id,patients, doctors,appointments):
+def admin_menu(user_id, patients, doctors, appointments, admin):
     #This function displays the options available
     #to an administrator.
 
@@ -300,3 +300,5 @@ def patient_menu(user_id, patients, doctors, appointments):
 #start the application
 if __name__ == "__main__":
     main()
+
+
