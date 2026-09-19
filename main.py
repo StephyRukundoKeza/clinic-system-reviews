@@ -49,73 +49,52 @@ def main():# this particular function will control the main flow
 
                 else:
                      print("Incorrect Password")     
-            else:
-                print("Adminstrator ID not found. Use A-ADMIN and 1234 to login.")                       
-                
-             #---DOCTOR LOGIN ---
-                
-        
-        elif user_id.startswith("DR-"):
-             user = find_record_by_id(doctors, user_id)
+            elif user_id.startswith("DR-"):
+                # ---DOCTOR LOGIN ---
+                user = find_record_by_id(doctors, user_id)
 
-            if user:
-                entered_pin=input("Enter your 4 digit PIN: ").strip()
+                if user:
+                    entered_pin=input("Enter your 4 digit PIN: ").strip()
                     #Securely extract PIN regardless of if object is dict or class instance
-                user_pin = str(user.get('pin')) if isinstance(user,dict) else str(user.pin)
-                if entered_pin == user_pin:
-                           print("\nOpening Doctor Menu...")
-                            doctor_menu(user_id,doctors,patients,appointment)
+                    user_pin = str(user.get('pin')) if isinstance(user,dict) else str(user.pin)
+                    if entered_pin == user_pin:
+                        print("\nOpening Doctor Menu...")
+                        doctor_menu(user_id,doctors,patients,appointment)
+                    else:
+                        print("Incorrect PIN")
                 else:
-                    print("Incorrect PIN")
-            else:
-                print("Doctor ID not found.")
+                    print("Doctor ID not found.")
 
+            elif user_id.startswith("P-"):
+                # ---PATIENT LOGIN---
+                user = find_record_by_id(patients, user_id)
 
-                    #---PATIENT LOGIN---
-                
-        
-        elif user_id.startswith("P-"): 
-            user = find_record_by_id(patients, user_id)
-
-            if user:
-                entered_pin = input("Enter your 4-digit PIN: " ).strip()
-                       # Securely extract PIN regardless of if object is dict or class instance
-                    if ininstance(user, dict):
+                if user:
+                    entered_pin = input("Enter your 4-digit PIN: ").strip()
+                    # Securely extract PIN regardless of if object is dict or class instance
+                    if isinstance(user, dict):
                         user_pin = str(user.get("pin"))
                     else:
-                        user_pin=str(user.pin)
-                    #check whether the entered PIN matches
+                        user_pin = str(user.pin)
 
-                user_pin = str(user.get('pin')) if isistance(user,dict) else str(user.pin)
-                if entered_pin ==user_pin:
-                    print("\nOpening Patient Menu...")
-                    patient_menu(user_id, patients, doctors,appointments)
-                    
-                       patient_menu(user_id)
-                       #an ID starting with P belongs to a patient.
+                    if entered_pin == user_pin:
+                        print("\nOpening Patient Menu...")
+                        patient_menu(user_id, patients, doctors, appointments)
+                    else:
+                        print("Incorrect PIN.")
                 else:
-                    print("Incorrect PIN.")
-
+                    print("Patient ID not found.")
             else:
-                         print("Patient ID not found.")
-        else:
-            #this runs when the ID does not match
-            #any of the accepted ID formats
-            print("Invalid ID format.Please try again.")            
-
+                print("Invalid ID format. Please try again.")
 
         #Option 2:Public Account Creation
-        elif choice== 2:
+        elif choice == 2:
             print("\n========================")
             print(" Patient Self-Registration")
             print("==========================")
-                 #Opens the patient registration interface
-                 sun_main.patient_self_registration_menu(patients)
-                 
-                 
-
-
-                
+            #Opens the patient registration interface
+            sub_main.patient_self_registration_menu(patients)
+                      
 
         #Option 3:Safe Shutdown
         elif choice ==3:
@@ -159,7 +138,7 @@ def admin_menu(user_id,patients, doctors,appointments):
         print("13.Logout")
 
 
-        choice = get_valid_admin_menu()
+        choice = validation.get_valid_admin_menu()
 
         
 
@@ -199,10 +178,10 @@ def admin_menu(user_id,patients, doctors,appointments):
             sub_main.admin_delete_doctors(doctors)
 
         elif choice ==11:
-            sub_main.admin_view_appointment(appointment)
+            sub_main.admin_view_appointment(appointments)
         
         elif choice ==12:
-            sub_main.admin_delete_appointment(appointment)
+            sub_main.admin_delete_appointment(appointments)
 
      
         
@@ -238,22 +217,22 @@ def  doctor_menu(user_id,doctors, patients, appointments):
         print("3.Updat Appointment Status")
         print("4.Logout")
          #get a valid doctor menu choice.
-        choice = get_valid_doctor_menu()  
+        choice = validation.get_valid_doctor_menu()
 
         if choice == 4:
             print("\nLogging out...")
             break
 
         elif choice == 1:
-            sub_main.doctor_view_schedule(current_doctor,appointment,patients)
+            sub_main.doctor_view_schedule(current_doctor,appointments,patients)
             print("View appointment")
 
         elif choice == 2:
             sub_main.doctor_view_profile(current_doctor)
-                    print("View patient information")
+            print("View patient information")
 
         elif choice == 3:
-          sub.main.doctor_update_appointment_status(current_doctor,appointments)
+          sub_main.doctor_update_appointment_status(current_doctor,appointments)
 
         else:
             print("Invalid option.Please choose a number from 1 to 4")
@@ -306,4 +285,6 @@ def patient_menu(user_id, patients, doctors, appointment):
         
 
 #start the application
-main()       
+if __name__ == "__main__":
+    main()
+
