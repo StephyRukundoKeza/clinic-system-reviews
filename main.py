@@ -17,7 +17,7 @@ def main():# this particular function will control the main flow
     while True:
         #display the opening screen
 
-        print("========================================")
+        print("\n========================================")
         print("Clinic Appointment And Management System")
         print("========================================")
         print()
@@ -70,6 +70,8 @@ def main():# this particular function will control the main flow
                     print("Doctor ID not found.")
 
             elif user_id.startswith("P-"):
+
+                
                 # ---PATIENT LOGIN---
                 user = find_record_by_id(patients, user_id)
 

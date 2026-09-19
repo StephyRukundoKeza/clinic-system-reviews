@@ -31,7 +31,7 @@ def patient_self_registration_menu(patients):
 # Administrator menu
 
 def create_admin_account(admins):
-    print("---Create New Admin Account---")
+    print("\n---Create New Admin Account---")
     first = validation.get_valid_firstname()
     last = validation.get_valid_lastname()
     name = f"{first} {last}"
@@ -46,7 +46,7 @@ def create_admin_account(admins):
     print(f"\nSuccessful! Admin {name} created with ID: {new_id}")
 
 def delete_admin_account(admins):
-    print("---Delete Admin Account---")
+    print("\n---Delete Admin Account---")
     search_id = input("Enter the admin ID to delete(e.g., A-12345678): ").strip().upper()
     
     a = operations.find_record_by_id(admins, search_id)
@@ -70,7 +70,7 @@ def delete_admin_account(admins):
 
 
 def admin_register_patient(patients):
-    print("---Register New Patient (Admin)---")
+    print("\n---Register New Patient (Admin)---")
     first = validation.get_valid_firstname()
     last = validation.get_valid_lastname()
     name = f"{first} {last}"
@@ -89,7 +89,7 @@ def admin_register_patient(patients):
     print(f"\nSuccessful! Patient {name} registered with ID: {new_id}")
 
 def admin_display_patients(patients):
-    print("---Display All Registered Patients (Admin)---")
+    print("\n---Display All Registered Patients (Admin)---")
     if not patients:
         print("No patients registered yet.")
         return
@@ -118,7 +118,7 @@ def admin_search_patient(patients):
         print(f"ID: {p.user_id} | Name: {p.name} | Phone: {p.phone_number}")
 
 def admin_update_patient(patients):
-    print("---Update Patient Profile (Admin)---")
+    print("\n---Update Patient Profile (Admin)---")
     search_id = input("Enter the patient ID to update(e.g., P-12345678): ").strip().upper()
     
     p = operations.find_record_by_id(patients, search_id)
@@ -154,7 +154,7 @@ def admin_update_patient(patients):
     print("\nPatient profile updated successfully.")
 
 def admin_delete_patient(patients):
-    print("---Delete Patient Profile (Admin)---")
+    print("\n---Delete Patient Profile (Admin)---")
     search_id = input("Enter the patient ID to delete(e.g., P-12345678): ").strip().upper()
     
     p = operations.find_record_by_id(patients, search_id)
@@ -177,7 +177,7 @@ def admin_delete_patient(patients):
         print("Attempt Cancelled.") 
 
 def admin_add_doctor(doctors):
-    print("---Add New Doctor (Admin)---")
+    print("\n---Add New Doctor (Admin)---")
     first = validation.get_valid_firstname()
     last = validation.get_valid_lastname()
     name = f"{first} {last}"
@@ -195,7 +195,7 @@ def admin_add_doctor(doctors):
     print(f"\nSuccessful! Doctor {name} added with ID: {new_id}")
 
 def admin_display_doctors(doctors):
-    print("---Display All Registered Doctors (Admin)---")
+    print("\n---Display All Registered Doctors (Admin)---")
     if not doctors:
         print("No doctors registered yet.")
         return
@@ -208,7 +208,7 @@ def admin_display_doctors(doctors):
             print(f"ID: {d.user_id} | Name: {d.name} | Specialization: {d.specialization}")
 
 def admin_search_doctor(doctors):
-    print("---Search Doctor (Admin)---")
+    print("\n---Search Doctor (Admin)---")
     search_id = input("Enter the doctor ID to search(e.g., DR-12345678): ").strip().upper()
     
     d = operations.find_record_by_id(doctors, search_id)
