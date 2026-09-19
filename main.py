@@ -39,9 +39,9 @@ def main():# this particular function will control the main flow
           
             if user_id.startswith("A-"):
                 print("Adminstrator Login is not connected yet.")
-                     # An ID starting with A belongs to the Adminstrator
-                     #Hardcoded emergency backdoor so the system can be accessed
-                     #if admins.json is missing or not configured yet.
+# An ID starting with A belongs to the Adminstrator
+# Hardcoded emergency backdoor so the system can be accessed
+# if admins.json is missing or not configured yet.
                 print("Administrator login is not connected yet.")
                 if user_id =="A-ADMIN":
                     entered_pin = input("Enter your 4-digit PIN: ").strip()
@@ -63,7 +63,7 @@ def main():# this particular function will control the main flow
                     user_pin = str(user.get('pin')) if isinstance(user,dict) else str(user.pin)
                     if entered_pin == user_pin:
                         print("\nOpening Doctor Menu...")
-                        doctor_menu(user_id,doctors,patients,appointment)
+                        doctor_menu(user_id,doctors,patients,appointments)
                     else:
                         print("Incorrect PIN")
                 else:
@@ -274,7 +274,7 @@ def patient_menu(user_id, patients, doctors, appointments):
         print("5. Logout")
 
 
-        choice =   get_valid_patient_menu()
+        choice = validation.get_valid_patient_menu()
 
     
 
@@ -287,7 +287,7 @@ def patient_menu(user_id, patients, doctors, appointments):
 
 
         elif choice == 2:
-            sub.main.patient_book_information(patients,doctors,appointment)
+            sub_main.patient_book_information(patients, doctors, appointments)
         
         elif choice == 3:
             sub_main.patient_view_appointments(
