@@ -41,16 +41,16 @@ def get_valid_admin_menu():
     while True:
        
         try:
-            choice = int(input("Choose an option(1-7): "))
+            choice = int(input("Choose an option(1-13): "))
             if choice=="": #check for my empty string inputs
                 print("Oops sorry menu can not be left empty")
                 continue
-            if choice < 1 or choice > 7:
-                print("Selection out of range. Please select a number from 1-7 ")
+            if choice < 1 or choice > 13:
+                print("Selection out of range. Please select a number from 1-13 ")
                 continue
             return choice
         except ValueError:
-           print("Invalid format. Select a number from 1-7 ")       
+           print("Invalid format. Select a number from 1-13 ")       
                     
 def get_valid_doctor_menu() :   
     #This function displays the options available
@@ -63,7 +63,7 @@ def get_valid_doctor_menu() :
                 print("Oops sorry menu can not be left empty")
                 continue
             if choice < 1 or choice > 4:
-                print("Selection out of range. Please select a number from 1-7 ")
+                print("Selection out of range. Please select a number from 1-4")
                 continue
             return choice
         except ValueError:
@@ -82,7 +82,7 @@ def get_valid_patient_menu():
                 print("Oops sorry menu can not be left empty")        
                 continue
             if choice < 1 or choice > 5:
-                print("Selection out of range. Please select a number from 1-7 ")
+                print("Selection out of range. Please select a number from 1-5 ")
                 continue
             return choice
         except ValueError:
