@@ -326,33 +326,33 @@ def admin_cancel_appointment(appointments):
 
 # Patient menu
 
-def patient_view_information(patients):
+def patient_view_information(current_patients):
     print("---View My Information---")
-    if isinstance(patients, dict):
-        print(f"Patient ID : {patients.get('user_id')}")
-        print(f"Name       : {patients.get('name')}")
-        print(f"DOB        : {patients.get('date_of_birth')}")
-        print(f"Gender     : {patients.get('gender')}")
-        print(f"Phone      : {patients.get('phone_number')}")
-        print(f"Email      : {patients.get('email')}")
-        print(f"Address    : {patients.get('address')}")
+    if isinstance(current_patients, dict):
+        print(f"Patient ID : {current_patients.get('user_id')}")
+        print(f"Name       : {current_patients.get('name')}")
+        print(f"DOB        : {current_patients.get('date_of_birth')}")
+        print(f"Gender     : {current_patients.get('gender')}")
+        print(f"Phone      : {current_patients.get('phone_number')}")
+        print(f"Email      : {current_patients.get('email')}")
+        print(f"Address    : {current_patients.get('address')}")
     else:
-        print(f"Patient ID : {patients.user_id}")
-        print(f"Name       : {patients.name}")
-        print(f"DOB        : {getattr(patients, 'date_of_birth', getattr(patients, 'dob', 'N/A'))}")
-        print(f"Gender     : {patients.gender}")
-        print(f"Phone      : {patients.phone_number}")
-        print(f"Email      : {patients.email}")
-        print(f"Address    : {patients.address}")
+        print(f"Patient ID : {current_patients.user_id}")
+        print(f"Name       : {current_patients.name}")
+        print(f"DOB        : {getattr(current_patients, 'date_of_birth', getattr(current_patients, 'dob', 'N/A'))}")
+        print(f"Gender     : {current_patients.gender}")
+        print(f"Phone      : {current_patients.phone_number}")
+        print(f"Email      : {current_patients.email}")
+        print(f"Address    : {current_patients.address}")
      
-def patient_book_appointment(patients, doctors, appointments):
+def patient_book_appointment(current_patients, doctors, appointments):
     print("\n--- Book an Appointment ---")
     if not doctors:
         print("No doctors available in the system yet.")
         return
 
     # Extract patient ID safely
-    patient_id = patients.get('user_id') if isinstance(patients, dict) else patients.user_id
+    patient_id = current_patients.get('user_id') if isinstance(current_patients, dict) else current_patients.user_id
 
     # 1. Display available doctors
     print("\nAvailable Doctors:")
@@ -469,13 +469,13 @@ def patient_cancel_appointment(patients, appointments):
 
 # Doctor menu
 
-def doctor_view_schedule(current_doctor, appointments, patients=None):
+def doctor_view_schedule(doctors, appointments, patients=None):
 # Displays all appointments associated with the logged-in doctor.
 #Handles both dictionary and object representations cleanly.
     print("\n--- My Appointment Schedule ---")
     
     # Extract Doctor ID safely
-    doc_id = current_doctor.get('user_id') if isinstance(current_doctor, dict) else getattr(current_doctor, 'user_id', None)
+    doc_id = doctors.get('user_id') if isinstance(doctors, dict) else getattr(doctors, 'user_id', None)
 
     # Filter appointments for this doctor
     doctor_appointments = []
@@ -509,10 +509,10 @@ def doctor_view_schedule(current_doctor, appointments, patients=None):
         print(f"{apt_id:<12} | {p_id:<12} | {date:<12} | {time:<8} | {status:<10}")
     print("---------------------------------------------------------------------------------------------\n")
 
-def doctor_update_appointment_status(current_doctor, appointments):
+def doctor_update_appointment_status(doctors, appointments):
     #Allows the doctor to update the status of an appointment assigned to them.
     print("\n--- Update Appointment Status ---")
-    doc_id = current_doctor.get('user_id') if isinstance(current_doctor, dict) else getattr(current_doctor, 'user_id', None)
+    doc_id = doctors.get('user_id') if isinstance(doctors, dict) else getattr(doctors, 'user_id', None)
 
     apt_id = input("Enter the Appointment ID to update (e.g., APT-123456): ").strip().upper()
     apt = operations.find_record_by_id(appointments, apt_id)
@@ -547,41 +547,41 @@ def doctor_update_appointment_status(current_doctor, appointments):
     print(f"\nSuccess: Appointment {apt_id} status updated to '{new_status}'.")
 
 
-def doctor_view_profile(current_doctor):
+def doctor_view_profile(doctors):
 # Displays profile details for the currently logged-in doctor.
     print("\n--- My Profile ---")
-    if isinstance(current_doctor, dict):
-        print(f"Doctor ID    : {current_doctor.get('user_id')}")
-        print(f"Name         : Dr. {current_doctor.get('name')}")
-        print(f"Specialty    : {current_doctor.get('specialization', 'General')}")
-        print(f"Phone        : {current_doctor.get('phone_number', 'N/A')}")
-        print(f"Shift Start  : {current_doctor.get('shift_start_time', '09:00')}")
-        print(f"Shift End    : {current_doctor.get('shift_end_time', '17:00')}")
+    if isinstance(doctors, dict):
+        print(f"Doctor ID    : {doctors.get('user_id')}")
+        print(f"Name         : Dr. {doctors.get('name')}")
+        print(f"Specialty    : {doctors.get('specialization', 'General')}")
+        print(f"Phone        : {doctors.get('phone_number', 'N/A')}")
+        print(f"Shift Start  : {doctors.get('shift_start_time', '09:00')}")
+        print(f"Shift End    : {doctors.get('shift_end_time', '17:00')}")
     else:
-        print(f"Doctor ID    : {getattr(current_doctor, 'user_id', 'N/A')}")
-        print(f"Name         : Dr. {getattr(current_doctor, 'name', 'N/A')}")
-        print(f"Specialty    : {getattr(current_doctor, 'specialization', 'General')}")
-        print(f"Phone        : {getattr(current_doctor, 'phone_number', 'N/A')}")
-        print(f"Shift Start  : {getattr(current_doctor, 'shift_start_time', getattr(current_doctor, 'shift_start', '09:00'))}")
-        print(f"Shift End    : {getattr(current_doctor, 'shift_end_time', getattr(current_doctor, 'shift_end', '17:00'))}")
+        print(f"Doctor ID    : {getattr(doctors, 'user_id', 'N/A')}")
+        print(f"Name         : Dr. {getattr(doctors, 'name', 'N/A')}")
+        print(f"Specialty    : {getattr(doctors, 'specialization', 'General')}")
+        print(f"Phone        : {getattr(doctors, 'phone_number', 'N/A')}")
+        print(f"Shift Start  : {getattr(doctors, 'shift_start_time', getattr(doctors, 'shift_start', '09:00'))}")
+        print(f"Shift End    : {getattr(doctors, 'shift_end_time', getattr(doctors, 'shift_end', '17:00'))}")
 
-def doctor_update_shift(current_doctor):
+def doctor_update_shift(doctors):
 # Allows the doctor to change their shift hours.
     print("\n--- Update Shift Working Hours ---")
     new_start = validation.get_valid_time("Enter new Shift Start Time (HH:MM in 24h format): ")
     new_end = validation.get_valid_time("Enter new Shift End Time (HH:MM in 24h format): ")
 
-    if isinstance(current_doctor, dict):
-        current_doctor['shift_start_time'] = new_start
-        current_doctor['shift_end_time'] = new_end
+    if isinstance(doctors, dict):
+        doctors['shift_start_time'] = new_start
+        doctors['shift_end_time'] = new_end
     else:
-        if hasattr(current_doctor, 'update_shifts'):
-            current_doctor.update_shifts(new_start, new_end)
-        elif hasattr(current_doctor, 'update_shift'):
-            current_doctor.update_shift(new_start, new_end)
+        if hasattr(doctors, 'update_shifts'):
+            doctors.update_shifts(new_start, new_end)
+        elif hasattr(doctors, 'update_shift'):
+            doctors.update_shift(new_start, new_end)
         else:
-            setattr(current_doctor, 'shift_start_time', new_start)
-            setattr(current_doctor, 'shift_end_time', new_end)
+            setattr(doctors, 'shift_start_time', new_start)
+            setattr(doctors, 'shift_end_time', new_end)
 
     print(f"\nShift updated successfully: {new_start} - {new_end}")
     
