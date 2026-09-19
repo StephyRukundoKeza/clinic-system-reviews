@@ -18,7 +18,7 @@ def patient_self_registration_menu(patient_list):
     phone = validation.get_valid_phone_number()
     email = validation.get_valid_email()
     address = input("Enter your physical address: ").strip()
-    new_id = operations.generate_new_id_patient()
+    new_id = operations.generate_new_id("Patient", patient_list)
     new_pin = str(random.randint(1000, 9999)) # Create a random 4-digit PIN for the patient
 
     new_patient = models.Patient(new_id, name, new_pin, phone, gender, str(dob), email, address)
@@ -39,7 +39,7 @@ def create_admin_account(admin_list):
     phone = validation.get_valid_phone_number()
     pin = input("Create a 4-digit PIN for the admin: ").strip()
 
-    new_id = operations.generate_new_id_admin()
+    new_id = operations.generate_new_id("Admin", admin_list)
     new_admin = models.Admin(new_id, name, pin, phone)
     admin_list.append(new_admin)
 
@@ -82,7 +82,7 @@ def admin_register_patient(patient_list):
     address = input("Enter your physical address: ").strip()
     pin = input("Create a 4-digit PIN for the patient: ").strip()
     
-    new_id = operations.generate_new_id_patient()
+    new_id = operations.generate_new_id("Patient", patient_list)
     new_patient = models.Patient(new_id, name, pin, phone, gender, str(dob), email, address)
     patient_list.append(new_patient)
     
@@ -188,7 +188,7 @@ def admin_add_doctor(doctor_list):
     phone = validation.get_valid_phone_number()
     pin = input("Create a 4-digit PIN for the doctor: ").strip()
 
-    new_id = operations.generate_new_id_doctor()
+    new_id = operations.generate_new_id("Doctor", doctor_list)
     new_doctor = models.Doctor(new_id, name, pin, phone, specialization, shift_start_time, shift_end_time)
     doctor_list.append(new_doctor)
 
@@ -334,6 +334,11 @@ def patient_view_information(patient):
         print(f"ID: {patient.user_id} | Name: {patient.name} | Phone: {patient.phone_number}")
         print(f"Gender: {patient.gender} | DOB: {patient.date_of_birth} | Email: {patient.email}")
         print(f"Address: {patient.address}")
+        if getattr(patient, 'notification', None):
+            print("\nNotifications:")
+            for note in patient.notification:
+                print(f"  - {note}")
+            patient.clear_notification()
 
 
 def patient_view_own_appointments(patient, appointment_list):
@@ -400,13 +405,27 @@ def doctor_update_appointment(doctor, appointment_list):
         print("Error: Appointment not found for this doctor. Please check the ID.")
         return
 
-    new_status = input("Enter new status (Scheduled/Completed/Cancelled): ").strip()
-    if isinstance(match, dict):
-        match['status'] = new_status
-    else:
-        match.update_status(new_status)
-    print(f"Appointment {search_id} updated to status: {new_status}")
+    new_status = input("Enter new status (Scheduled/Completed/Cancelled) - leave blank to keep: ").strip()
+    new_date = input("Enter new date (YYYY-MM-DD) - leave blank to keep: ").strip()
+    new_start_time = input("Enter new start time (HH:MM) - leave blank to keep: ").strip()
 
+    if isinstance(match, dict):
+        if new_status:
+            match['status'] = new_status
+        if new_date:
+            match['date'] = new_date
+        if new_start_time:
+            match['start_time'] = new_start_time
+    else:
+        if new_status:
+            match.update_status(new_status)
+        if new_date or new_start_time:
+            match.reschedule_appointment(
+                new_date or match.date,
+                new_start_time or match.start_time,
+            )
+
+    print(f"Appointment {search_id} updated.")
 
 def patient_book_appointment(patient, doctors, appointment_list):
     print("---Book an Appointment---")
@@ -441,7 +460,7 @@ def patient_book_appointment(patient, doctors, appointment_list):
         print("Please choose 'a' or 'b'. Booking cancelled.")
         return
 
-    target_date = input("Enter the date you'd like (YYYY-MM-DD): ").strip()
+    target_date = str(validation.get_valid_appointmentdate())
     available_slots = operations.get_available_time_slots(doctor, target_date, appointment_list)
     if not available_slots:
         print("Sorry, no available time slots for that doctor on that date.")
@@ -456,9 +475,20 @@ def patient_book_appointment(patient, doctors, appointment_list):
         print("That's not one of the available time slots. Booking cancelled.")
         return
 
+    duration_input = input("Enter appointment duration in minutes (leave blank for default 60): ").strip()
+    if not duration_input:
+        duration = 60
+    elif duration_input.isdigit() and operations.is_valid_duration(int(duration_input)):
+        duration = int(duration_input)
+    else:
+        print("That's not a valid duration - using the default of 60 minutes instead.")
+        duration = 60
+
     new_id = operations.generate_new_id_appointment()
-    new_appointment = models.Appointment(new_id, patient_id, doctor_id, target_date, chosen_time, status="Scheduled")
+    new_appointment = models.Appointment(new_id, patient_id, doctor_id, target_date, chosen_time, duration_minutes=duration, status="Scheduled")
     appointment_list.append(new_appointment)
+    if not isinstance(patient, dict):
+        patient.add_notification(f"Appointment {new_id} booked with {doctor_id} on {target_date} at {chosen_time}.")
     print(f"Appointment booked! Your appointment ID is {new_id}.")
 
 
@@ -482,10 +512,11 @@ def patient_cancel_appointment(patient, appointment_list):
     confirmation = input(f"Are you sure you want to cancel Appointment {search_id}? (yes/no): ").strip().lower()
     if confirmation == "yes":
         appointment_list.remove(match)
+        if not isinstance(patient, dict):
+            patient.add_notification(f"Appointment {search_id} was cancelled.")
         print(f"Appointment {search_id} has been cancelled successfully.")
     else:
-        print("Cancellation attempt aborted.")
- 
+        print("Cancellation attempt aborted.") 
 
 
 

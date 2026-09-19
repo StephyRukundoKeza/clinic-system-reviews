@@ -60,13 +60,14 @@ class Doctor(User):   #Doctor class inherits from User class
 
 
 class Patient(User):  #Patient class inherits from User class
-    def __init__(self, user_id, name, pin, phone_number, gender, date_of_birth, email, address, notification=None):
+    def __init__(self, user_id, name, pin, phone_number, gender, date_of_birth, email, address, notification=None, medical_history=None):
         super().__init__(user_id, name, pin, phone_number)
         self.gender = gender
         self.date_of_birth = date_of_birth
         self.email = email
         self.address = address
         self.notification = notification
+        self.medical_history = medical_history
     
     def update_profile(self, name=None, phone_number=None, gender=None, date_of_birth=None, email=None, address=None):  #method to update the patient's profile
         updates = {"name": name, "phone_number": phone_number, "gender": gender, "date_of_birth": date_of_birth, "email": email, "address": address}
@@ -92,6 +93,7 @@ class Patient(User):  #Patient class inherits from User class
         data["email"] = self.email
         data["address"] = self.address
         data["notification"] = self.notification
+        data["medical_history"] = self.medical_history
         return data 
 
 class Appointment:  #Appointment class to manage appointments

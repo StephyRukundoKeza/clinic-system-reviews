@@ -136,20 +136,21 @@ def test_new_registration_actually_creates_a_patient(isolated_project):
 
 
 def test_admin_menu_rejects_bad_input_instead_of_crashing(isolated_project):
-    stdout, returncode = run_main(["A-100", "9999", "x", "7", "exit"])
+    stdout, returncode = run_main(["A-100", "9999", "x", "15", "exit"])
     assert returncode == 0, (
         f"Program crashed instead of handling bad input gracefully "
         f"(returncode={returncode}). Output:\n{stdout}"
     )
-    assert "Please enter a number between 1 and 7." in stdout
+    assert "Please enter a number between 1 and 15." in stdout
 
 
 def test_admin_menu_logout_actually_works(isolated_project):
-    stdout, _ = run_main(["A-100", "9999", "7", "exit"])
+    stdout, _ = run_main(["A-100", "9999", "15", "exit"])
     assert "Logging out..." in stdout, (
-        "Typing 7 to log out of the admin menu didn't log out - "
+        "Typing 15 to log out of the admin menu didn't log out - "
         "it fell through to the else branch instead (int vs string compare bug)."
     )
+
 
 def test_admin_menu_all_options_run_without_crashing(isolated_project):
     stdout, returncode = run_main([
@@ -161,6 +162,14 @@ def test_admin_menu_all_options_run_without_crashing(isolated_project):
         "5", "Add", "Doc", "Neurology", "09:00", "17:00", "55512345", "2222",
         "6",
         "7",
+        "8", "DR-201",
+        "9", "DR-201", "", "", "", "",
+        "10", "P-999999",
+        "11", "DR-999999",
+        "12", "A-301", "yes",
+        "13", "New", "Admin", "55598765", "3333",
+        "14", "A-999999",
+        "15",
         "exit",
     ])
     assert returncode == 0, (
@@ -174,7 +183,7 @@ def test_doctor_menu_all_options_run_without_crashing(isolated_project):
         "DR-201", "5678",
         "1",
         "2", "P-101",
-        "3", "A-301", "Completed",
+        "3", "A-301", "Completed", "2026-09-28", "11:00",
         "4",
         "exit",
     ])
@@ -188,7 +197,7 @@ def test_patient_menu_all_options_run_without_crashing(isolated_project):
     stdout, returncode = run_main([
         "P-101", "1234",
         "1",
-        "2", "b", "DR-201", "2026-09-25", "09:00",
+        "2", "b", "DR-201", "2026-09-25", "09:00", "",
         "3",
         "4", "A-301", "yes",
         "5",

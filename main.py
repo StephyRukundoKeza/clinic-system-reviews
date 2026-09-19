@@ -1,6 +1,7 @@
 from data_manager import load_data, save_data
 from operations import find_record_by_id, check_pin
 import sub_main
+import models
 
 print("========================================")
 print("Clinic Appointment And Management System")
@@ -8,7 +9,7 @@ print("========================================")
 
 
 
-def admin_menu(patients, doctors, appointments):
+def admin_menu(patients, doctors, appointments, admins):
     while True:
         print("=====ADMINISTRATOR MENU=====")
         print("1.Register new patient")
@@ -17,16 +18,24 @@ def admin_menu(patients, doctors, appointments):
         print("4.Update patient information")
         print("5.Add doctor")
         print("6.View appointments")
-        print("7.Logout")
+        print("7.Display all doctors")
+        print("8.Search doctor")
+        print("9.Update doctor information")
+        print("10.Delete patient")
+        print("11.Delete doctor")
+        print("12.Cancel appointment")
+        print("13.Create new admin account")
+        print("14.Delete admin account")
+        print("15.Logout")
 
         try:
-            choice = int(input("Choose an option (1-7): "))
+            choice = int(input("Choose an option (1-15): "))
         except ValueError:
-            print("Please enter a number between 1 and 7.")
+            print("Please enter a number between 1 and 15.")
             continue
 
-        if choice < 1 or choice > 7:
-            print("Please choose a number between 1 and 7.")
+        if choice < 1 or choice > 15:
+            print("Please choose a number between 1 and 15.")
             continue
 
         if choice == 1:
@@ -42,9 +51,24 @@ def admin_menu(patients, doctors, appointments):
         elif choice == 6:
             sub_main.admin_view_appointments(appointments)
         elif choice == 7:
+            sub_main.admin_display_doctors(doctors)
+        elif choice == 8:
+            sub_main.admin_search_doctor(doctors)
+        elif choice == 9:
+            sub_main.admin_update_doctor(doctors)
+        elif choice == 10:
+            sub_main.admin_delete_patient(patients)
+        elif choice == 11:
+            sub_main.admin_delete_doctor(doctors)
+        elif choice == 12:
+            sub_main.admin_cancel_appointment(appointments)
+        elif choice == 13:
+            sub_main.create_admin_account(admins)
+        elif choice == 14:
+            sub_main.delete_admin_account(admins)
+        elif choice == 15:
             print("Logging out...")
             break
-
 
 def doctor_menu(record, patients, appointments):
     while True:
@@ -134,8 +158,13 @@ def main():  # this particular function will control the main flow
                 else:
                     entered_pin = input("Enter your PIN: ")
                     if check_pin(record, entered_pin):
+                        if isinstance(record, dict):
+                            current_user = models.Admin(record['user_id'], record['name'], record['pin'], record['phone_number'])
+                        else:
+                            current_user = record
                         print("Opening Admin Menu... ")
-                        admin_menu(patients, doctors, appointments)
+                        print(f"Welcome, {current_user.name}!")
+                        admin_menu(patients, doctors, appointments, admins)
                     else:
                         print("Incorrect PIN.")
 
@@ -146,8 +175,16 @@ def main():  # this particular function will control the main flow
                 else:
                     entered_pin = input("Enter your PIN: ")
                     if check_pin(record, entered_pin):
+                        if isinstance(record, dict):
+                            current_user = models.Doctor(
+                                record['user_id'], record['name'], record['pin'], record['phone_number'],
+                                record.get('specialization'), record.get('shift_start_time'), record.get('shift_end_time')
+                            )
+                        else:
+                            current_user = record
                         print("Opening Doctor Menu... ")
-                        doctor_menu(record, patients, appointments)
+                        print(f"Welcome, Dr. {current_user.name}!")
+                        doctor_menu(current_user, patients, appointments)
                     else:
                         print("Incorrect PIN.")
 
@@ -159,8 +196,17 @@ def main():  # this particular function will control the main flow
                 else:
                     entered_pin = input("Enter your PIN: ")
                     if check_pin(record, entered_pin):
+                        if isinstance(record, dict):
+                            current_user = models.Patient(
+                                record['user_id'], record['name'], record['pin'], record['phone_number'],
+                                record.get('gender'), record.get('date_of_birth'), record.get('email'), record.get('address'),
+                                record.get('notification'), record.get('medical_history')
+                            )
+                        else:
+                            current_user = record
                         print("Opening Patient Menu")
-                        patient_menu(record, doctors, appointments)
+                        print(f"Welcome, {current_user.name}!")
+                        patient_menu(current_user, doctors, appointments)
                     else:
                         print("Incorrect PIN.")
 
