@@ -1,4 +1,3 @@
-print("Day one on clinic appointment system!")
 import random
 from datetime import datetime, timedelta
 import data_manager

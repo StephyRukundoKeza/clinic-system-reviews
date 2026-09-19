@@ -1,4 +1,3 @@
-print("Day one on clinic appointment system!")
 from datetime import datetime
 
 from operations import get_available_time_slots
