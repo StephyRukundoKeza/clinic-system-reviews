@@ -8,7 +8,7 @@ import random
 
 # 1st menu for all patients to register
 
-def patient_self_registration_menu(patient_list):
+def patient_self_registration_menu(patients):
     first = validation.get_valid_firstname()
     last = validation.get_valid_lastname()
     name = f"{first} {last}"
@@ -18,11 +18,11 @@ def patient_self_registration_menu(patient_list):
     phone = validation.get_valid_phone_number()
     email = validation.get_valid_email()
     address = input("Enter your physical address: ").strip()
-    new_id = operations.generate_new_id("Patient", patient_list)
+    new_id = operations.generate_new_id("Patient", patients)
     new_pin = str(random.randint(1000, 9999)) # Create a random 4-digit PIN for the patient
 
     new_patient = models.Patient(new_id, name, new_pin, phone, gender, str(dob), email, address)
-    patient_list.append(new_patient)
+    patients.append(new_patient)
     print(f"\nRegistration successful!")
     print(f"Your patient ID is {new_id} and your PIN is {new_pin}.")
     print("\nPlease use these credentials to login.")
@@ -30,8 +30,8 @@ def patient_self_registration_menu(patient_list):
 
 # Administrator menu
 
-def create_admin_account(admin_list):
-    print("---Create New Admin Account---")
+def create_admin_account(admins):
+    print("\n---Create New Admin Account---")
     first = validation.get_valid_firstname()
     last = validation.get_valid_lastname()
     name = f"{first} {last}"
@@ -39,17 +39,17 @@ def create_admin_account(admin_list):
     phone = validation.get_valid_phone_number()
     pin = input("Create a 4-digit PIN for the admin: ").strip()
 
-    new_id = operations.generate_new_id("Admin", admin_list)
+    new_id = operations.generate_new_id("Admin", admins)
     new_admin = models.Admin(new_id, name, pin, phone)
-    admin_list.append(new_admin)
+    admins.append(new_admin)
 
     print(f"\nSuccessful! Admin {name} created with ID: {new_id}")
 
-def delete_admin_account(admin_list):
-    print("---Delete Admin Account---")
+def delete_admin_account(admins):
+    print("\n---Delete Admin Account---")
     search_id = input("Enter the admin ID to delete(e.g., A-12345678): ").strip().upper()
     
-    a = operations.find_record_by_id(admin_list, search_id)
+    a = operations.find_record_by_id(admins, search_id)
     
     if not a:
         print("Error: Admin not found. Please check the ID.")
@@ -63,14 +63,14 @@ def delete_admin_account(admin_list):
 
     confirmation = input(f"Are you sure you want to delete Admin {search_id}? (yes/no): ").strip().lower()
     if confirmation == "yes":
-        admin_list.remove(a)
+        admins.remove(a)
         print(f"Admin {search_id} has been deleted successfully.")
     else:
         print("Attempt Cancelled.") 
 
 
-def admin_register_patient(patient_list):
-    print("---Register New Patient (Admin)---")
+def admin_register_patient(patients):
+    print("\n---Register New Patient (Admin)---")
     first = validation.get_valid_firstname()
     last = validation.get_valid_lastname()
     name = f"{first} {last}"
@@ -82,30 +82,30 @@ def admin_register_patient(patient_list):
     address = input("Enter your physical address: ").strip()
     pin = input("Create a 4-digit PIN for the patient: ").strip()
     
-    new_id = operations.generate_new_id("Patient", patient_list)
+    new_id = operations.generate_new_id("Patient", patients)
     new_patient = models.Patient(new_id, name, pin, phone, gender, str(dob), email, address)
-    patient_list.append(new_patient)
+    patients.append(new_patient)
     
     print(f"\nSuccessful! Patient {name} registered with ID: {new_id}")
 
-def admin_display_patients(patient_list):
-    print("---Display All Registered Patients (Admin)---")
-    if not patient_list:
+def admin_display_patients(patients):
+    print("\n---Display All Registered Patients (Admin)---")
+    if not patients:
         print("No patients registered yet.")
         return
 
     print("\nRegistered Patients:")
-    for p in patient_list:
+    for p in patients:
         if isinstance(p, dict):
             print(f"ID: {p.get('user_id')} | Name: {p.get('name')} | Phone: {p.get('phone_number')}")
         else:
             print(f"ID: {p.user_id} | Name: {p.name} | Phone: {p.phone_number}")
 
-def admin_search_patient(patient_list):
+def admin_search_patient(patients):
     print("---Search Patient (Admin)---")
-    search_id = input("Enter the patient ID to search(e.g., P-12345678): ").strip().upper()
+    search_id = input("Enter the patient ID to search(e. g., P-12345678): ").strip().upper()
     
-    p = operations.find_record_by_id(patient_list, search_id)
+    p = operations.find_record_by_id(patients, search_id)
     
     if not p:
         print("Error: Patient not found. Please check the ID.")
@@ -117,11 +117,11 @@ def admin_search_patient(patient_list):
     else:
         print(f"ID: {p.user_id} | Name: {p.name} | Phone: {p.phone_number}")
 
-def admin_update_patient(patient_list):
-    print("---Update Patient Profile (Admin)---")
+def admin_update_patient(patients):
+    print("\n---Update Patient Profile (Admin)---")
     search_id = input("Enter the patient ID to update(e.g., P-12345678): ").strip().upper()
     
-    p = operations.find_record_by_id(patient_list, search_id)
+    p = operations.find_record_by_id(patients, search_id)
     
     if not p:
         print("Error: Patient not found. Please check the ID.")
@@ -153,11 +153,11 @@ def admin_update_patient(patient_list):
         p.update_profile(name=new_name, phone_number=new_phone, gender=new_gender, date_of_birth=str(new_dob), email=new_email, address=new_address)
     print("\nPatient profile updated successfully.")
 
-def admin_delete_patient(patient_list):
-    print("---Delete Patient Profile (Admin)---")
+def admin_delete_patient(patients):
+    print("\n---Delete Patient Profile (Admin)---")
     search_id = input("Enter the patient ID to delete(e.g., P-12345678): ").strip().upper()
     
-    p = operations.find_record_by_id(patient_list, search_id)
+    p = operations.find_record_by_id(patients, search_id)
     
     if not p:
         print("Error: Patient not found. Please check the ID.")
@@ -171,13 +171,13 @@ def admin_delete_patient(patient_list):
 
     confirmation = input(f"Are you sure you want to delete Patient {search_id}? (yes/no): ").strip().lower()
     if confirmation == "yes":
-        patient_list.remove(p)
+        patients.remove(p)
         print(f"Patient {search_id} has been deleted successfully.")
     else:
         print("Attempt Cancelled.") 
 
-def admin_add_doctor(doctor_list):
-    print("---Add New Doctor (Admin)---")
+def admin_add_doctor(doctors):
+    print("\n---Add New Doctor (Admin)---")
     first = validation.get_valid_firstname()
     last = validation.get_valid_lastname()
     name = f"{first} {last}"
@@ -188,30 +188,30 @@ def admin_add_doctor(doctor_list):
     phone = validation.get_valid_phone_number()
     pin = input("Create a 4-digit PIN for the doctor: ").strip()
 
-    new_id = operations.generate_new_id("Doctor", doctor_list)
+    new_id = operations.generate_new_id("Doctor", doctors)
     new_doctor = models.Doctor(new_id, name, pin, phone, specialization, shift_start_time, shift_end_time)
-    doctor_list.append(new_doctor)
+    doctors.append(new_doctor)
 
     print(f"\nSuccessful! Doctor {name} added with ID: {new_id}")
 
-def admin_display_doctors(doctor_list):
-    print("---Display All Registered Doctors (Admin)---")
-    if not doctor_list:
+def admin_display_doctors(doctors):
+    print("\n---Display All Registered Doctors (Admin)---")
+    if not doctors:
         print("No doctors registered yet.")
         return
 
     print("\nRegistered Doctors:")
-    for d in doctor_list:
+    for d in doctors:
         if isinstance(d, dict):
             print(f"ID: {d.get('user_id')} | Name: {d.get('name')} | Specialization: {d.get('specialization')}")
         else:
             print(f"ID: {d.user_id} | Name: {d.name} | Specialization: {d.specialization}")
 
-def admin_search_doctor(doctor_list):
-    print("---Search Doctor (Admin)---")
+def admin_search_doctor(doctors):
+    print("\n---Search Doctor (Admin)---")
     search_id = input("Enter the doctor ID to search(e.g., DR-12345678): ").strip().upper()
     
-    d = operations.find_record_by_id(doctor_list, search_id)
+    d = operations.find_record_by_id(doctors, search_id)
     
     if not d:
         print("Error: Doctor not found. Please check the ID.")
@@ -223,11 +223,11 @@ def admin_search_doctor(doctor_list):
     else:
         print(f"ID: {d.user_id} | Name: {d.name} | Specialization: {d.specialization}")
 
-def admin_update_doctor(doctor_list):
+def admin_update_doctor(doctors):
     print("---Update Doctor Profile (Admin)---")
     search_id = input("Enter the doctor ID to update(e.g., DR-12345678): ").strip().upper()
     
-    d = operations.find_record_by_id(doctor_list, search_id)
+    d = operations.find_record_by_id(doctors, search_id)
     
     if not d:
         print("Error: Doctor not found. Please check the ID.")
@@ -257,11 +257,11 @@ def admin_update_doctor(doctor_list):
             setattr(d, 'name', new_name)
     print("\nDoctor profile updated successfully.")
 
-def admin_delete_doctor(doctor_list):
+def admin_delete_doctor(doctors):
     print("---Delete Doctor Profile (Admin)---")
     search_id = input("Enter the doctor ID to delete(e.g., DR-12345678): ").strip().upper()
     
-    d = operations.find_record_by_id(doctor_list, search_id)
+    d = operations.find_record_by_id(doctors, search_id)
     
     if not d:
         print("Error: Doctor not found. Please check the ID.")
@@ -275,30 +275,30 @@ def admin_delete_doctor(doctor_list):
 
     confirmation = input(f"Are you sure you want to delete Doctor {search_id}? (yes/no): ").strip().lower()
     if confirmation == "yes":
-        doctor_list.remove(d)
+        doctors.remove(d)
         print(f"Doctor {search_id} has been deleted successfully.")
     else:
         print("Attempt Cancelled.")
 
-def admin_view_appointments(appointment_list):
+def admin_view_appointments(appointments):
     print("---View All Appointments (Admin)---")
-    if not appointment_list:
+    if not appointments:
         print("No appointments scheduled yet.")
         return
 
     print("\nScheduled Appointments:")
-    for a in appointment_list:
+    for a in appointments:
         if isinstance(a, dict):
             print(f"Appointment ID: {a.get('appointment_id')} | Patient ID: {a.get('patient_id')} | Doctor ID: {a.get('doctor_id')} | Date: {a.get('date')}")
         else:
             print(f"Appointment ID: {a.appointment_id} | Patient ID: {a.patient_id} | Doctor ID: {a.doctor_id} | Date: {a.date}")
 
-def admin_cancel_appointment(appointment_list):
+def admin_cancel_appointment(appointments):
     print("---Cancel Appointment (Admin)---")
     search_id = input("Enter the appointment ID to cancel: ").strip().upper()
     found = False
 
-    for a in appointment_list:
+    for a in appointments:
         if isinstance(a, dict):
             if a.get('appointment_id') == search_id:
                 print("\nAppointment Found:")
@@ -319,7 +319,7 @@ def admin_cancel_appointment(appointment_list):
     # If we found the appointment, proceed to cancel it
     confirmation = input(f"Are you sure you want to cancel Appointment {search_id}? (yes/no): ").strip().lower()
     if confirmation == "yes":
-        appointment_list.remove(a)
+        appointments.remove(a)
         print(f"Appointment {search_id} has been cancelled successfully.")
     else:
         print("Attempt Cancelled.")
@@ -518,5 +518,153 @@ def patient_cancel_appointment(patient, appointment_list):
     else:
         print("Cancellation attempt aborted.") 
 
+
+def patient_cancel_appointment(patients, appointments):
+    print("\n--- Cancel My Appointment ---")
+    patient_id = patients.get('user_id') if isinstance(patients, dict) else patients.user_id
+
+    search_id = input("Enter the Appointment ID to cancel (e.g., APT-123456): ").strip().upper()
+    apt = operations.find_record_by_id(appointments, search_id)
+
+    if not apt:
+        print("Error: Appointment not found.")
+        return
+
+    apt_patient_id = apt.get('patient_id') if isinstance(apt, dict) else getattr(apt, 'patient_id', None)
+    if apt_patient_id != patient_id:
+        print("Error: Appointment not found.")
+        return
+
+    confirm = input(f"Are you sure you want to cancel appointment {search_id}? (Y/N): ").strip().upper()
+    if confirm == 'Y' or confirm == 'YES':
+        if isinstance(apt, dict):
+            apt['status'] = 'Cancelled'
+        else:
+            if hasattr(apt, 'update_status'):
+                apt.update_status('Cancelled')
+            else:
+                setattr(apt, 'status', 'Cancelled')
+        print(f"Appointment {search_id} has been cancelled.")
+    else:
+        print("Cancellation aborted.")
+
+
+# Doctor menu
+
+def doctor_view_schedule(current_doctor, appointments, patients=None):
+# Displays all appointments associated with the logged-in doctor.
+#Handles both dictionary and object representations cleanly.
+    print("\n--- My Appointment Schedule ---")
+    
+    # Extract Doctor ID safely
+    doc_id = current_doctor.get('user_id') if isinstance(current_doctor, dict) else getattr(current_doctor, 'user_id', None)
+
+    # Filter appointments for this doctor
+    doc_apts = []
+    for a in appointments:
+        apt_doc = a.get('doctor_id') if isinstance(a, dict) else getattr(a, 'doctor_id', None)
+        if apt_doc == doc_id:
+            doc_apts.append(a)
+
+    if not doc_apts:
+        print("You have no scheduled appointments on record.")
+        return
+
+    print("\n---------------------------------------------------------------------------------------------")
+    print(f"{'Appt ID':<12} | {'Patient ID':<12} | {'Date':<12} | {'Time':<8} | {'Status':<10}")
+    print("---------------------------------------------------------------------------------------------")
+
+    for a in doc_apts:
+        if isinstance(a, dict):
+            apt_id = a.get('appointment_id', 'N/A')
+            p_id = a.get('patient_id', 'N/A')
+            date = a.get('date') or a.get('appointment_date', 'N/A')
+            time = a.get('start_time', 'N/A')
+            status = a.get('status', 'Active')
+        else:
+            apt_id = getattr(a, 'appointment_id', 'N/A')
+            p_id = getattr(a, 'patient_id', 'N/A')
+            date = getattr(a, 'date', getattr(a, 'appointment_date', 'N/A'))
+            time = getattr(a, 'start_time', 'N/A')
+            status = getattr(a, 'status', 'Active')
+
+        print(f"{apt_id:<12} | {p_id:<12} | {date:<12} | {time:<8} | {status:<10}")
+    print("---------------------------------------------------------------------------------------------\n")
+
+def doctor_update_appointment_status(current_doctor, appointments):
+    #Allows the doctor to update the status of an appointment assigned to them.
+    print("\n--- Update Appointment Status ---")
+    doc_id = current_doctor.get('user_id') if isinstance(current_doctor, dict) else getattr(current_doctor, 'user_id', None)
+
+    apt_id = input("Enter the Appointment ID to update (e.g., APT-123456): ").strip().upper()
+    apt = operations.find_record_by_id(appointments, apt_id)
+    if not apt:
+        print("Error: Appointment not found.")
+        return
+
+    # Verify ownership
+    apt_doc_id = apt.get('doctor_id') if isinstance(apt, dict) else getattr(apt, 'doctor_id', None)
+    if apt_doc_id != doc_id:
+        print("Error: You can only update appointments assigned to you.")
+        return
+
+    print("\n--- Select New Status ---")
+    print("1. Completed")
+    print("2. In-Progress")
+    print("3. Cancelled")
+    print("4. Active")
+
+    choice = validation.get_integer("Enter choice (1-4): ", min_val=1, max_val=4)
+    status_map = {1: "Completed", 2: "In-Progress", 3: "Cancelled", 4: "Active"}
+    new_status = status_map[choice]
+
+    if isinstance(apt, dict):
+        apt['status'] = new_status
+    else:
+        if hasattr(apt, 'update_status'):
+            apt.update_status(new_status)
+        else:
+            setattr(apt, 'status', new_status)
+
+    print(f"\nSuccess: Appointment {apt_id} status updated to '{new_status}'.")
+
+
+def doctor_view_profile(current_doctor):
+# Displays profile details for the currently logged-in doctor.
+    print("\n--- My Profile ---")
+    if isinstance(current_doctor, dict):
+        print(f"Doctor ID    : {current_doctor.get('user_id')}")
+        print(f"Name         : Dr. {current_doctor.get('name')}")
+        print(f"Specialty    : {current_doctor.get('specialization', 'General')}")
+        print(f"Phone        : {current_doctor.get('phone_number', 'N/A')}")
+        print(f"Shift Start  : {current_doctor.get('shift_start_time', '09:00')}")
+        print(f"Shift End    : {current_doctor.get('shift_end_time', '17:00')}")
+    else:
+        print(f"Doctor ID    : {getattr(current_doctor, 'user_id', 'N/A')}")
+        print(f"Name         : Dr. {getattr(current_doctor, 'name', 'N/A')}")
+        print(f"Specialty    : {getattr(current_doctor, 'specialization', 'General')}")
+        print(f"Phone        : {getattr(current_doctor, 'phone_number', 'N/A')}")
+        print(f"Shift Start  : {getattr(current_doctor, 'shift_start_time', getattr(current_doctor, 'shift_start', '09:00'))}")
+        print(f"Shift End    : {getattr(current_doctor, 'shift_end_time', getattr(current_doctor, 'shift_end', '17:00'))}")
+
+def doctor_update_shift(current_doctor):
+# Allows the doctor to change their shift hours.
+    print("\n--- Update Shift Working Hours ---")
+    new_start = validation.get_valid_time("Enter new Shift Start Time (HH:MM in 24h format): ")
+    new_end = validation.get_valid_time("Enter new Shift End Time (HH:MM in 24h format): ")
+
+    if isinstance(current_doctor, dict):
+        current_doctor['shift_start_time'] = new_start
+        current_doctor['shift_end_time'] = new_end
+    else:
+        if hasattr(current_doctor, 'update_shifts'):
+            current_doctor.update_shifts(new_start, new_end)
+        elif hasattr(current_doctor, 'update_shift'):
+            current_doctor.update_shift(new_start, new_end)
+        else:
+            setattr(current_doctor, 'shift_start_time', new_start)
+            setattr(current_doctor, 'shift_end_time', new_end)
+
+    print(f"\nShift updated successfully: {new_start} - {new_end}")
 
 
