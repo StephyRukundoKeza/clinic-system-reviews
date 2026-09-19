@@ -9,7 +9,7 @@ def main():# this particular function will control the main flow
               #of the application'
 
 #load saved data while the program starts
-    patients, doctors, appointments = load_data()
+    admins, patients, doctors, appointments = load_data()
 
     while True:
         #display the opening screen
@@ -17,9 +17,8 @@ def main():# this particular function will control the main flow
         print("\n=============================================")
         print("Clinic Appointment And Management System")
         print("=============================================\n")
-        print()
         print("Welcome!")
-        print()
+
         print("\n1. Login")
         print("2. Create Account(Patients Only) ")
         print("3. Exit")
@@ -103,7 +102,7 @@ def main():# this particular function will control the main flow
         elif choice ==3:
             print("\nSaving system data...")
             #Save the current data before closing
-            save_data(patients, doctors, appointments)
+            save_data(admins, patients, doctors, appointments)
             print("Thank you using our Clinic Management System.")
             print("System closed successfully!")
             break
