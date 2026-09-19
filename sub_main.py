@@ -336,14 +336,14 @@ def patient_view_information(patients):
         print(f"Phone      : {patients.get('phone_number')}")
         print(f"Email      : {patients.get('email')}")
         print(f"Address    : {patients.get('address')}")
-    else:
-        print(f"Patient ID : {patients.user_id}")
-        print(f"Name       : {patients.name}")
-        print(f"DOB        : {getattr(patients, 'date_of_birth', getattr(patients, 'dob', 'N/A'))}")
-        print(f"Gender     : {patients.gender}")
-        print(f"Phone      : {patients.phone_number}")
-        print(f"Email      : {patients.email}")
-        print(f"Address    : {patients.address}")
+    # else:
+    #     print(f"Patient ID : {patients.user_id}")
+    #     print(f"Name       : {patients.name}")
+    #     print(f"DOB        : {getattr(patients, 'date_of_birth', getattr(patients, 'dob', 'N/A'))}")
+    #     print(f"Gender     : {patients.gender}")
+    #     print(f"Phone      : {patients.phone_number}")
+    #     print(f"Email      : {patients.email}")
+    #     print(f"Address    : {patients.address}")
      
 def patient_book_appointment(patients, doctors, appointments):
     print("\n--- Book an Appointment ---")
