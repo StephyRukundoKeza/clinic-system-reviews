@@ -132,18 +132,18 @@ def get_available_time_slots(doctor, target_date, appointment_list):
 
     # 3. Remove slots already booked for this doctor on this date (P1-14 fix:
     booked_times = set()
-    for appt in appointment_list:
-        if isinstance(appt, dict):
-            appt_doctor_id = appt.get('doctor_id')
-            appt_date = appt.get('date')
-            appt_time = appt.get('start_time')
-            appt_status = appt.get('status')
+    for appointment in appointment_list:
+        if isinstance(appointment, dict):
+            appointment_doctor_id = appointment.get('doctor_id')
+            appointment_date = appointment.get('date')
+            appointment_time = appointment.get('start_time')
+            appointment_status = appointment.get('status')
         else:
-            appt_doctor_id = getattr(appt, 'doctor_id', None)
-            appt_date = getattr(appt, 'date', None)
-            appt_time = getattr(appt, 'start_time', None)
-            appt_status = getattr(appt, 'status', None)
-        if appt_doctor_id == doc_id and appt_date == target_date and appt_status != "Cancelled":
-            booked_times.add(appt_time)
+            appointment_doctor_id = getattr(appointment, 'doctor_id', None)
+            appointment_date = getattr(appointment, 'date', None)
+            appointment_time = getattr(appointment, 'start_time', None)
+            appointment_status = getattr(appointment, 'status', None)
+        if appointment_doctor_id == doc_id and appointment_date == target_date and appointment_status != "Cancelled":
+            booked_times.add(appointment_time)
 
     return [slot for slot in all_slots if slot not in booked_times]

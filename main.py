@@ -102,7 +102,7 @@ def doctor_menu(record, patients, appointments):
 def patient_menu(record, doctors, appointments):
     while True:
         print("========PATIENT MENU========")
-        print("1.View my infomation")
+        print("1.View my information")
         print("2.Book appointment")
         print("3.View my appointment")
         print("4.Cancel appointment")
@@ -151,7 +151,7 @@ def main():  # this particular function will control the main flow
                 print("Starting new patient registration")
                 sub_main.patient_self_registration_menu(patients)
 
-            elif user_id.startswith("A-"): # An ID starting with A belongs to the Adminstrator
+            elif user_id.startswith("A-"): # An ID starting with A belongs to the Administrator
                 record = find_record_by_id(admins, user_id)
                 if record is None:
                     print("Invalid ID.Please enter a valid ID.")
