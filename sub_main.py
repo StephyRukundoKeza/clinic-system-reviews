@@ -18,7 +18,7 @@ def patient_self_registration_menu(patients):
     phone = validation.get_valid_phone_number()
     email = validation.get_valid_email()
     address = input("Enter your physical address: ").strip()
-    new_id = operations.generate_new_id_patient()
+    new_id = operations.generate_new_id_patient(patients)
     new_pin = str(random.randint(1000, 9999)) # Create a random 4-digit PIN for the patient
 
     new_patient = models.Patient(new_id, name, new_pin, phone, gender, str(dob), email, address)
@@ -82,7 +82,7 @@ def admin_register_patient(patients):
     address = input("Enter your physical address: ").strip()
     pin = input("Create a 4-digit PIN for the patient: ").strip()
     
-    new_id = operations.generate_new_id_patient()
+    new_id = operations.generate_new_id_patient(patients)
     new_patient = models.Patient(new_id, name, pin, phone, gender, str(dob), email, address)
     patients.append(new_patient)
     
