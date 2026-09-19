@@ -31,12 +31,14 @@ def main():# this particular function will control the main flow
         choice = validation.get_valid_menu()
 
         #option 1 :login routing      
-        if choice =="1":
+        if choice == 1:
                #Ask the user for their ID 
             user_id = input("Enter your ID: ").strip().upper()
+
             # ---ADMINISTRATOR LOGIN ---
           
             if user_id.startswith("A-"):
+                print("Adminstrator Login is not connected yet.")
                      # An ID starting with A belongs to the Adminstrator
                      #Hardcoded emergency backdoor so the system can be accessed
                      #if admins.json is missing or not configured yet.
@@ -48,9 +50,11 @@ def main():# this particular function will control the main flow
                        admin_menu(user_id, patients,doctors,appointments)
 
                 else:
-                     print("Incorrect Password")     
+                     print("Incorrect Password")   
+
+                     #--Doctor Login  
             elif user_id.startswith("DR-"):
-                # ---DOCTOR LOGIN ---
+               
                 user = find_record_by_id(doctors, user_id)
 
                 if user:
@@ -59,7 +63,7 @@ def main():# this particular function will control the main flow
                     user_pin = str(user.get('pin')) if isinstance(user,dict) else str(user.pin)
                     if entered_pin == user_pin:
                         print("\nOpening Doctor Menu...")
-                        doctor_menu(user_id,doctors,patients,appointment)
+                        doctor_menu(user_id,doctors,patients,appointments)
                     else:
                         print("Incorrect PIN")
                 else:
@@ -103,12 +107,12 @@ def main():# this particular function will control the main flow
             save_data(patients, doctors, appointments)
             print("Thank you using our Clinic Management System.")
             print("System closed successfully!")
+            break
        
 
 
     #This ensures main() is only run if this script is executed directly
-    if __name__ == "__main__":
-        main()
+   
     
 #This starts the program by calling the main function
         
@@ -150,8 +154,8 @@ def admin_menu(user_id,patients, doctors,appointments):
             sub_main.admin_register_patient(patients)
 
         
-        elif choice ==2:
-           sub_main.admin_display_patient(patients)
+        elif choice == 2:
+           sub_main.admin_display_patients(patients)
 
         elif choice ==3:
             sub_main.admin_search_patient(patients)
@@ -163,25 +167,25 @@ def admin_menu(user_id,patients, doctors,appointments):
            sub_main.admin_delete_patient(patients)
 
         elif choice ==6:
-            sub_main.admin_add_doctors(doctors)
+            sub_main.admin_add_doctor(doctors)
 
         elif choice ==7:
             sub_main.admin_display_doctors(doctors)
                            
         elif choice ==8:
-            sub_main.admin_search_doctors(doctors)
+            sub_main.admin_search_doctor(doctors)
                         
         elif choice ==9:
-            sub_main.admin_update_doctors(doctors)
+            sub_main.admin_update_doctor(doctors)
 
         elif choice ==10:
-            sub_main.admin_delete_doctors(doctors)
+            sub_main.admin_delete_doctor(doctors)
 
         elif choice ==11:
-            sub_main.admin_view_appointment(appointments)
+            sub_main.admin_view_appointments(appointments)
         
         elif choice ==12:
-            sub_main.admin_delete_appointment(appointments)
+            sub_main.admin_cancel_appointment(appointments)
 
      
         
@@ -241,12 +245,17 @@ def  doctor_menu(user_id,doctors, patients, appointments):
         
 
 
-def patient_menu(user_id, patients, doctors, appointment):
+def patient_menu(user_id, patients, doctors, appointments):
     """
     Displays the Patient menu and routes choices to the functions in sub_main.py
     """
     #Find the currently logged - in patient
     current_patient = find_record_by_id(patients, user_id)
+
+    if isinstance(current_patient, dict):
+        patient_name = current_patient.get("name")
+    else:
+        patient_name = current_patient.name
 
     #Get the patient's name whether the record is a dictionary or a Patient object
     while True:
@@ -260,7 +269,7 @@ def patient_menu(user_id, patients, doctors, appointment):
         print("5. Logout")
 
 
-        choice =   get_valid_patient_menu()
+        choice =   validation.get_valid_patient_menu()
 
     
 
@@ -273,10 +282,12 @@ def patient_menu(user_id, patients, doctors, appointment):
 
 
         elif choice == 2:
-            sub.main.patient_book_information(patients,doctors,appointment)
+            sub_main.patient_book_appointment(
+                patients,doctors,appointments)
         
         elif choice == 3:
-            sub_main.patients_view_appointments(patients,appointments)
+            sub_main.patient_view_appointments(
+                patients,appointments)
 
         elif choice == 4:
             sub_main.patient_cancel_appointment(patients,appointments)
