@@ -5,6 +5,6 @@
     "phone_number": "555-0199",
     "pin": "1234",
     "address": "123 Main St",
-    "medical_history": ["Hypertension"]
+    "email": "jane.doe@example.com"
   }
 ]

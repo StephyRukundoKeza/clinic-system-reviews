@@ -327,7 +327,7 @@ def admin_cancel_appointment(appointments):
 # Patient menu
 
 def patient_view_information(patients):
-    print("---View Patient Information---")
+    print("\n---View Patient Information---")
     if isinstance(patients, dict):
         print(f"Patient ID : {patients.get('user_id')}")
         print(f"Name       : {patients.get('name')}")

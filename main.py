@@ -95,9 +95,9 @@ def main():# this particular function will control the main flow
 
         #Option 2:Public Account Creation
         elif choice == 2:
-            print("\n========================")
+            print("\n===============================")
             print(" Patient Self-Registration")
-            print("==========================")
+            print("===============================\n")
             #Opens the patient registration interface
             sub_main.patient_self_registration_menu(patients)
                       
@@ -126,9 +126,9 @@ def admin_menu(user_id,patients, doctors,appointments):
     #to an adminstrator.
 
     while True:
-        print("\n======================")
-        print("       Adminstrator Menu")
-        print("========================")
+        print("\n=========================")
+        print(" Adminstrator Menu")
+        print("===========================\n")
         print("1.Register new patient")
         print("2.Display all  patients")
         print("3.Search patient")
@@ -199,11 +199,9 @@ def admin_menu(user_id,patients, doctors,appointments):
     
 
 def  doctor_menu(user_id,doctors, patients, appointments):
-    """
-    Displays the doctor menu and routes choices to the functions in sub_main.py.
-    """
+    # Displays the doctor menu and routes choices to the functions in sub_main.py.
 
-    #Find the currently logged -in doctor
+    # Find the currently logged -in doctor
     current_doctor = find_record_by_id(doctors, user_id)
 
 
@@ -285,18 +283,18 @@ def patient_menu(user_id, patients, doctors, appointments):
             break 
 
         elif choice == 1:
-           sub_main.patient_view_information(patients)
+           sub_main.patient_view_information(current_patient)
 
 
         elif choice == 2:
-            sub_main.patient_book_information(patients, doctors, appointments)
+            sub_main.patient_book_appointment(current_patient, doctors, appointments)
         
         elif choice == 3:
             sub_main.patient_view_appointments(
-                patients,appointments)
+                current_patient,appointments)
 
         elif choice == 4:
-            sub_main.patient_cancel_appointment(patients,appointments)
+            sub_main.patient_cancel_appointment(current_patient,appointments)
             
 
         
