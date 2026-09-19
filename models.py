@@ -17,9 +17,6 @@ class User:
     def verify_pin(self, input_pin):   #verifies the user's pin for authentication
         return self.pin == input_pin
 
-    def login(self, input_pin):  #named login entry point per the role spec - just delegates to verify_pin so there's one source of truth for the pin check
-        return self.verify_pin(input_pin)
-
     def to_dict(self):  #converts the user object to a dictionary for easy storage and retrieval
         return {
             "user_id": self.user_id,
@@ -60,14 +57,12 @@ class Doctor(User):   #Doctor class inherits from User class
 
 
 class Patient(User):  #Patient class inherits from User class
-    def __init__(self, user_id, name, pin, phone_number, gender, date_of_birth, email, address, notification=None, medical_history=None):
+    def __init__(self, user_id, name, pin, phone_number, gender, date_of_birth, email, address, notification=None):
         super().__init__(user_id, name, pin, phone_number)
         self.gender = gender
         self.date_of_birth = date_of_birth
         self.email = email
         self.address = address
-        self.notification = notification
-        self.medical_history = medical_history
     
     def update_profile(self, name=None, phone_number=None, gender=None, date_of_birth=None, email=None, address=None):  #method to update the patient's profile
         updates = {"name": name, "phone_number": phone_number, "gender": gender, "date_of_birth": date_of_birth, "email": email, "address": address}
@@ -76,14 +71,6 @@ class Patient(User):  #Patient class inherits from User class
                 setattr(self, field, value)
         return True
 
-    def add_notification(self, message):  #method to add a notification for the patient
-        if self.notification is None:
-            self.notification = []
-        self.notification.append(message)
-
-    def clear_notification(self):  #method to clear the patient's read notifications
-        if self.notification is not None:
-            self.notification = []
 
     def to_dict(self):  #overrides the to_dict method to include the role of the user
         data = super().to_dict()
@@ -92,8 +79,6 @@ class Patient(User):  #Patient class inherits from User class
         data["date_of_birth"] = self.date_of_birth
         data["email"] = self.email
         data["address"] = self.address
-        data["notification"] = self.notification
-        data["medical_history"] = self.medical_history
         return data 
 
 class Appointment:  #Appointment class to manage appointments
@@ -106,22 +91,21 @@ class Appointment:  #Appointment class to manage appointments
     self.duration = duration_minutes  # Duration in minutes
     self.status = status    
 
-   
+    def update_status(self, new_status):  #method to update the status of the appointment (e.g., Active, Completed, Cancelled)
+        self.status = new_status
 
-  def update_status(self, new_status):  #method to update the status of the appointment (e.g., Active, Completed, Cancelled)
-      self.status = new_status
+    def reschedule_appointment(self, new_date, new_start_time):  #method to reschedule an existing appointment
+        self.date = new_date
+        self.start_time = new_start_time
 
-  def reschedule_appointment(self, new_date, new_start_time):  #method to reschedule an existing appointment
-      self.date = new_date
-      self.start_time = new_start_time
+    def to_dict(self):  #method to convert the appointment object to a dictionary for easy storage and retrieval
+        return {
+            "appointment_id": self.appointment_id,
+            "patient_id": self.patient_id,
+            "doctor_id": self.doctor_id,
+            "date": self.date,
+            "start_time": self.start_time,
+            "duration": self.duration,
+            "status": self.status
+        }
 
-  def to_dict(self):  #method to convert the appointment object to a dictionary for easy storage and retrieval
-      return {
-          "appointment_id": self.appointment_id,
-          "patient_id": self.patient_id,
-          "doctor_id": self.doctor_id,
-          "date": self.date,
-          "start_time": self.start_time,
-          "duration": self.duration,
-          "status": self.status
-      }

@@ -1,86 +1,63 @@
 print("Day one on clinic appointment system!")
 import random
+from datetime import datetime, timedelta
+import data_manager
 
-def is_duplicate_id(new_id, existing_records):
-    """True if new_id already belongs to someone/something in existing_records."""
-    for record in existing_records:
-        record_id = record.get('user_id') if isinstance(record, dict) else getattr(record, 'user_id', None)
-        if record_id == new_id:
-            return True
-    return False
+def generate_new_id_admin():
+    # Generates a unique 8-digit ID for new admins.
+    print("Generating your admin id")
+    id=random.randrange(00000000,99999999)
+    print(f"Your admin id is A-{id}")
+    return f"A-{id}"
 
-
-def is_valid_name(name):
-    """Business rule: a name can't be empty or just whitespace."""
-    return isinstance(name, str) and name.strip() != ""
-
-
-def is_valid_duration(duration_minutes):
-    """Business rule: an appointment's duration must be a positive number of minutes."""
-    return isinstance(duration_minutes, (int, float)) and duration_minutes > 0
-
-def check_pin(record, input_pin):
-    """True if input_pin matches this record's stored pin - record can be
-    a dict (from JSON) or a User/Admin/Doctor/Patient object."""
-    stored_pin = record.get('pin') if isinstance(record, dict) else getattr(record, 'pin', None)
-    return stored_pin == input_pin
-
-
-def is_valid_price(price):
-    """Business rule: a price can't be negative. (No price field exists in the
-    data model yet — this is ready for whenever one's added.)"""
-    return isinstance(price, (int, float)) and price >= 0
-
-def generate_new_id_admin(existing_ids=None):
+def generate_new_id_patient(patients):
+    
     while True:
-        id = random.randrange(00000000, 99999999)
-        new_id = f"A-{id}"
-        if not existing_ids or new_id not in existing_ids:
-            print(f"Your admin id is {new_id}")
+    # Generates a unique 8-digit ID for new patients.
+        print("Generating your patients id")
+        id=random.randrange(00000000,99999999)
+        new_id= f"P-{id}"
+#checks for any duplicates
+        for patient in patients:
+            if patient["user_id"] ==new_id:
+                break
+        else:
+            print(f"Your patient id is P-{id}")
             return new_id
 
-def generate_new_id_patient(existing_ids=None):
-    # Generates a unique 8-digit ID for new patients (see note above).
-    while True:
-        id = random.randrange(00000000, 99999999)
-        new_id = f"P-{id}"
-        if not existing_ids or new_id not in existing_ids:
-            print(f"Your patient id is {new_id}")
-            return new_id
+def generate_new_id_doctor(doctors):
+    # Generates a unique 8-digit ID for new doctors.
+    print("Generating your doctors id")
+    id=random.randrange(00000000,99999999)
+    new_id=f"DR-{id}"
+    
+    
+    #checks for any duplicates
+    for doctor in doctors:
+        if doctor["user_id"] ==new_id:
+                break
+    else:
+        print(f"Your doctor id is DR-{id}")
+        return new_id
 
-def generate_new_id_doctor(existing_ids=None):
-    # Generates a unique 8-digit ID for new doctors (see note above).
-    while True:
-        id = random.randrange(00000000, 99999999)
-        new_id = f"DR-{id}"
-        if not existing_ids or new_id not in existing_ids:
-            print(f"Your doctor id is {new_id}")
-            return new_id
+def generate_new_id_appointment(appointments):
+# Generates a unique 6-digit ID for new appointments.
+    id = random.randrange(100000, 999999)
+    new_id=f"APT-{id}"
+    
+    #checks for any duplicates
+    for appointment in appointments:
+        if appointment["appointment_id"] ==new_id:
+                    break
+    else:
+        print(f"Your appointment id is DR-{id}")
+        return  new_id
 
-def generate_new_id(role, existing_users):
-    """
-    Generates the next sequential ID for a role: 'Patient' -> P-, 'Doctor' -> DR-, 'Admin' -> A-.
-    Looks through existing_users (dicts or objects) for the highest number
-    already used with that prefix, then returns highest + 1, zero-padded to 8 digits.
-    """
-    prefixes = {"Patient": "P-", "Doctor": "DR-", "Admin": "A-"}
-    prefix = prefixes.get(role)
-    if prefix is None:
-        raise ValueError(f"Unknown role '{role}'. Expected one of: {list(prefixes.keys())}")
 
-    highest_number = 0
-    for user in existing_users:
-        user_id = user.get('user_id') if isinstance(user, dict) else getattr(user, 'user_id', None)
-        if user_id and user_id.startswith(prefix):
-            number_part = user_id[len(prefix):]
-            if number_part.isdigit():
-                highest_number = max(highest_number, int(number_part))
 
-    return f"{prefix}{highest_number + 1:08d}"
-
-def find_record_by_id(record_list, search_id):
-    for record in record_list:
-# Check if the record is a dictionary (freshly loaded from JSON by Student 3)
+def find_record_by_id(saved_data, search_id):
+    for record in saved_data:
+# Check if the record is a dictionary (freshly loaded from JSON by data_manager)
         if isinstance(record, dict):
 # We check 'user_id', but if it's an appointment, it falls back to checking 'appointment_id'
             record_id = record.get('user_id') or record.get('appointment_id')
@@ -97,53 +74,37 @@ def find_record_by_id(record_list, search_id):
     # Return None if the loop finishes and no match was found
     return None
 
-def generate_new_id_appointment():
-# Generates a unique 6-digit ID for new appointments.
-    id = random.randrange(100000, 999999)
-    return f"APT-{id}"
-
-from datetime import datetime, timedelta
-
-def get_available_time_slots(doctor, target_date, appointment_list):
+def get_available_time_slots(selected_doctor , appointment_date, appointments):
 # Calculates available 1-hour time slots for a doctor on a specific date.
 # It looks at the doctor's shift hours and subtracts any active appointments.
 # 1. Get the doctor's shift times (safely handling dicts or objects)
-    if isinstance(doctor, dict):
-        start_str = doctor.get('shift_start_time', '09:00')
-        end_str = doctor.get('shift_end_time', '17:00')
-        doc_id = doctor.get('user_id')
-    else:
-        start_str = getattr(doctor, 'shift_start_time', '09:00')
-        end_str = getattr(doctor, 'shift_end_time', '17:00')
-        doc_id = getattr(doctor, 'user_id')
-
-# 2. Generate all possible hourly slots for the shift
-    all_slots = []
-    try:
-        start_time = datetime.strptime(start_str, "%H:%M")
-        end_time = datetime.strptime(end_str, "%H:%M")
+    
+    
+    all_slots=[]
+    start_time = datetime.strptime(selected_doctor['shift_start_time'],"%H:%M")
+    end_time = datetime.strptime(selected_doctor['shift_end_time'],"%H:%M")
+    doc_id = selected_doctor['user_id']
+    booked_slots=[]  
         
-        current_time = start_time
-        while current_time < end_time:
-            all_slots.append(current_time.strftime("%H:%M"))
-            current_time += timedelta(hours=1)
-    except ValueError:
-        return []
+    for appointment in appointments:
+        if(appointment['user_id'] == doc_id
+            and appointment['date'] == appointment_date):
+            booked_slots.append(appointment["start_time"])          
+                    
+    available_slots = []
+    current_time=start_time
+    while current_time + timedelta(minutes=60) <= end_time:
 
-    # 3. Remove slots already booked for this doctor on this date (P1-14 fix:
-    booked_times = set()
-    for appointment in appointment_list:
-        if isinstance(appointment, dict):
-            appointment_doctor_id = appointment.get('doctor_id')
-            appointment_date = appointment.get('date')
-            appointment_time = appointment.get('start_time')
-            appointment_status = appointment.get('status')
-        else:
-            appointment_doctor_id = getattr(appointment, 'doctor_id', None)
-            appointment_date = getattr(appointment, 'date', None)
-            appointment_time = getattr(appointment, 'start_time', None)
-            appointment_status = getattr(appointment, 'status', None)
-        if appointment_doctor_id == doc_id and appointment_date == target_date and appointment_status != "Cancelled":
-            booked_times.add(appointment_time)
+        start = current_time.strftime("%H:%M")
+        end = (current_time + timedelta(minutes=60)).strftime("%H:%M")
 
-    return [slot for slot in all_slots if slot not in booked_times]
+        if start not in booked_slots: 
+            available_slots.append(f"{start} - {end}")
+
+        current_time += timedelta(minutes=60)
+        
+    for position, slot in enumerate(available_slots, start=1):
+        print(f"[position].{slot}")
+
+    
+            
