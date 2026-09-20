@@ -7,30 +7,32 @@ def get_valid_menu():
         #to an administrator.
     while True:
         try:
-            menu=int(input("select an option(1-3): ")).strip()
-            if menu=="":  #check for my empty string inputs
+            menu_input = input("select an option(1-3): ").strip()
+            if menu_input == "":  #check for my empty string inputs
                 print("Oops sorry menu can not be left empty")
                 continue
-            if menu < 1 or menu > 3:
+            choice = int(menu_input)
+            if choice < 1 or choice > 3:
                 print("Selection out of range. Please select a number from 1-3 ")
                 continue
         
-            return menu
+            return choice
         except ValueError:
             print("Invalid format. Select a number from 1-3")    
             
 def get_valid_create_account_menu():
     while True:
         try:
-            menu=int(input("Select an option(1-4): ")).strip()
-            if menu=="":  #check for my empty string inputs
+            menu_input = (input("Select an option(1-4): ")).strip()
+            if menu_input == "":  #check for my empty string inputs
                 print("Oops sorry menu can not be left empty")
                 continue
-            if menu < 1 or menu > 4:
+            choice = int(menu_input)
+            if choice < 1 or choice > 4:
                 print("Selection out of range. Please select a number from 1-4 ")
                 continue
             
-            return menu
+            return choice
         except ValueError:
                 print("Invalid format. Select a number from 1-4")    
             
@@ -41,10 +43,11 @@ def get_valid_admin_menu():
     while True:
     
         try:
-            choice = int(input("Choose an option(1-13): "))
-            if choice=="": #check for my empty string inputs
+            menu_input = input("Choose an option(1-13): ").strip()
+            if menu_input == "": #check for my empty string inputs
                 print("Oops sorry menu can not be left empty")
                 continue
+            choice = int(menu_input)
             if choice < 1 or choice > 13:
                 print("Selection out of range. Please select a number from 1-13 ")
                 continue
@@ -58,10 +61,11 @@ def get_valid_doctor_menu() :
     while True:
     
         try:
-            choice = int(input("Choose an option(1-4): "))
-            if choice=="":
+            menu_input = input("Choose an option(1-4): ").strip()
+            if menu_input == "":
                 print("Oops sorry menu can not be left empty")
                 continue
+            choice = int(menu_input)
             if choice < 1 or choice > 4:
                 print("Selection out of range. Please select a number from 1-4")
                 continue
@@ -77,10 +81,11 @@ def get_valid_patient_menu():
     while True:
     
         try:
-            choice = int(input("Choose an option(1-5): ")).strip()
-            if choice=="":
+            menu_input = (input("Choose an option(1-5): ")).strip()
+            if menu_input == "":
                 print("Oops sorry menu can not be left empty")        
                 continue
+            choice = int(menu_input)
             if choice < 1 or choice > 5:
                 print("Selection out of range. Please select a number from 1-5. ")
                 continue

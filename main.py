@@ -192,7 +192,7 @@ def admin_menu(user_id, patients, doctors, appointments, admin):
                                 
     
 
-def  doctor_menu(user_id,doctors, patients, appointments,current_doctor):
+def  doctor_menu(user_id,doctors, patients, appointments):
     """
     Displays the doctor menu and routes choices to the functions in sub_main.py.
     """
