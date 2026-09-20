@@ -109,3 +109,4 @@ class Appointment:  #Appointment class to manage appointments
             "status": self.status
         }
 
+

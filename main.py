@@ -6,13 +6,13 @@ from operations import find_record_by_id
 
 
 def main():# this particular function will control the main flow
-              #of the application'
+              # of the application'
 
-#load saved data while the program starts
+# load saved data while the program starts
     patients, doctors, appointments, admins = load_data()
 
     while True:
-        #display the opening screen
+        # display the opening screen
 
         print("\n=============================================")
         print("Clinic Appointment And Management System")
@@ -28,7 +28,7 @@ def main():# this particular function will control the main flow
 
         #option 1 :login routing      
         if choice == 1:
-               #Ask the user for their ID 
+               # Ask the user for their ID 
             user_id = input("Enter your ID: ").strip().upper()
 
             # ---ADMINISTRATOR LOGIN ---
@@ -48,9 +48,9 @@ def main():# this particular function will control the main flow
                 else:
                      print("Incorrect Password")   
 
-                     #--Doctor Login  
+            # --Doctor Login--  
             elif user_id.startswith("DR-"):
-               
+
                 user = find_record_by_id(doctors, user_id)
 
                 if user:
@@ -277,11 +277,11 @@ def patient_menu(user_id, patients, doctors, appointments):
     
 
         if choice ==5:
-            print("Logging out...")
+            print("\nLogging out...")
             break 
 
         elif choice == 1:
-              sub_main.patient_view_information(current_patient)
+            sub_main.patient_view_information(current_patient)
 
 
         elif choice == 2:

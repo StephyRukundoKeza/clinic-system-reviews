@@ -345,52 +345,30 @@ def patient_view_information(current_patients):
         print(f"Email      : {current_patients.email}")
         print(f"Address    : {current_patients.address}")
      
-def patient_book_appointment(current_patients, doctors, appointments):
-    print("\n--- Book an Appointment ---")
-    if not doctors:
-        print("No doctors available in the system yet.")
-        return
+def patient_book_appointment(doctors,appointment_list):
+    print("---Book appointment---")
+    print("Available Doctors")
+    for position, doctor in enumerate(doctors, start=1):
+        print(f"{position}.{doctor['name']}")
+        print(f"   {doctor["specialization"]}")
+        print(f"Working hours: {doctor['shift_start_time']} - {doctor['shift_end_time']}")
+    
+        
+    choice=validation.get_valid_doctor_choice(doctors)
+    choice= choice-1
+    selected_doctor=doctors[choice]
+    print(f"You selected: {selected_doctor['name']}")
+    appointment_date = validation.get_valid_appointment_date()
+    available_slots = validation.get_available_time_slots()
+    slot_choice = validation.get_valid_slot_choice(available_slots)
+    
+    slot_choice = choice-1
+    print(f"You selected: {slot_choice}") 
+    
+def patient_view_appointment(patient_id, doc_id, appointments, target_date):
+    """Create an appointment for the supplied patient and doctor."""
 
-    # Extract patient ID safely
-    patient_id = current_patients.get('user_id') if isinstance(current_patients, dict) else current_patients.user_id
-
-    # 1. Display available doctors
-    print("\nAvailable Doctors:")
-    for d in doctors:
-        if isinstance(d, dict):
-            print(f"ID: {d.get('user_id')} | Name: Dr. {d.get('name')} | Specialization: {d.get('specialization')}")
-            print(f"    Working hours: {d.get('shift_start_time')} - {d.get('shift_end_time')}")
-        else:
-            print(f"ID: {d.user_id} | Name: Dr. {d.name} | Specialization: {d.specialization}")
-            # Handle slight attribute name variations between team members
-            start = getattr(d, 'shift_start_time', getattr(d, 'shift_start', '09:00'))
-            end = getattr(d, 'shift_end_time', getattr(d, 'shift_end', '17:00'))
-            print(f"    Working hours: {start} - {end}")
-
-    doc_id = input("\nEnter the Doctor ID you wish to see (e.g., DR-12345678): ").strip().upper()
-    doctor = operations.find_record_by_id(doctors, doc_id)
-
-    if not doctor:
-        print("Error: Doctor not found.")
-        return
-
-    doc_name = doctor.get('name') if isinstance(doctor, dict) else doctor.name
-    print(f"\nYou selected: Dr. {doc_name}")
-
-    # 2. Get target date using validation
-    target_date = validation.get_valid_appointment_date()
-
-    # 3. Use operations helper to find free slots
-    available_slots = operations.get_available_time_slots(doctor, str(target_date), appointments)
-
-    if not available_slots:
-        print(f"Sorry, Dr. {doc_name} has no open slots on {target_date}.")
-        return
-
-    print(f"\nAvailable time slots for {target_date}:")
-    for idx, slot in enumerate(available_slots, 1):
-        print(f"  [{idx}] {slot}")
-
+    available_slots = validation.get_available_time_slots()
     slot_choice = validation.get_integer("Select slot number: ", min_val=1, max_val=len(available_slots))
     selected_time = available_slots[slot_choice - 1]
 
