@@ -58,7 +58,7 @@ def main():# this particular function will control the main flow
                     #Securely extract PIN regardless of if object is dict or class instance
                     user_pin = str(user.get('pin')) if isinstance(user,dict) else str(user.pin)
                     if entered_pin == user_pin:
-                        print("Login succesful")
+                        print("Login successful")
                         print("\nOpening Doctor Menu...")
                         doctor_menu(user_id,doctors,patients,appointments)
                     else:
