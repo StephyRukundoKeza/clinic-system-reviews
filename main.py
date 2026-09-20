@@ -281,17 +281,17 @@ def patient_menu(user_id, patients, doctors, appointments):
             break 
 
         elif choice == 1:
-           sub_main.patient_view_information(patients)
+              sub_main.patient_view_information(current_patient)
 
 
         elif choice == 2:
-            sub_main.patient_book_appointment(patients, doctors, appointments)
+            sub_main.patient_book_appointment(current_patient, doctors, appointments)
         
         elif choice == 3:
-            sub_main.patient_view_appointments(patients,appointments)
+            sub_main.patient_view_appointments(current_patient,appointments)
 
         elif choice == 4:
-            sub_main.patient_cancel_appointment(patients,appointments)
+            sub_main.patient_cancel_appointment(current_patient,appointments)
             
 
         
