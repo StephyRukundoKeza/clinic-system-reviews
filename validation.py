@@ -198,7 +198,7 @@ def get_valid_email():
 def get_valid_doctor_choice(doctors):
     while True:
             try:
-                choice=int(input('select a doctor number'))
+                choice=int(input('select a doctor number: '))
     
     
                 if choice <1 or choice >len(doctors):
@@ -207,6 +207,21 @@ def get_valid_doctor_choice(doctors):
                 return choice
             except ValueError:
                 print(f"Invalid format. Please enter a number between 1 and {len(doctors)}")          
+                
+def get_valid_integer():
+     while True:
+        try:
+            choice=int(input('select an option(1-4): '))
+        
+        
+            if choice <1 or choice >4:
+                print("sorry, selection out of range")
+                continue
+            return choice
+        except ValueError:
+            print(f"Invalid format. Please enter a number between 1 and 4")          
+                    
+    
             
 
 

@@ -1,12 +1,12 @@
 [
-{
-"user_id": "P-101",
-"name": "Jane Doe",
-"phone_number": "555-0199",
-"pin": "1234",
-"gender": "Female",
-"date_of_birth": "1990-05-14",
-"email": "jane.doe@gmail.com",
-"address": "123 Main St"
-}
+    {
+        "user_id": "P-101",
+        "name": "Jane Doe",
+        "phone_number": "555-0199",
+        "pin": "1234",
+        "gender": "Female",
+        "date_of_birth": "1990-05-14",
+        "email": "jane.doe@gmail.com",
+        "address": "123 Main St"
+    }
 ]

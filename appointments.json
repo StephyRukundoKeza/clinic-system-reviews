@@ -5,7 +5,7 @@
         "start_time": "10:00",
         "doctor_id": "DR-201",
         "patient_id": "P-101",
-        "status": "Scheduled",
+        "status": "Cancelled",
         "duration": 30
     }
 ]
