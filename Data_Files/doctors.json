@@ -1,0 +1,11 @@
+[
+{
+"user_id": "DR-201",
+"name": "Smith",
+"phone_number": "555-0144",
+"pin": "5678",
+"specialization": "Cardiology",
+"shift_start_time": "09:00",
+"shift_end_time": "17:00"
+}
+]
