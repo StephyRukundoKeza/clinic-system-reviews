@@ -1,11 +1,11 @@
 [
-{
-"appointment_id": "A301",
-"date": "2026-09-10",
-"start_time": "10:00",
-"doctor_id": "DR-201",
-"patient_id": "P-101",
-"status": "Scheduled",
-"duration": 30
-}
+    {
+        "appointment_id": "A-301",
+        "date": "2026-09-10",
+        "start_time": "10:00",
+        "doctor_id": "DR-201",
+        "patient_id": "P-101",
+        "status": "Scheduled",
+        "duration": 30
+    }
 ]

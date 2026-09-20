@@ -38,7 +38,7 @@ def main():# this particular function will control the main flow
 # An ID starting with A belongs to the Administrator
 # Hardcoded emergency backdoor so the system can be accessed
 # if admins.json is missing or not configured yet.
-                print("Administrator login is not connected yet.")
+                
                 if user_id =="A-ADMIN":
                     entered_pin = input("Enter your 4-digit PIN: ").strip()
                     if entered_pin =="1234":

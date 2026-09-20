@@ -82,11 +82,11 @@ def get_available_time_slots(selected_doctor , appointment_date, appointments):
     all_slots=[]
     start_time = datetime.strptime(selected_doctor['shift_start_time'],"%H:%M")
     end_time = datetime.strptime(selected_doctor['shift_end_time'],"%H:%M")
-    doc_id = selected_doctor['user_id']
+    doc_id = selected_doctor["user_id"]
     booked_slots=[]  
         
     for appointment in appointments:
-        if(appointment['user_id'] == doc_id
+        if(appointment["doctor_id"] == doc_id
             and appointment['date'] == appointment_date):
             booked_slots.append(appointment["start_time"])          
                     
@@ -103,8 +103,7 @@ def get_available_time_slots(selected_doctor , appointment_date, appointments):
         current_time += timedelta(minutes=60)
         
     for position, slot in enumerate(available_slots, start=1):
-        print(f"[position].{slot}")
-        
-    return available_slots
+        print(f"{position}.{slot}")
+
     
 
