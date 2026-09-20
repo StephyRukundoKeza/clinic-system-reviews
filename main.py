@@ -6,13 +6,13 @@ from operations import find_record_by_id
 
 
 def main():# this particular function will control the main flow
-              #of the application'
+            # of the application'
 
-#load saved data while the program starts
+# load saved data while the program starts
     patients, doctors, appointments, admins = load_data()
 
     while True:
-        #display the opening screen
+        # display the opening screen
 
         print("\n=============================================")
         print("Clinic Appointment And Management System")
@@ -28,11 +28,11 @@ def main():# this particular function will control the main flow
 
         #option 1 :login routing      
         if choice == 1:
-               #Ask the user for their ID 
+            # Ask the user for their ID 
             user_id = input("Enter your ID: ").strip().upper()
 
             # ---ADMINISTRATOR LOGIN ---
-          
+        
             if user_id.startswith("A-"):
                 print("Administrator Login is not connected yet.")
 # An ID starting with A belongs to the Administrator
@@ -42,15 +42,15 @@ def main():# this particular function will control the main flow
                 if user_id =="A-ADMIN":
                     entered_pin = input("Enter your 4-digit PIN: ").strip()
                     if entered_pin =="1234":
-                       print("\nOpening Administrator Menu...")
-                       admin_menu(user_id, patients, doctors, appointments, admins)
+                        print("\nOpening Administrator Menu...")
+                        admin_menu(user_id, patients, doctors, appointments, admins)
 
                 else:
-                     print("Incorrect Password")   
+                    print("Incorrect Password")   
 
-                     #--Doctor Login  
+            # --Doctor Login--  
             elif user_id.startswith("DR-"):
-               
+
                 user = find_record_by_id(doctors, user_id)
 
                 if user:
@@ -96,7 +96,7 @@ def main():# this particular function will control the main flow
             print("=============================\n")
             #Opens the patient registration interface
             sub_main.patient_self_registration_menu(patients)
-                      
+                    
 
         #Option 3:Safe Shutdown
         elif choice ==3:
@@ -106,11 +106,9 @@ def main():# this particular function will control the main flow
             print("Thank you using our Clinic Management System.")
             print("System closed successfully!")
             break
-       
 
 
     #This ensures main() is only run if this script is executed directly
-   
     
 #This starts the program by calling the main function
         
@@ -153,23 +151,23 @@ def admin_menu(user_id, patients, doctors, appointments, admin):
 
         
         elif choice == 2:
-           sub_main.admin_display_patients(patients)
+            sub_main.admin_display_patients(patients)
 
         elif choice ==3:
             sub_main.admin_search_patient(patients)
 
         elif choice ==4:
-           sub_main.admin_update_patient(patients)
+            sub_main.admin_update_patient(patients)
 
         elif choice ==5:
-           sub_main.admin_delete_patient(patients)
+            sub_main.admin_delete_patient(patients)
 
         elif choice ==6:
             sub_main.admin_add_doctor(doctors)
 
         elif choice ==7:
             sub_main.admin_display_doctors(doctors)
-                           
+                        
         elif choice ==8:
             sub_main.admin_search_doctor(doctors)
                         
@@ -185,16 +183,16 @@ def admin_menu(user_id, patients, doctors, appointments, admin):
         elif choice ==12:
             sub_main.admin_cancel_appointment(appointments)
 
-     
+    
         
                                 
         
-       
+    
                                 
                                 
     
 
-def  doctor_menu(user_id,doctors, patients, appointments,current_doctor):
+def  doctor_menu(user_id,doctors, patients, appointments):
     """
     Displays the doctor menu and routes choices to the functions in sub_main.py.
     """
@@ -218,7 +216,7 @@ def  doctor_menu(user_id,doctors, patients, appointments,current_doctor):
         print("2.View My profile")
         print("3.Update Appointment Status")
         print("4.Logout")
-         #get a valid doctor menu choice.
+        # get a valid doctor menu choice.
         choice = validation.get_valid_doctor_menu()
 
         if choice == 4:
@@ -234,7 +232,7 @@ def  doctor_menu(user_id,doctors, patients, appointments,current_doctor):
             print("View patient information")
 
         elif choice == 3:
-          sub_main.doctor_update_appointment_status(current_doctor,appointments)
+            sub_main.doctor_update_appointment_status(current_doctor,appointments)
 
         else:
             print("Invalid option.Please choose a number from 1 to 4")
@@ -277,11 +275,11 @@ def patient_menu(user_id, patients, doctors, appointments):
     
 
         if choice ==5:
-            print("Logging out...")
+            print("\nLogging out...")
             break 
 
         elif choice == 1:
-              sub_main.patient_view_information(current_patient)
+            sub_main.patient_view_information(current_patient)
 
 
         elif choice == 2:

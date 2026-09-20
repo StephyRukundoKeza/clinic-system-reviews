@@ -1,8 +1,8 @@
 [
-    {
-        "user_id": "A-100",
-        "name": "Admin User",
-        "phone_number": "555-0100",
-        "pin": "9999"
-    }
+{
+"user_id": "A-100",
+"name": "Admin User",
+"phone_number": "555-0100",
+"pin": "9999"
+}
 ]

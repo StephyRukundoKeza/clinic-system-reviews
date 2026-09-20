@@ -82,14 +82,14 @@ class Patient(User):  #Patient class inherits from User class
         return data 
 
 class Appointment:  #Appointment class to manage appointments
-  def __init__(self, appointment_id, patient_id, doctor_id, date, start_time, duration_minutes=60, status="Active"):
-    self.appointment_id = appointment_id
-    self.patient_id = patient_id
-    self.doctor_id = doctor_id
-    self.date = date
-    self.start_time = start_time
-    self.duration = duration_minutes  # Duration in minutes
-    self.status = status    
+    def __init__(self, appointment_id, patient_id, doctor_id, date, start_time, duration_minutes=60, status="Active"):
+        self.appointment_id = appointment_id
+        self.patient_id = patient_id
+        self.doctor_id = doctor_id
+        self.date = date
+        self.start_time = start_time
+        self.duration = duration_minutes  # Duration in minutes
+        self.status = status    
 
     def update_status(self, new_status):  #method to update the status of the appointment (e.g., Active, Completed, Cancelled)
         self.status = new_status
@@ -108,4 +108,5 @@ class Appointment:  #Appointment class to manage appointments
             "duration": self.duration,
             "status": self.status
         }
+
 
