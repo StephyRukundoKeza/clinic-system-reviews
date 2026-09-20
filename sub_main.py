@@ -344,26 +344,53 @@ def patient_view_information(current_patients):
         print(f"Phone      : {current_patients.phone_number}")
         print(f"Email      : {current_patients.email}")
         print(f"Address    : {current_patients.address}")
-     
-def patient_book_appointment(doctors,appointment_list):
+    
+def patient_book_appointment(current_patients, doctors, appointment_list):
     print("---Book appointment---")
     print("Available Doctors")
     for position, doctor in enumerate(doctors, start=1):
-        print(f"{position}.{doctor['name']}")
-        print(f"   {doctor["specialization"]}")
-        print(f"Working hours: {doctor['shift_start_time']} - {doctor['shift_end_time']}")
-    
-        
+        doc_name = doctor.get('name') if isinstance(doctor, dict) else doctor.name
+        doc_spec = doctor.get('specialization') if isinstance(doctor, dict) else doctor.specialization
+        doc_start = doctor.get('shift_start_time') if isinstance(doctor, dict) else doctor.shift_start_time
+        doc_end = doctor.get('shift_end_time') if isinstance(doctor, dict) else doctor.shift_end_time
+        print(f"{position}. Dr. {doc_name}")
+        print(f"   {doc_spec}")
+        print(f"Working hours: {doc_start} - {doc_end}")
+            
     choice=validation.get_valid_doctor_choice(doctors)
     choice= choice-1
     selected_doctor=doctors[choice]
-    print(f"You selected: {selected_doctor['name']}")
-    appointment_date = validation.get_valid_appointment_date()
-    available_slots = validation.get_available_time_slots()
-    slot_choice = validation.get_valid_slot_choice(available_slots)
+    doc_name = selected_doctor.get('name') if isinstance(selected_doctor, dict) else selected_doctor.name
+    doc_id = selected_doctor.get('user_id') if isinstance(selected_doctor, dict) else selected_doctor.user_id
+    patient_id = current_patients.get('user_id') if isinstance(current_patients, dict) else current_patients.user_id
+
+    print(f"You selected: Dr. {doc_name}")
     
-    slot_choice = choice-1
-    print(f"You selected: {slot_choice}") 
+    appointment_date = validation.get_valid_appointment_date()
+    
+    # Use operations to filter and get the time slots
+    available_slots = operations.get_available_time_slots(selected_doctor, str(appointment_date), appointment_list)
+    
+    if not available_slots:
+        print("No time slots available for this date.")
+        return
+
+    slot_choice = validation.get_valid_slot_choice(available_slots)
+    selected_time = available_slots[slot_choice - 1]
+    
+    # Generate unique ID and create the Appointment
+    new_appointment_id = operations.generate_new_id_appointment(appointment_list)
+    new_appointment = models.Appointment(
+        appointment_id=new_appointment_id,
+        patient_id=patient_id,
+        doctor_id=doc_id,
+        date=str(appointment_date),
+        start_time=selected_time.split(" - ")[0], # Gets just the start time string
+        status="Active"
+    )
+    appointment_list.append(new_appointment)
+    print(f"\nSuccess! Appointment booked.")
+    print(f"Appointment ID: {new_appointment_id} | Date: {appointment_date} | Time: {selected_time}")
     
 def patient_view_appointment(patient_id, doc_id, appointments, target_date):
     """Create an appointment for the supplied patient and doctor."""

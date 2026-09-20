@@ -1,11 +1,11 @@
 [
-  {
-    "user_id": "D-201",
-    "name": "Dr. Smith",
-    "phone_number": "555-0144",
-    "pin": "5678",
-    "specialization": "Cardiology",
-    "shift_start_time": "09:00",
-    "shift_end_time": "17:00"
-  }
+{
+"user_id": "D-201",
+"name": "Dr. Smith",
+"phone_number": "555-0144",
+"pin": "5678",
+"specialization": "Cardiology",
+"shift_start_time": "09:00",
+"shift_end_time": "17:00"
+}
 ]

@@ -14,7 +14,7 @@ def generate_new_id_patient(patients):
     while True:
     # Generates a unique 8-digit ID for new patients.
         print("Generating your patients id")
-        id=random.randrange(00000000,99999999)
+        id=random.randrange(10000000,99999999)
         new_id= f"P-{id}"
 #checks for any duplicates
         for patient in patients:
@@ -27,7 +27,7 @@ def generate_new_id_patient(patients):
 def generate_new_id_doctor(doctors):
     # Generates a unique 8-digit ID for new doctors.
     print("Generating your doctors id")
-    id=random.randrange(00000000,99999999)
+    id=random.randrange(10000000,99999999)
     new_id=f"DR-{id}"
     
     
@@ -41,7 +41,7 @@ def generate_new_id_doctor(doctors):
 
 def generate_new_id_appointment(appointments):
 # Generates a unique 6-digit ID for new appointments.
-    id = random.randrange(100000, 999999)
+    id = random.randrange(10000000,99999999)
     new_id=f"APT-{id}"
     
     #checks for any duplicates
@@ -104,6 +104,7 @@ def get_available_time_slots(selected_doctor , appointment_date, appointments):
         
     for position, slot in enumerate(available_slots, start=1):
         print(f"[position].{slot}")
-
+        
+    return available_slots
     
-            
+

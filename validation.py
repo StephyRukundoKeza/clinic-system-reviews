@@ -7,7 +7,7 @@ def get_valid_menu():
         #to an administrator.
     while True:
         try:
-            menu=int(input("select an option(1-3): "))
+            menu=int(input("select an option(1-3): ")).strip()
             if menu=="":  #check for my empty string inputs
                 print("Oops sorry menu can not be left empty")
                 continue
@@ -22,24 +22,24 @@ def get_valid_menu():
 def get_valid_create_account_menu():
     while True:
         try:
-            menu=int(input("select an option(1-4): "))
+            menu=int(input("Select an option(1-4): ")).strip()
             if menu=="":  #check for my empty string inputs
                 print("Oops sorry menu can not be left empty")
                 continue
             if menu < 1 or menu > 4:
-                print("Selection out of range. Please select a number from 1-3 ")
+                print("Selection out of range. Please select a number from 1-4 ")
                 continue
-               
+            
             return menu
         except ValueError:
-                print("Invalid format. Select a number from 1-3")    
+                print("Invalid format. Select a number from 1-4")    
             
 def get_valid_admin_menu():
     #This function displays the options available
     #to an administrator.
 
     while True:
-       
+    
         try:
             choice = int(input("Choose an option(1-13): "))
             if choice=="": #check for my empty string inputs
@@ -50,7 +50,7 @@ def get_valid_admin_menu():
                 continue
             return choice
         except ValueError:
-           print("Invalid format. Select a number from 1-13 ")       
+            print("Invalid format. Select a number from 1-13 ")       
                     
 def get_valid_doctor_menu() :   
     #This function displays the options available
@@ -75,31 +75,31 @@ def get_valid_patient_menu():
     #to a menu
     
     while True:
-       
+    
         try:
-            choice = int(input("Choose an option(1-5): "))
+            choice = int(input("Choose an option(1-5): ")).strip()
             if choice=="":
                 print("Oops sorry menu can not be left empty")        
                 continue
             if choice < 1 or choice > 5:
-                print("Selection out of range. Please select a number from 1-5 ")
+                print("Selection out of range. Please select a number from 1-5. ")
                 continue
             return choice
         except ValueError:
-                print("Invalid format. Select a number from 1-5 ")  
+                print("Invalid format. Select a number from 1-5. ")  
         
             
 def get_valid_firstname():
-   while True:
-    firstname=input("Please enter your first name: ").strip()
-    if firstname=="":
-        print("Oops sorry first name can not be left empty")
-        continue
-    if not firstname.isalpha():
-        print("Invalid format. Please enter a valid name")
-        continue
-    if firstname.isalpha():
-        return  firstname      
+    while True:
+        firstname=input("Please enter your first name: ").strip()
+        if firstname=="":
+            print("Oops sorry first name can not be left empty")
+            continue
+        if not firstname.isalpha():
+            print("Invalid format. Please enter a valid name")
+            continue
+        if firstname.isalpha():
+            return firstname
                 
 def get_valid_lastname():
     while True:
@@ -112,7 +112,7 @@ def get_valid_lastname():
             continue
         if lastname.isalpha():
             return  lastname      
-           
+        
 def get_valid_birthdate():
     while True:
         try:
@@ -144,9 +144,9 @@ def get_valid_appointment_date():
                 date_input=input("Enter another date(YYYY-MM-DD: ")
                 continue
             
-                      
+                    
             return date
-           
+        
         except ValueError:
             print("Invalid format. Please try again with this format date as, YYYY-MM-DD: ")
     
@@ -187,7 +187,7 @@ def get_valid_email():
         if parts[1] not in valid_domains:
             print("Invalid email format. Enter a valid email domain: ")
             continue
-     
+    
         return email
     
 def get_valid_doctor_choice(doctors):
@@ -201,9 +201,7 @@ def get_valid_doctor_choice(doctors):
                     continue
                 return choice
             except ValueError:
-                print(f"Invalid format. Please enter a number between 1 and {len(doctors)}")
-   
-            
+                print(f"Invalid format. Please enter a number between 1 and {len(doctors)}")          
             
 
 
@@ -214,8 +212,21 @@ def get_valid_slot_choice(available_slots):
             if slot_choice <1 or slot_choice >len(available_slots):
                 print("sorry, selection out of range")
                 continue
-            return slot_choice 
-                
+            return slot_choice
+                        
         except ValueError:
             print(f"Invalid format. Please enter a number between 1 and {len(available_slots)}")
-           
+
+def get_valid_time(prompt):
+    # FIXED: Added the missing time validator used by doctor_update_shift
+    while True:
+        time_input = input(prompt).strip()
+        if time_input == "":
+            print("Time cannot be empty.")
+            continue
+        try:
+            datetime.strptime(time_input, "%H:%M")
+            return time_input
+        except ValueError:
+            print("Invalid format. Please use HH:MM format (e.g., 09:30).")
+
