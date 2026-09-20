@@ -5,7 +5,7 @@ import data_manager
 def generate_new_id_admin():
     # Generates a unique 8-digit ID for new admins.
     print("Generating your admin id")
-    id=random.randrange(00000000,99999999)
+    id=random.randrange(10000000,99999999)
     print(f"Your admin id is A-{id}")
     return f"A-{id}"
 
