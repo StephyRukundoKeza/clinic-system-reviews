@@ -53,7 +53,7 @@ def save_data(patients, doctors, appointments,admins):
     Writes patients, doctors, and appointments back to their respective JSON files.
     """
     # 1. Save patients.json
-    with open(('Data_Files/patients.json', 'w')) as f:
+    with open('Data_Files/patients.json', 'w') as f:
         json.dump(_to_serializable(patients), f, indent=4)
 
     # 2. Save doctors.json
