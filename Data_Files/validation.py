@@ -239,7 +239,7 @@ def get_valid_integer():
 def get_valid_slot_choice(available_slots):
     while True:
         try:
-            slot_choice= int(input('select a slot number'))
+            slot_choice= int(input('Select a slot number: '))
             if slot_choice <1 or slot_choice >len(available_slots):
                 print("sorry, selection out of range")
                 continue
