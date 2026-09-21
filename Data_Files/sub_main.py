@@ -509,7 +509,7 @@ def doctor_update_appointment_status(current_doctors, appointments):
     print("3. Cancelled")
     print("4. Active")
 
-    choice = validation.get_integer("Enter choice (1-4): ", min_val=1, max_val=4)
+    choice = validation.get_valid_integer()
     status_map = {1: "Completed", 2: "In-Progress", 3: "Cancelled", 4: "Active"}
     new_status = status_map[choice]
 
