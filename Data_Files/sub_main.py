@@ -346,7 +346,7 @@ def patient_view_information(current_patients):
         print(f"Address    : {current_patients.address}")
     
 def patient_book_appointment(current_patients, doctors, appointment_list):
-    print("---Book appointment---")
+    print("\n---Book appointment---")
     print("Available Doctors")
     for position, doctor in enumerate(doctors, start=1):
         doc_name = doctor.get('name') if isinstance(doctor, dict) else doctor.name
