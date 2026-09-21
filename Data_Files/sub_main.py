@@ -14,7 +14,7 @@ def patient_self_registration_menu(patients):
     name = f"{first} {last}"
 
     dob = validation.get_valid_birthdate()
-    gender = input("Enter your gender (e.g., Male/Female): ").strip()
+    gender = validation.get_valid_gender()
     phone = validation.get_valid_phone_number()
     email = validation.get_valid_email()
     address = input("Enter your physical address: ").strip()

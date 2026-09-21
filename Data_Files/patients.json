@@ -8,5 +8,16 @@
         "date_of_birth": "1990-05-14",
         "email": "jane.doe@gmail.com",
         "address": "123 Main St"
+    },
+    {
+        "user_id": "P-39006729",
+        "name": "Dumebi Ukogu",
+        "pin": "9788",
+        "phone_number": "78789875",
+        "role": "Patient",
+        "gender": "Female",
+        "date_of_birth": "2026-08-21",
+        "email": "dumie@gmail.com",
+        "address": "1 ademulegun"
     }
 ]

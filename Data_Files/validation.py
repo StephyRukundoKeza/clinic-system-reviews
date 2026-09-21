@@ -249,4 +249,21 @@ def get_valid_time(prompt):
             return time_input
         except ValueError:
             print("Invalid format. Please use HH:MM format (e.g., 09:30).")
+            
+def get_valid_gender():
+    while True:
+        try:
+            gender=input("Enter your gender (e.g., Male/Female): ").strip()
+            if gender=="":
+                print("Oops sorry gender can not be left empty. Enter a gender(Male/Female)")
+                continue
+            if gender != "Male" and gender!= "Female":
+                print("Please enter a valid gender(Male/Female)")
+                continue
+            return gender
+        except ValueError:
+              print("Invalid format! Please enter a valid gender(Male/Female)")
+    
+                 
+    
 
