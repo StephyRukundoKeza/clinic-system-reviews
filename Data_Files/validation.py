@@ -117,7 +117,18 @@ def get_valid_lastname():
             continue
         if lastname.isalpha():
             return  lastname      
-        
+def get_valid_new_name():
+    while True:
+        new_name = input("New Name: ").strip()
+        if new_name=="":
+            print("Oops sorry last name can not be left empty. Enter a valid name")
+            continue
+        if not new_name.isalpha():
+            print("Invalid format. Please enter a valid name")
+            continue
+        if new_name.isalpha():
+            return  new_name     
+         
 def get_valid_birthdate():
     while True:
         try:
