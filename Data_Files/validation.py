@@ -128,7 +128,7 @@ def get_valid_birthdate():
                 continue 
             if date>datetime.today().date(): # ensures the due date is not a date that has already past
                 print("Birth date date cannot be after today's date.")
-                date_input=input("Enter another date(YYYY-MM-DD: ")
+                
                 continue
             break
         except ValueError:
@@ -146,7 +146,7 @@ def get_valid_appointment_date():
                 continue 
             if date<datetime.today().date(): # ensures the due date is not a date that has already past
                 print("Appointment date cannot be before today's date.")
-                date_input=input("Enter another date(YYYY-MM-DD: ")
+                
                 continue
             
                     

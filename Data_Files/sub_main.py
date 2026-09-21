@@ -360,7 +360,7 @@ def patient_book_appointment(current_patients, doctors, appointment_list):
         print("No doctors are currently available.")
         return
 
-    doctor_choice = validation.get_valid_doctor_choice("Select a doctor: ", min_val=1, max_val=len(doctors))
+    doctor_choice = validation.get_valid_doctor_choice(doctors)
     selected_doctor = doctors[doctor_choice - 1]
     doc_name = selected_doctor.get('name') if isinstance(selected_doctor, dict) else selected_doctor.name
     doc_id = selected_doctor.get('user_id') if isinstance(selected_doctor, dict) else selected_doctor.user_id
