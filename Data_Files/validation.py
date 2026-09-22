@@ -348,8 +348,8 @@ def get_valid_new_birthdate():
     while True:
         try:
             date_input= input("Please enter your date of birth with this format date as, YYYY-MM-DD: ")  # ask users for appointment date
-            if date--"":
-                return date
+            if date_input=="":
+                return None
             date = datetime.strptime(date_input, "%Y-%m-%d").date() 
            
             if date>datetime.today().date(): # ensures the due date is not a date that has already past

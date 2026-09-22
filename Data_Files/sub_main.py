@@ -188,7 +188,7 @@ def admin_add_doctor(doctors):
     phone = validation.get_valid_phone_number()
     pin = input("Create a 4-digit PIN for the doctor: ").strip()
 
-    new_id = operations.generate_new_id_doctor()
+    new_id = operations.generate_new_id_doctor(doctors)
     new_doctor = models.Doctor(new_id, name, pin, phone, specialization, shift_start_time, shift_end_time)
     doctors.append(new_doctor)
 
