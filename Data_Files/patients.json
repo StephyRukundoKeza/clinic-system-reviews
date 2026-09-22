@@ -19,5 +19,16 @@
         "date_of_birth": "2026-08-21",
         "email": "dumie@gmail.com",
         "address": "1 ademulegun"
+    },
+    {
+        "user_id": "P-54912207",
+        "name": "mark",
+        "pin": "4587",
+        "phone_number": "56746554",
+        "role": "Patient",
+        "gender": "Male",
+        "date_of_birth": "2008-09-14",
+        "email": "mark@yahoo.com",
+        "address": "Male"
     }
 ]

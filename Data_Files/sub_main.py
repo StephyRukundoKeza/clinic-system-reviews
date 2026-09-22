@@ -135,11 +135,11 @@ def admin_update_patient(patients):
 
     print("\nEnter new details (leave blank to keep current value):")
     new_name = validation.get_valid_new_name()
-    new_phone = validation.get_valid_phone_number()
-    new_gender = input("New Gender (e.g., Male/Female): ").strip()
-    new_dob = validation.get_valid_birthdate()
-    new_email = validation.get_valid_email()
-    new_address =  validation.get_valid_gender()
+    new_phone = validation.get_valid_new_phone_number()
+    new_gender = validation.get_valid_new_gender()
+    new_dob = validation.get_valid_new_birthdate()
+    new_email = validation.get_valid_new_email()
+    new_address = input("New Address: ").strip()
     
     # We still have to check type here because we are modifying the data
     if isinstance(p, dict):
