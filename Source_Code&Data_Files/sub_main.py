@@ -281,20 +281,21 @@ def admin_delete_doctor(doctors):
         print("Attempt Cancelled.")
 
 def admin_view_appointments(appointments):
-    print("---View All Appointments (Admin)---")
+    print("\n---View All Appointments (Admin)---")
     if not appointments:
         print("No appointments scheduled yet.")
         return
-
     print("\nScheduled Appointments:")
     for a in appointments:
         if isinstance(a, dict):
-            print(f"Appointment ID: {a.get('appointment_id')} | Patient ID: {a.get('patient_id')} | Doctor ID: {a.get('doctor_id')} | Date: {a.get('appointment_date')}")
+            # Fixed from a.get('appointment_date') to a.get('date')
+            print(f"Appointment ID: {a.get('appointment_id')} | Patient ID: {a.get('patient_id')} | Doctor ID: {a.get('doctor_id')} | Date: {a.get('date')}")
         else:
-            print(f"Appointment ID: {a.appointment_id} | Patient ID: {a.patient_id} | Doctor ID: {a.doctor_id} | Date: {a.appointment_date}")
-
+            # Fixed from a.appointment_date to a.date
+            print(f"Appointment ID: {a.appointment_id} | Patient ID: {a.patient_id} | Doctor ID: {a.doctor_id} | Date: {a.date}")
+            
 def admin_cancel_appointment(appointments):
-    print("---Cancel Appointment (Admin)---")
+    print("\n---Cancel Appointment (Admin)---")
     search_id = input("Enter the appointment ID to cancel: ").strip().upper()
     found = False
 
@@ -308,7 +309,7 @@ def admin_cancel_appointment(appointments):
         else:
             if a.appointment_id == search_id:
                 print("\nAppointment Found:")
-                print(f"Appointment ID: {a.appointment_id} | Patient ID: {a.patient_id} | Doctor ID: {a.doctor_id} | Date: {a.appointment_date}")
+                print(f"Appointment ID: {a.appointment_id} | Patient ID: {a.patient_id} | Doctor ID: {a.doctor_id} | Date: {a.date}")
                 found = True
                 break
 
