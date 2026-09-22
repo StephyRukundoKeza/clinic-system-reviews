@@ -258,7 +258,7 @@ def admin_update_doctor(doctors):
     print("\nDoctor profile updated successfully.")
 
 def admin_delete_doctor(doctors):
-    print("---Delete Doctor Profile (Admin)---")
+    print("\n---Delete Doctor Profile (Admin)---")
     search_id = input("Enter the doctor ID to delete(e.g., DR-12345678): ").strip().upper()
     
     d = operations.find_record_by_id(doctors, search_id)
@@ -293,9 +293,9 @@ def admin_view_appointments(appointments):
         else:
             # Fixed from a.appointment_date to a.date
             print(f"Appointment ID: {a.appointment_id} | Patient ID: {a.patient_id} | Doctor ID: {a.doctor_id} | Date: {a.date}")
-
+            
 def admin_cancel_appointment(appointments):
-    print("---Cancel Appointment (Admin)---")
+    print("\n---Cancel Appointment (Admin)---")
     search_id = input("Enter the appointment ID to cancel: ").strip().upper()
     found = False
 
