@@ -349,13 +349,13 @@ def get_valid_new_birthdate():
         try:
             date_input= input("Please enter your date of birth with this format date as, YYYY-MM-DD: ")  # ask users for appointment date
             date = datetime.strptime(date_input, "%Y-%m-%d").date() 
-           
+            if date--"":
+                return date
             if date>datetime.today().date(): # ensures the due date is not a date that has already past
                 print("Birth date date cannot be after today's date.")
                 
                 continue
-            if date--"":
-                return date
+            
            
         except ValueError:
             print("Invalid format. Please try again with this format date as, YYYY-MM-DD: ")
