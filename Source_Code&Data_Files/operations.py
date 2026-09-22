@@ -18,7 +18,12 @@ def generate_new_id_patient(patients):
         new_id= f"P-{id}"
 #checks for any duplicates
         for patient in patients:
-            if patient["user_id"] ==new_id:
+            if isinstance(patient,dict):
+                existing_id=patient["user_id"]
+            else:
+                existing_id=patient.user_id
+                
+            if existing_id == new_id:
                 break
         else:
             print(f"Your patient id is P-{id}")
@@ -33,8 +38,12 @@ def generate_new_id_doctor(doctors):
     
     #checks for any duplicates
     for doctor in doctors:
-        if doctor["user_id"] ==new_id:
-                break
+        if isinstance(doctor,dict):
+            existing_id=doctor["user_id"]
+        else:
+            existing_id=doctor.user_id
+        if existing_id == new_id:
+            break               
     else:
         print(f"Your doctor id is DR-{id}")
         return new_id
