@@ -44,9 +44,12 @@ def main():# this particular function will control the main flow
                     if entered_pin =="1234":
                         print("\nOpening Administrator Menu...")
                         admin_menu(user_id, patients, doctors, appointments, admins)
+                    else:
+                        print("Incorrect Password")   
+                        
 
                 else:
-                    print("Incorrect Password")   
+                    print("Incorrect USER ID")   
 
             # --Doctor Login--  
             elif user_id.startswith("DR-"):
