@@ -274,7 +274,81 @@ def get_valid_gender():
             return gender
         except ValueError:
               print("Invalid format! Please enter a valid gender(Male/Female)")
+
+def get_valid_new_name():
     
+    while True:
+        firstname=input("Please enter your first name: ").strip()
+        
+        if not firstname.isalpha():
+            print("Invalid format. Please enter a valid name")
+            continue
+        if firstname.isalpha():
+            return firstname
+                
                  
     
 
+def get_valid_new_phone_number():
+    while True:
+        number=input("Enter your mobile phone number(without the country code): ").strip()  # this ensures users do not enter country codes with have + at the beginning because the program is built to reject all non digit inputs
+        
+        if not number.isdigit() : # checks that all the input only contains numbers
+            print("Phone number must contain only numbers")
+            continue
+        if len(number)!=8:  # since the typical mauritian mobile number is 8 digits it checks to ensure a valid length is entered
+            print("Phone number must be 8 digits")
+            continue
+        if number[0] !="5" and number[0]!="7": # checks that numbers entered starts with 5 or 7 which is the standard for mauritian numbers to ensure the number is valid
+            print("Enter a valid mauritian number")
+            continue
+        return number
+    
+def get_valid_new_email():
+    while True:
+        valid_domains = ["gmail.com", "yahoo.com", "outlook.com"]  # valid email domains to allow
+        email=input("Enter a valid email address: ").strip()
+        parts=email.split("@") #splits the email into two parts
+        
+        if "@" and "." not in email:
+            print("Invalid email format. Enter a valid format following this patient@gmail.com: ")
+            continue
+        if len(parts)!=2:
+            print("Invalid email format. Enter a valid format following this patient@gmail.com: ")
+            continue
+        if parts[0]==""and parts[1]=="":
+            print("Invalid email format. Enter a valid format following this patient@gmail.com: ")
+            continue
+        if parts[1] not in valid_domains:
+            print("Invalid email format. Enter a valid email domain: ")
+            continue
+    
+        return email
+    
+def get_valid_new_gender():
+    while True:
+        try:
+            gender=input("Enter your gender (e.g., Male/Female): ").strip()
+          
+            if gender != "Male" and gender!= "Female":
+                print("Please enter a valid gender(Male/Female)")
+                continue
+            return gender
+        except ValueError:
+              print("Invalid format! Please enter a valid gender(Male/Female)")
+              
+              
+def get_valid_new_birthdate():
+    while True:
+        try:
+            date_input= input("Please enter your date of birth with this format date as, YYYY-MM-DD: ")  # ask users for appointment date
+            date = datetime.strptime(date_input, "%Y-%m-%d").date() 
+           
+            if date>datetime.today().date(): # ensures the due date is not a date that has already past
+                print("Birth date date cannot be after today's date.")
+                
+                continue
+            break
+        except ValueError:
+            print("Invalid format. Please try again with this format date as, YYYY-MM-DD: ")
+    return date  
