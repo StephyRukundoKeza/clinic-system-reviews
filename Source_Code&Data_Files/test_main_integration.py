@@ -72,12 +72,12 @@ def isolated_project(tmp_path):
 
 
 def test_invalid_id_shows_error_and_reprompts(isolated_project):
-    stdout, _ = run_main(["not-a-real-id", "exit"], cwd=isolated_project)
+    stdout, _ = run_main(["1", "not-a-real-id", "3"], cwd=isolated_project)
     assert "Invalid ID" in stdout
 
 
 def test_exit_saves_and_closes_cleanly(isolated_project):
-    stdout, returncode = run_main(["exit"], cwd=isolated_project)
+    stdout, returncode = run_main(["3"], cwd=isolated_project)
     assert "Saving system data" in stdout
     assert "System closed successfully" in stdout
     assert returncode == 0
@@ -86,65 +86,65 @@ def test_exit_saves_and_closes_cleanly(isolated_project):
 def test_admin_backdoor_no_longer_works(isolated_project):
     # The old hardcoded "A-ADMIN" / "1234" backdoor must be gone - only a
     # real admin record in admins.json should be able to log in.
-    stdout, returncode = run_main(["A-ADMIN", "1234", "exit"], cwd=isolated_project)
+    stdout, returncode = run_main(["1", "A-ADMIN", "3"], cwd=isolated_project)
     assert "Administrator Menu" not in stdout
     assert returncode == 0
 
 
 def test_real_admin_login_works(isolated_project):
-    stdout, returncode = run_main(["A-100", "9999", "13", "exit"], cwd=isolated_project)
+    stdout, returncode = run_main(["1", "A-100", "9999", "13", "3"], cwd=isolated_project)
     assert "Administrator Menu" in stdout
     assert "Logging out from Admin session" in stdout
     assert returncode == 0
 
 
 def test_wrong_pin_is_rejected(isolated_project):
-    stdout, returncode = run_main(["P-101", "0000", "exit"], cwd=isolated_project)
+    stdout, returncode = run_main(["1", "P-101", "0000", "3"], cwd=isolated_project)
     assert "Incorrect PIN" in stdout
     assert "Patient Menu" not in stdout
     assert returncode == 0
 
 
 def test_doctor_menu_logout_works(isolated_project):
-    stdout, returncode = run_main(["DR-201", "5678", "4", "exit"], cwd=isolated_project)
+    stdout, returncode = run_main(["1", "DR-201", "5678", "4", "3"], cwd=isolated_project)
     assert "Logging out" in stdout
     assert returncode == 0
 
 
 def test_patient_menu_logout_works(isolated_project):
-    stdout, returncode = run_main(["P-101", "1234", "5", "exit"], cwd=isolated_project)
+    stdout, returncode = run_main(["1", "P-101", "1234", "5", "3"], cwd=isolated_project)
     assert "Logging out" in stdout
     assert returncode == 0
 
 
 def test_patient_can_view_own_information(isolated_project):
-    stdout, returncode = run_main(["P-101", "1234", "1", "5", "exit"], cwd=isolated_project)
+    stdout, returncode = run_main(["1", "P-101", "1234", "1", "5", "3"], cwd=isolated_project)
     assert "Jane Doe" in stdout
     assert returncode == 0
 
 
 def test_patient_can_view_own_appointments(isolated_project):
-    stdout, returncode = run_main(["P-101", "1234", "3", "5", "exit"], cwd=isolated_project)
+    stdout, returncode = run_main(["1", "P-101", "1234", "3", "5", "3"], cwd=isolated_project)
     assert "A-301" in stdout
     assert returncode == 0
 
 
 def test_doctor_can_view_own_schedule(isolated_project):
-    stdout, returncode = run_main(["DR-201", "5678", "1", "4", "exit"], cwd=isolated_project)
+    stdout, returncode = run_main(["1", "DR-201", "5678", "1", "4", "3"], cwd=isolated_project)
     assert "A-301" in stdout
     assert returncode == 0
 
 
 def test_new_registration_actually_creates_a_patient(isolated_project):
     stdout, returncode = run_main([
-        "new",
+        "2",
         "Jane", "Test",
         "1990-01-01",
         "Female",
         "55512345",
         "jane.test@gmail.com",
         "1 Test St",
-        "exit",
+        "3",
     ], cwd=isolated_project)
     assert "Registration successful!" in stdout
     assert returncode == 0
@@ -159,11 +159,11 @@ def test_new_patient_ids_are_sequential_not_random(isolated_project):
     # Registering two new patients back to back should never produce the
     # same ID - the old random generator could, the sequential one can't.
     stdout, returncode = run_main([
-        "new", "First", "Patient", "1990-01-01", "Female", "55512345",
+        "2", "First", "Patient", "1990-01-01", "Female", "55512345",
         "first@gmail.com", "1 Test St",
-        "new", "Second", "Patient", "1990-01-01", "Male", "57123456",
+        "2", "Second", "Patient", "1990-01-01", "Male", "57123456",
         "second@gmail.com", "2 Test St",
-        "exit",
+        "3",
     ], cwd=isolated_project)
     assert returncode == 0
 
@@ -174,16 +174,16 @@ def test_new_patient_ids_are_sequential_not_random(isolated_project):
 
 
 def test_admin_menu_rejects_bad_input_instead_of_crashing(isolated_project):
-    stdout, returncode = run_main(["A-100", "9999", "x", "13", "exit"], cwd=isolated_project)
+    stdout, returncode = run_main(["1", "A-100", "9999", "x", "13", "3"], cwd=isolated_project)
     assert returncode == 0
     assert "Selection out of range" in stdout or "Invalid format" in stdout
 
 
 def test_admin_can_add_a_doctor(isolated_project):
     stdout, returncode = run_main([
-        "A-100", "9999",
+        "1", "A-100", "9999",
         "6", "New", "Doc", "Neurology", "09:00", "17:00", "55512345", "2222",
-        "13", "exit",
+        "13", "3",
     ], cwd=isolated_project)
     assert "Successful! Doctor New Doc added" in stdout
     assert returncode == 0
@@ -191,9 +191,9 @@ def test_admin_can_add_a_doctor(isolated_project):
 
 def test_patient_booking_rejects_past_date_then_accepts_future_date(isolated_project):
     stdout, returncode = run_main([
-        "P-101", "1234",
+        "1", "P-101", "1234",
         "2", "1", PAST_DATE, FUTURE_DATE, "1",
-        "5", "exit",
+        "5", "3",
     ], cwd=isolated_project)
     assert "cannot be before today's date" in stdout
     assert "Success! Appointment booked." in stdout
@@ -202,9 +202,9 @@ def test_patient_booking_rejects_past_date_then_accepts_future_date(isolated_pro
 
 def test_doctor_can_update_status_and_reschedule(isolated_project):
     stdout, returncode = run_main([
-        "DR-201", "5678",
+        "1", "DR-201", "5678",
         "3", "A-301", "1", "yes", FUTURE_DATE, "14:30",
-        "4", "exit",
+        "4", "3",
     ], cwd=isolated_project)
     assert "status updated to 'Completed'" in stdout
     assert "rescheduled to" in stdout
@@ -220,9 +220,9 @@ def test_doctor_can_update_status_and_reschedule(isolated_project):
 
 def test_doctor_can_decline_reschedule_and_only_change_status(isolated_project):
     stdout, returncode = run_main([
-        "DR-201", "5678",
+        "1", "DR-201", "5678",
         "3", "A-301", "3", "no",
-        "4", "exit",
+        "4", "3",
     ], cwd=isolated_project)
     assert "status updated to 'Cancelled'" in stdout
     assert "rescheduled to" not in stdout
