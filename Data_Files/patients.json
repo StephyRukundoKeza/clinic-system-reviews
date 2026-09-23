@@ -10,17 +10,6 @@
         "address": "123 Main St"
     },
     {
-        "user_id": "P-39006729",
-        "name": "Dumebi Ukogu",
-        "pin": "9788",
-        "phone_number": "78789875",
-        "role": "Patient",
-        "gender": "Female",
-        "date_of_birth": "2026-08-21",
-        "email": "dumie@gmail.com",
-        "address": "1 ademulegun"
-    },
-    {
         "user_id": "P-54912207",
         "name": "mark",
         "pin": "4587",
@@ -30,5 +19,27 @@
         "date_of_birth": "2008-09-14",
         "email": "mark@yahoo.com",
         "address": "Male"
+    },
+    {
+        "user_id": "P-46636976",
+        "name": "Stephy Rukundo",
+        "pin": "1241",
+        "phone_number": "56879087",
+        "role": "Patient",
+        "gender": "Female",
+        "date_of_birth": "2006-09-12",
+        "email": "stephy@gmail.com",
+        "address": "1 Beau Plan"
+    },
+    {
+        "user_id": "P-20399824",
+        "name": "Elbra Anita",
+        "pin": "9201",
+        "phone_number": "58589725",
+        "role": "Patient",
+        "gender": "Female",
+        "date_of_birth": "2007-07-20",
+        "email": "anita12@yahoo.com",
+        "address": "12 port louis"
     }
 ]

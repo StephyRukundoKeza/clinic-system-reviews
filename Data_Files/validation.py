@@ -197,7 +197,7 @@ def get_valid_email():
         if len(parts)!=2:
             print("Invalid email format. Enter a valid format following this patient@gmail.com: ")
             continue
-        if parts[0]==""and parts[1]=="":
+        if parts[0]==""or parts[1]=="":
             print("Invalid email format. Enter a valid format following this patient@gmail.com: ")
             continue
         if parts[1] not in valid_domains:
@@ -320,7 +320,7 @@ def get_valid_new_email():
         if len(parts)!=2:
             print("Invalid email format. Enter a valid format following this patient@gmail.com: ")
             continue
-        if parts[0]==""and parts[1]=="":
+        if parts[0]==""or parts[1]=="":
             print("Invalid email format. Enter a valid format following this patient@gmail.com: ")
             continue
         if parts[1] not in valid_domains:
