@@ -135,11 +135,11 @@ def admin_update_patient(patients):
 
     print("\nEnter new details (leave blank to keep current value):")
     new_name = validation.get_valid_new_name()
-    new_phone = validation.get_valid_new_phone_number()
-    new_gender = validation.get_valid_new_gender()
-    new_dob = validation.get_valid_new_birthdate()
-    new_email = validation.get_valid_new_email()
-    new_address = input("New Address: ").strip()
+    new_phone = validation.get_valid_phone_number()
+    new_gender = input("New Gender (e.g., Male/Female): ").strip()
+    new_dob = validation.get_valid_birthdate()
+    new_email = validation.get_valid_email()
+    new_address =  validation.get_valid_gender()
     
     # We still have to check type here because we are modifying the data
     if isinstance(p, dict):
@@ -188,7 +188,7 @@ def admin_add_doctor(doctors):
     phone = validation.get_valid_phone_number()
     pin = input("Create a 4-digit PIN for the doctor: ").strip()
 
-    new_id = operations.generate_new_id_doctor(doctors)
+    new_id = operations.generate_new_id_doctor()
     new_doctor = models.Doctor(new_id, name, pin, phone, specialization, shift_start_time, shift_end_time)
     doctors.append(new_doctor)
 
@@ -258,7 +258,7 @@ def admin_update_doctor(doctors):
     print("\nDoctor profile updated successfully.")
 
 def admin_delete_doctor(doctors):
-    print("---Delete Doctor Profile (Admin)---")
+    print("\n---Delete Doctor Profile (Admin)---")
     search_id = input("Enter the doctor ID to delete(e.g., DR-12345678): ").strip().upper()
     
     d = operations.find_record_by_id(doctors, search_id)
@@ -293,9 +293,9 @@ def admin_view_appointments(appointments):
         else:
             # Fixed from a.appointment_date to a.date
             print(f"Appointment ID: {a.appointment_id} | Patient ID: {a.patient_id} | Doctor ID: {a.doctor_id} | Date: {a.date}")
-
+            
 def admin_cancel_appointment(appointments):
-    print("---Cancel Appointment (Admin)---")
+    print("\n---Cancel Appointment (Admin)---")
     search_id = input("Enter the appointment ID to cancel: ").strip().upper()
     found = False
 
