@@ -1,5 +1,5 @@
 import json
-DATA_FOLDER = "Data_Files"
+DATA_FOLDER = "Source_Code&Data_Files"
 
 def load_data():
     """
@@ -8,21 +8,21 @@ def load_data():
     """
     # 1. Read patients.json
     try:
-        with open('Data_Files/patients.json', 'r') as f:
+        with open('Source_Code&Data_Files/patients.json', 'r') as f:
             patients = json.load(f)
     except FileNotFoundError:
         patients = []
 
     # 2. Read doctors.json
     try:
-        with open('Data_Files/doctors.json', 'r') as f:
+        with open('Source_Code&Data_Files/doctors.json', 'r') as f:
             doctors = json.load(f)
     except FileNotFoundError:
         doctors = []
 
     # 3. Read appointments.json
     try:
-        with open('Data_Files/appointments.json', 'r') as f:
+        with open('Source_Code&Data_Files/appointments.json', 'r') as f:
             appointments = json.load(f)
     except FileNotFoundError:
         appointments = []
@@ -30,7 +30,7 @@ def load_data():
 
     # 4. Read admins.json
     try:
-        with open('Data_Files/admins.json', 'r') as f:
+        with open('Source_Code&Data_Files/admins.json', 'r') as f:
             admins = json.load(f)
     except FileNotFoundError:
         admins = []
@@ -53,17 +53,17 @@ def save_data(patients, doctors, appointments,admins):
     Writes patients, doctors, and appointments back to their respective JSON files.
     """
     # 1. Save patients.json
-    with open('Data_Files/patients.json', 'w') as f:
+    with open('Source_Code&Data_Files/patients.json', 'w') as f:
         json.dump(_to_serializable(patients), f, indent=4)
 
     # 2. Save doctors.json
-    with open('Data_Files/doctors.json', 'w') as f:
+    with open('Source_Code&Data_Files/doctors.json', 'w') as f:
         json.dump(_to_serializable(doctors), f, indent=4)
 
     # 3. Save appointments.json
-    with open('Data_Files/appointments.json', 'w') as f:
+    with open('Source_Code&Data_Files/appointments.json', 'w') as f:
         json.dump(_to_serializable(appointments), f, indent=4)
 
     # 4. Save admins.json
-    with open('Data_Files/admins.json', 'w') as f:
+    with open('Source_Code&Data_Files/admins.json', 'w') as f:
         json.dump(_to_serializable(admins), f, indent=4)
