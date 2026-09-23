@@ -18,7 +18,7 @@ def patient_self_registration_menu(patients):
     phone = validation.get_valid_phone_number()
     email = validation.get_valid_email()
     address = input("Enter your physical address: ").strip()
-    new_id = operations.generate_new_id_patient(patients)
+    new_id = operations.generate_new_id("Patient", patients)
     new_pin = str(random.randint(1000, 9999)) # Create a random 4-digit PIN for the patient
 
     new_patient = models.Patient(new_id, name, new_pin, phone, gender, str(dob), email, address)
@@ -39,7 +39,7 @@ def create_admin_account(admins):
     phone = validation.get_valid_phone_number()
     pin = input("Create a 4-digit PIN for the admin: ").strip()
 
-    new_id = operations.generate_new_id_admin()
+    new_id = operations.generate_new_id("Admin", admins)
     new_admin = models.Admin(new_id, name, pin, phone)
     admins.append(new_admin)
 
@@ -82,7 +82,7 @@ def admin_register_patient(patients):
     address = input("Enter your physical address: ").strip()
     pin = input("Create a 4-digit PIN for the patient: ").strip()
     
-    new_id = operations.generate_new_id_patient(patients)
+    new_id = operations.generate_new_id("Patient", patients)
     new_patient = models.Patient(new_id, name, pin, phone, gender, str(dob), email, address)
     patients.append(new_patient)
     
@@ -188,7 +188,7 @@ def admin_add_doctor(doctors):
     phone = validation.get_valid_phone_number()
     pin = input("Create a 4-digit PIN for the doctor: ").strip()
 
-    new_id = operations.generate_new_id_doctor()
+    new_id = operations.generate_new_id("Doctor", doctors)
     new_doctor = models.Doctor(new_id, name, pin, phone, specialization, shift_start_time, shift_end_time)
     doctors.append(new_doctor)
 
@@ -523,6 +523,22 @@ def doctor_update_appointment_status(current_doctors, appointments):
             setattr(apt, 'status', new_status)
 
     print(f"\nSuccess: Appointment {apt_id} status updated to '{new_status}'.")
+
+    # Optionally reschedule the same appointment to a new date/time
+    reschedule_choice = input("Would you also like to reschedule this appointment's date/time? (yes/no): ").strip().lower()
+    if reschedule_choice in ("yes", "y"):
+        new_date = validation.get_valid_appointment_date()
+        new_time = validation.get_valid_time("Enter new start time (HH:MM in 24h format): ")
+        if isinstance(apt, dict):
+            apt['date'] = str(new_date)
+            apt['start_time'] = new_time
+        else:
+            if hasattr(apt, 'reschedule_appointment'):
+                apt.reschedule_appointment(str(new_date), new_time)
+            else:
+                setattr(apt, 'date', str(new_date))
+                setattr(apt, 'start_time', new_time)
+        print(f"Appointment {apt_id} rescheduled to {new_date} at {new_time}.")
 
 
 def doctor_view_profile(current_doctor):

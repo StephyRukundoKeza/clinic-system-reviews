@@ -68,6 +68,26 @@ def generate_new_id_appointment(appointments):
 
 
 
+def generate_new_id(role, existing_users):
+    # Generates the next sequential ID for a role instead of a random one,
+    # so two new records can never end up with the same ID.
+    prefixes = {"Patient": "P-", "Doctor": "DR-", "Admin": "A-"}
+    prefix = prefixes.get(role)
+    if prefix is None:
+        raise ValueError(f"Unknown role '{role}'. Expected one of: {list(prefixes.keys())}")
+
+    highest_number = 0
+    for user in existing_users:
+        existing_id = user.get('user_id') if isinstance(user, dict) else getattr(user, 'user_id', None)
+        if existing_id and existing_id.startswith(prefix):
+            number_part = existing_id[len(prefix):]
+            if number_part.isdigit():
+                highest_number = max(highest_number, int(number_part))
+
+    new_id = f"{prefix}{highest_number + 1:08d}"
+    print(f"Your {role.lower()} id is {new_id}")
+    return new_id
+
 def find_record_by_id(saved_data, search_id):
     for record in saved_data:
 # Check if the record is a dictionary (freshly loaded from JSON by data_manager)

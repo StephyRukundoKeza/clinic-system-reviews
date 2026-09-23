@@ -1,5 +1,6 @@
 import validation
 import sub_main
+import models
 from data_manager import load_data,save_data
 from operations import find_record_by_id
 
@@ -11,59 +12,75 @@ def main():# this particular function will control the main flow
 # load saved data while the program starts
     patients, doctors, appointments, admins = load_data()
 
-    while True:
-        # display the opening screen
+    try:
+        while True:
+            # display the opening screen
 
-        print("\n=============================================")
-        print("Clinic Appointment And Management System")
-        print("=============================================\n")
-        print("Welcome!")
+            print("\n=============================================")
+            print("Clinic Appointment And Management System")
+            print("=============================================\n")
+            print("Welcome!")
 
-        print("\n1. Login")
-        print("2. Create Account(Patients Only) ")
-        print("3. Exit")
-        
+            user_id = input("\nEnter your ID, type NEW to register as a patient, or Exit to close: ").strip().upper()
 
-        choice = validation.get_valid_menu()
+            #Option: Safe Shutdown
+            if user_id == "EXIT":
+                print("\nThank you using our Clinic Management System.")
+                print("System closed successfully!")
+                break
 
-        #option 1 :login routing      
-        if choice == 1:
-            # Ask the user for their ID 
-            user_id = input("Enter your ID: ").strip().upper()
+            #Option: Public Account Creation
+            elif user_id == "NEW":
+                print("\n=============================")
+                print(" Patient Self-Registration")
+                print("=============================\n")
+                #Opens the patient registration interface
+                sub_main.patient_self_registration_menu(patients)
 
             # ---ADMINISTRATOR LOGIN ---
-        
-            if user_id.startswith("A-"):
-                print("Administrator Login is not connected yet.")
-# An ID starting with A belongs to the Administrator
-# Hardcoded emergency backdoor so the system can be accessed
-# if admins.json is missing or not configured yet.
-                
-                if user_id =="A-ADMIN":
-                    entered_pin = input("Enter your 4-digit PIN: ").strip()
-                    if entered_pin =="1234":
-                        print("\nOpening Administrator Menu...")
-                        admin_menu(user_id, patients, doctors, appointments, admins)
-                    else:
-                        print("Incorrect Password")   
-                        
+            elif user_id.startswith("A-"):
+                record = find_record_by_id(admins, user_id)
 
+                if record:
+                    entered_pin = input("Enter your 4-digit PIN: ").strip()
+                    #Securely extract PIN regardless of if object is dict or class instance
+                    record_pin = str(record.get('pin')) if isinstance(record, dict) else str(record.pin)
+                    if entered_pin == record_pin:
+                        #Build the real Admin object for this session so the rest of the
+                        #program is working with the actual class, not just a dict
+                        if isinstance(record, dict):
+                            current_admin = models.Admin(record['user_id'], record['name'], record['pin'], record['phone_number'])
+                        else:
+                            current_admin = record
+                        print("Login successful")
+                        print("\nOpening Administrator Menu...")
+                        admin_menu(current_admin, patients, doctors, appointments, admins)
+                    else:
+                        print("Incorrect PIN")
                 else:
-                    print("Incorrect USER ID")   
+                    print("Administrator ID not found.")
 
             # --Doctor Login--  
             elif user_id.startswith("DR-"):
 
-                user = find_record_by_id(doctors, user_id)
+                record = find_record_by_id(doctors, user_id)
 
-                if user:
+                if record:
                     entered_pin=input("Enter your 4 digit PIN: ").strip()
                     #Securely extract PIN regardless of if object is dict or class instance
-                    user_pin = str(user.get('pin')) if isinstance(user,dict) else str(user.pin)
-                    if entered_pin == user_pin:
+                    record_pin = str(record.get('pin')) if isinstance(record,dict) else str(record.pin)
+                    if entered_pin == record_pin:
+                        #Build the real Doctor object for this session
+                        if isinstance(record, dict):
+                            current_doctor = models.Doctor(
+                                record['user_id'], record['name'], record['pin'], record['phone_number'],
+                                record.get('specialization'), record.get('shift_start_time'), record.get('shift_end_time')
+                            )
+                        else:
+                            current_doctor = record
                         print("Login successful")
                         print("\nOpening Doctor Menu...")
-                        doctor_menu(user_id,doctors,patients,appointments)
+                        doctor_menu(current_doctor, doctors, patients, appointments)
                     else:
                         print("Incorrect PIN")
                 else:
@@ -71,46 +88,42 @@ def main():# this particular function will control the main flow
 
             elif user_id.startswith("P-"):
 
-                
                 # ---PATIENT LOGIN---
-                user = find_record_by_id(patients, user_id)
+                record = find_record_by_id(patients, user_id)
 
-                if user:
+                if record:
                     entered_pin = input("Enter your 4-digit PIN: ").strip()
                     # Securely extract PIN regardless of if object is dict or class instance
-                    if isinstance(user, dict):
-                        user_pin = str(user.get("pin"))
+                    if isinstance(record, dict):
+                        record_pin = str(record.get("pin"))
                     else:
-                        user_pin = str(user.pin)
+                        record_pin = str(record.pin)
 
-                    if entered_pin == user_pin:
+                    if entered_pin == record_pin:
+                        #Build the real Patient object for this session
+                        if isinstance(record, dict):
+                            current_patient = models.Patient(
+                                record['user_id'], record['name'], record['pin'], record['phone_number'],
+                                record.get('gender'), record.get('date_of_birth'), record.get('email'), record.get('address')
+                            )
+                        else:
+                            current_patient = record
                         print("Login successful")
                         print("\nOpening Patient Menu...")
-                        patient_menu(user_id, patients, doctors, appointments)
+                        patient_menu(current_patient, patients, doctors, appointments)
                     else:
                         print("Incorrect PIN.")
                 else:
                     print("Patient ID not found.")
             else:
                 print("Invalid ID format. Please try again.")
-
-        #Option 2:Public Account Creation
-        elif choice == 2:
-            print("\n=============================")
-            print(" Patient Self-Registration")
-            print("=============================\n")
-            #Opens the patient registration interface
-            sub_main.patient_self_registration_menu(patients)
-                    
-
-        #Option 3:Safe Shutdown
-        elif choice ==3:
-            print("\nSaving system data...")
-            #Save the current data before closing
-            save_data(patients, doctors, appointments, admins)
-            print("Thank you using our Clinic Management System.")
-            print("System closed successfully!")
-            break
+    except KeyboardInterrupt:
+        print("\n\nInterrupted - saving your data before closing.")
+    finally:
+        #Runs on every exit path (normal exit, Ctrl+C, or a crash) so data is
+        #never lost because the loop ended before reaching the EXIT branch.
+        print("\nSaving system data...")
+        save_data(patients, doctors, appointments, admins)
 
 
     #This ensures main() is only run if this script is executed directly
@@ -120,7 +133,7 @@ def main():# this particular function will control the main flow
             
 
 
-def admin_menu(user_id, patients, doctors, appointments, admin):
+def admin_menu(current_admin, patients, doctors, appointments, admins):
     #This function displays the options available
     #to an administrator.
 
@@ -197,14 +210,10 @@ def admin_menu(user_id, patients, doctors, appointments, admin):
                                 
     
 
-def  doctor_menu(user_id,doctors, patients, appointments):
+def  doctor_menu(current_doctor, doctors, patients, appointments):
     """
     Displays the doctor menu and routes choices to the functions in sub_main.py.
     """
-
-    #Find the currently logged -in doctor
-    current_doctor = find_record_by_id(doctors, user_id)
-
 
     #Get the doctor's name whether the record is a dictionary
     #or Doctor object.
@@ -246,13 +255,10 @@ def  doctor_menu(user_id,doctors, patients, appointments):
         
 
 
-def patient_menu(user_id, patients, doctors, appointments):
+def patient_menu(current_patient, patients, doctors, appointments):
     """
     Displays the Patient menu and routes choices to the functions in sub_main.py
     """
-    #Find the currently logged - in patient
-    current_patient = find_record_by_id(patients, user_id)
-
     if isinstance(current_patient, dict):
         patient_name = current_patient.get("name")
     else:
@@ -302,5 +308,3 @@ def patient_menu(user_id, patients, doctors, appointments):
 #start the application
 if __name__ == "__main__":
     main()
-
-
