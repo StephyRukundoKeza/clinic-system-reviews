@@ -258,7 +258,7 @@ def admin_update_doctor(doctors):
     print("\nDoctor profile updated successfully.")
 
 def admin_delete_doctor(doctors):
-    print("\n---Delete Doctor Profile (Admin)---")
+    print("---Delete Doctor Profile (Admin)---")
     search_id = input("Enter the doctor ID to delete(e.g., DR-12345678): ").strip().upper()
     
     d = operations.find_record_by_id(doctors, search_id)
