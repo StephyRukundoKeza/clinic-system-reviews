@@ -1,0 +1,363 @@
+from datetime import datetime
+
+from operations import get_available_time_slots
+
+def get_valid_menu():
+    #This function displays the options available
+        #to an administrator.
+    while True:
+        try:
+            menu_input = input("select an option(1-3): ").strip()
+            if menu_input == "":  #check for my empty string inputs
+                print("Oops sorry menu can not be left empty")
+                continue
+            choice = int(menu_input)
+            if choice < 1 or choice > 3:
+                print("Selection out of range. Please select a number from 1-3 ")
+                continue
+        
+            return choice
+        except ValueError:
+            print("Invalid format. Select a number from 1-3")    
+            
+def get_valid_create_account_menu():
+    while True:
+        try:
+            menu_input = (input("Select an option(1-4): ")).strip()
+            if menu_input == "":  #check for my empty string inputs
+                print("Oops sorry menu can not be left empty")
+                continue
+            choice = int(menu_input)
+            if choice < 1 or choice > 4:
+                print("Selection out of range. Please select a number from 1-4 ")
+                continue
+            
+            return choice
+        except ValueError:
+                print("Invalid format. Select a number from 1-4")    
+            
+def get_valid_admin_menu():
+    #This function displays the options available
+    #to an administrator.
+
+    while True:
+    
+        try:
+            menu_input = input("Choose an option(1-13): ").strip()
+            if menu_input == "": #check for my empty string inputs
+                print("Oops sorry menu can not be left empty")
+                continue
+            choice = int(menu_input)
+            if choice < 1 or choice > 13:
+                print("Selection out of range. Please select a number from 1-13 ")
+                continue
+            return choice
+        except ValueError:
+            print("Invalid format. Select a number from 1-13 ")       
+                    
+def get_valid_doctor_menu() :   
+    #This function displays the options available
+    #to a doctor.              
+    while True:
+    
+        try:
+            menu_input = input("Choose an option(1-4): ").strip()
+            if menu_input == "":
+                print("Oops sorry menu can not be left empty")
+                continue
+            choice = int(menu_input)
+            if choice < 1 or choice > 4:
+                print("Selection out of range. Please select a number from 1-4")
+                continue
+            return choice
+        except ValueError:
+            print("Invalid format. Select a number from 1-4 ")  
+            
+            
+def get_valid_patient_menu():
+        #This function displays the options available
+    #to a menu
+    
+    while True:
+    
+        try:
+            menu_input = (input("Choose an option(1-5): ")).strip()
+            if menu_input == "":
+                print("Oops sorry menu can not be left empty")        
+                continue
+            choice = int(menu_input)
+            if choice < 1 or choice > 5:
+                print("Selection out of range. Please select a number from 1-5. ")
+                continue
+            return choice
+        except ValueError:
+                print("Invalid format. Select a number from 1-5. ")  
+        
+            
+def get_valid_firstname():
+    while True:
+        firstname=input("Please enter your first name: ").strip()
+        if firstname=="":
+            print("Oops sorry first name can not be left empty")
+            continue
+        if not firstname.isalpha():
+            print("Invalid format. Please enter a valid name")
+            continue
+        if firstname.isalpha():
+            return firstname
+                
+def get_valid_lastname():
+    while True:
+        lastname=input("Please enter your last name: ").strip()
+        if lastname=="":
+            print("Oops sorry last name can not be left empty")
+            continue
+        if not lastname.isalpha():
+            print("Invalid format. Please enter a valid name")
+            continue
+        if lastname.isalpha():
+            return  lastname      
+def get_valid_new_name():
+    while True:
+        new_name = input("New Name: ").strip()
+        if new_name=="":
+            print("Oops sorry last name can not be left empty. Enter a valid name")
+            continue
+        if not new_name.isalpha():
+            print("Invalid format. Please enter a valid name")
+            continue
+        if new_name.isalpha():
+            return  new_name     
+         
+def get_valid_birthdate():
+    while True:
+        try:
+            date_input= input("Please enter your date of birth with this format date as, YYYY-MM-DD: ")  # ask users for appointment date
+            date = datetime.strptime(date_input, "%Y-%m-%d").date() 
+            if date_input=="":
+                print("Oops sorry date of birth can not be left empty enter a valid date")
+                continue 
+            if date>datetime.today().date(): # ensures the due date is not a date that has already past
+                print("Birth date date cannot be after today's date.")
+                
+                continue
+            break
+        except ValueError:
+            print("Invalid format. Please try again with this format date as, YYYY-MM-DD: ")
+    return date       
+                        
+                            
+def get_valid_appointment_date():
+    while True:
+        try:
+            date_input= input("Please enter your appointment date this format date as, YYYY-MM-DD: ")  # ask users for appointment date
+            date = datetime.strptime(date_input, "%Y-%m-%d").date() 
+            if date_input=="":
+                print("Oops sorry date can not be left empty enter a valid date")
+                continue 
+            if date<datetime.today().date(): # ensures the due date is not a date that has already past
+                print("Appointment date cannot be before today's date.")
+                
+                continue
+            
+                    
+            return date
+        
+        except ValueError:
+            print("Invalid format. Please try again with this format date as, YYYY-MM-DD: ")
+    
+def get_valid_phone_number():
+    while True:
+        number=input("Enter your mobile phone number(without the country code): ").strip()  # this ensures users do not enter country codes with have + at the beginning because the program is built to reject all non digit inputs
+        if number=="": # non-empty string
+            print("Sorry your mobile phone number can not be empty")
+            continue
+        if not number.isdigit() : # checks that all the input only contains numbers
+            print("Phone number must contain only numbers")
+            continue
+        if len(number)!=8:  # since the typical mauritian mobile number is 8 digits it checks to ensure a valid length is entered
+            print("Phone number must be 8 digits")
+            continue
+        if number[0] !="5" and number[0]!="7": # checks that numbers entered starts with 5 or 7 which is the standard for mauritian numbers to ensure the number is valid
+            print("Enter a valid mauritian number")
+            continue
+        return number
+
+def get_valid_email():
+    while True:
+        valid_domains = ["gmail.com", "yahoo.com", "outlook.com"]  # valid email domains to allow
+        email=input("Enter a valid email address: ").strip()
+        parts=email.split("@") #splits the email into two parts
+        if email=="":
+            print("Email can not be empty. Please enter a valid email address: ")
+            continue
+        if "@" and "." not in email:
+            print("Invalid email format. Enter a valid format following this patient@gmail.com: ")
+            continue
+        if len(parts)!=2:
+            print("Invalid email format. Enter a valid format following this patient@gmail.com: ")
+            continue
+        if parts[0]==""or parts[1]=="":
+            print("Invalid email format. Enter a valid format following this patient@gmail.com: ")
+            continue
+        if parts[1] not in valid_domains:
+            print("Invalid email format. Enter a valid email domain: ")
+            continue
+    
+        return email
+    
+def get_valid_doctor_choice(doctors):
+    while True:
+            try:
+                choice=int(input('select a doctor number: '))
+    
+    
+                if choice <1 or choice >len(doctors):
+                    print("sorry, selection out of range")
+                    continue
+                return choice
+            except ValueError:
+                print(f"Invalid format. Please enter a number between 1 and {len(doctors)}")          
+                
+def get_valid_integer():
+     while True:
+        try:
+            choice=int(input('select an option(1-4): '))
+        
+        
+            if choice <1 or choice >4:
+                print("sorry, selection out of range")
+                continue
+            return choice
+        except ValueError:
+            print(f"Invalid format. Please enter a number between 1 and 4")          
+                    
+    
+            
+
+
+def get_valid_slot_choice(available_slots):
+    while True:
+        try:
+            slot_choice= int(input('Select a slot number: '))
+            if slot_choice <1 or slot_choice >len(available_slots):
+                print("sorry, selection out of range")
+                continue
+            return slot_choice
+                        
+        except ValueError:
+            print(f"Invalid format. Please enter a number between 1 and {len(available_slots)}")
+
+def get_valid_time(prompt):
+    # FIXED: Added the missing time validator used by doctor_update_shift
+    while True:
+        time_input = input(prompt).strip()
+        if time_input == "":
+            print("Time cannot be empty.")
+            continue
+        try:
+            datetime.strptime(time_input, "%H:%M")
+            return time_input
+        except ValueError:
+            print("Invalid format. Please use HH:MM format (e.g., 09:30).")
+            
+def get_valid_gender():
+    while True:
+        try:
+            gender=input("Enter your gender (e.g., Male/Female): ").strip()
+            if gender=="":
+                print("Oops sorry gender can not be left empty. Enter a gender(Male/Female)")
+                continue
+            if gender != "Male" and gender!= "Female":
+                print("Please enter a valid gender(Male/Female)")
+                continue
+            return gender
+        except ValueError:
+              print("Invalid format! Please enter a valid gender(Male/Female)")
+
+def get_valid_new_name():
+    
+    while True:
+        firstname=input("Please enter your first name: ").strip()
+        
+        if  firstname.isdigit():
+            print("Invalid format. Please enter a valid name")
+            continue
+        if firstname.isalpha() or firstname=="":
+            return firstname
+                
+                 
+    
+
+def get_valid_new_phone_number():
+    while True:
+        number=input("Enter your mobile phone number(without the country code): ").strip()  # this ensures users do not enter country codes with have + at the beginning because the program is built to reject all non digit inputs
+        if number=="":
+            return number
+        if not number.isdigit() : # checks that all the input only contains numbers
+            print("Phone number must contain only numbers")
+            continue
+        if len(number)!=8:  # since the typical mauritian mobile number is 8 digits it checks to ensure a valid length is entered
+            print("Phone number must be 8 digits")
+            continue
+        if number[0] !="5" and number[0]!="7": # checks that numbers entered starts with 5 or 7 which is the standard for mauritian numbers to ensure the number is valid
+            print("Enter a valid mauritian number")
+            continue
+        
+        return number
+    
+def get_valid_new_email():
+    while True:
+        valid_domains = ["gmail.com", "yahoo.com", "outlook.com"]  # valid email domains to allow
+        email=input("Enter a valid email address: ").strip()
+        if email=="":
+            return email
+        parts=email.split("@") #splits the email into two parts
+        
+        if "@" and "." not in email:
+            print("Invalid email format. Enter a valid format following this patient@gmail.com: ")
+            continue
+        if len(parts)!=2:
+            print("Invalid email format. Enter a valid format following this patient@gmail.com: ")
+            continue
+        if parts[0]==""or parts[1]=="":
+            print("Invalid email format. Enter a valid format following this patient@gmail.com: ")
+            continue
+        if parts[1] not in valid_domains:
+            print("Invalid email format. Enter a valid email domain: ")
+            continue
+        
+        return email
+    
+def get_valid_new_gender():
+    while True:
+        try:
+            gender=input("Enter your gender (e.g., Male/Female): ").strip()
+            if gender=="":
+                return gender
+            if gender != "Male" and gender!= "Female":
+                print("Please enter a valid gender(Male/Female)")
+                continue
+            
+            return gender
+        except ValueError:
+              print("Invalid format! Please enter a valid gender(Male/Female)")
+              
+              
+def get_valid_new_birthdate():
+    while True:
+        try:
+            date_input= input("Please enter your date of birth with this format date as, YYYY-MM-DD: ")  # ask users for appointment date
+            if date_input=="":
+                return None
+            date = datetime.strptime(date_input, "%Y-%m-%d").date() 
+           
+            if date>datetime.today().date(): # ensures the due date is not a date that has already past
+                print("Birth date date cannot be after today's date.")
+                
+                continue
+            
+           
+        except ValueError:
+            print("Invalid format. Please try again with this format date as, YYYY-MM-DD: ")
+      

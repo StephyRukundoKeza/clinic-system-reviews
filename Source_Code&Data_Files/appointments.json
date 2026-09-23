@@ -1,0 +1,29 @@
+[
+    {
+        "appointment_id": "A-301",
+        "date": "2026-09-10",
+        "start_time": "10:00",
+        "doctor_id": "DR-201",
+        "patient_id": "P-101",
+        "status": "Cancelled",
+        "duration": 30
+    },
+    {
+        "appointment_id": "APT-14921849",
+        "patient_id": "P-101",
+        "doctor_id": "DR-201",
+        "date": "2026-09-24",
+        "start_time": "10:00",
+        "duration": 60,
+        "status": "Cancelled"
+    },
+    {
+        "appointment_id": "APT-54971066",
+        "patient_id": "P-101",
+        "doctor_id": "DR-201",
+        "date": "2028-09-21",
+        "start_time": "11:00",
+        "duration": 60,
+        "status": "Active"
+    }
+]
